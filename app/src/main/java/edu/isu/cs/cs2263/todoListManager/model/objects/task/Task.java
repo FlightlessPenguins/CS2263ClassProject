@@ -6,18 +6,21 @@ package edu.isu.cs.cs2263.todoListManager.model.objects.task;
 
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
+import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 
-public class Task implements Context {
+import java.util.List;
+
+public class Task implements Searchable {
 
     /**
-     * Changes the state from the current state to the state following the current state's transition.
+     * Searches via the SearchVisitor, returning a List of Tasks matching the search term.
      *
-     * @param nextState The state that just finished its 'run()'.
-     *
-     * @author Brandon Watkins
+     * @param v (SearchVisitor) The visitor used to search with.
+     * @return (List < Task >) List of Tasks matching the visitor's search criteria.
      */
     @Override
-    public void changeState(State nextState) {
-
+    public List<Task> accept(SearchVisitor v) {
+        throw new RuntimeException("accept not implemented, yet.");
     }
 }

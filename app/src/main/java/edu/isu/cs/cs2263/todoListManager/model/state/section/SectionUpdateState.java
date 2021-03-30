@@ -11,8 +11,8 @@ public class SectionUpdateState implements State {
      *
      * @author Brandon Watkins
      */
-    public Object instance() {
-        return null;
+    public static State instance() {
+        throw new RuntimeException("not implemented yet.");
     }
 
     /**
@@ -23,7 +23,7 @@ public class SectionUpdateState implements State {
      */
     @Override
     public void run() {
-
+        throw new RuntimeException("not implemented yet.");
     }
 
 }

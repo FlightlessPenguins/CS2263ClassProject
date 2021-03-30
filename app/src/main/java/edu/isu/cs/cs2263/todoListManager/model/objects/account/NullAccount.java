@@ -97,6 +97,6 @@ public class NullAccount extends Account {
      * @author Brandon Watkins
      */
     public static Object instance() {
-        return null;
+        throw new RuntimeException("not implemented yet.");
     }
 }

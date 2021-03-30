@@ -16,7 +16,7 @@ public class AccountInfoState implements State {
      */
     @Override
     public void run() {
-
+        throw new RuntimeException("not implemented yet.");
     }
 
     /**
@@ -26,8 +26,8 @@ public class AccountInfoState implements State {
      *
      * @author Brandon Watkins
      */
-    public State instance() {
-        return null;
+    public static State instance() {
+        throw new RuntimeException("not implemented yet.");
     }
 
 }

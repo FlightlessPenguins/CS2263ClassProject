@@ -7,7 +7,7 @@ public class CreateCommand implements Command {
      */
     @Override
     public void execute() {
-
+        throw new RuntimeException("not implemented yet.");
     }
 
 }

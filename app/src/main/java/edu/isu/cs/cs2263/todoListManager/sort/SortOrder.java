@@ -1,3 +1,7 @@
+/**
+ * @author ?
+ * 3/30/2021
+ */
 package edu.isu.cs.cs2263.todoListManager.sort;
 
 public class SortOrder {

@@ -7,7 +7,7 @@ public class ListCommand implements Command {
      */
     @Override
     public void execute() {
-
+        throw new RuntimeException("not implemented yet.");
     }
 
 }

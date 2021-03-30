@@ -4,13 +4,9 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.context;
 
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.NullAccount;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.*;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
-import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountCreateState;
-import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountInfoState;
-import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
-import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountUpdateState;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.*;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.util.ArrayList;
@@ -25,10 +21,10 @@ public class AccountContext implements Context {
 
     private final List<State> states = new ArrayList<State>(
         Arrays.asList(
-            new AccountInfoState(),
-            new AccountUpdateState(),
-            new AccountCreateState(),
-            new AccountListState()
+            AccountInfoState.instance(),
+            AccountUpdateState.instance(),
+            AccountCreateState.instance(),
+            AccountListState.instance()
         )
     );
 

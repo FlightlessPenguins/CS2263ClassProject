@@ -8,12 +8,13 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.util.Iterator;
 import java.util.List;
 
-public class Section implements Context {
+public class Section implements Searchable {
 
     //Instance Variables
     private int id;
@@ -76,19 +77,8 @@ public class Section implements Context {
         throw new ExecutionControl.NotImplementedException("iterator() not implemented.");
     }
 
-    public void accept(SearchVisitor v){
-
+    public List<Task> accept(SearchVisitor v) {
+        throw new RuntimeException("accept not implemented, yet.");
     }
 
-    /**
-     * Changes the state from the current state to the state following the current state's transition.
-     *
-     * @param nextState The state that just finished its 'run()'.
-     *
-     * @author Brandon Watkins
-     */
-    @Override
-    public void changeState(State nextState) {
-
-    }
 }
