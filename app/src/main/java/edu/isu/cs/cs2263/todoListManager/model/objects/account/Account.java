@@ -4,6 +4,7 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.objects.account;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import jdk.jshell.spi.ExecutionControl;
 
 /**
@@ -44,7 +45,7 @@ public abstract class Account {
      */
     public Account(String email, String password, String firstName, String lastName) {
         this.email = email;
-        this.password = password;
+        setPassword(((AccountContext)AccountContext.instance()).generateHash(password));
         this.firstName = firstName;
         this.lastName = lastName;
         throw new RuntimeException("Account(id) not implemented yet.");
@@ -64,7 +65,7 @@ public abstract class Account {
      */
     public Account(int id, String email, String password, String firstName, String lastName) {
         this.email = email;
-        this.password = password;
+        setPassword(password);
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = id;
@@ -119,17 +120,28 @@ public abstract class Account {
     }
 
     /**
+     * Gets the account's password.
+     *
+     * @return (String) Account's password
+     *
+     * @author Brandon Watkins
+     */
+    public String getPassword() {
+        return this.password;
+    }
+
+    /**
      * Sets the user's password.
+     * <p>This should only be used when reading data in from a file, or with setPassword(AccountContext.instance().generateHash(password)).
      *
      * @param password (String) The user's password.
      * @return (Account) The user's account.
      *
      * @author Brandon Watkins
      */
-    public Account setPassword(String password) throws ExecutionControl.NotImplementedException {
-        // this.password = Password.Hash(password); // or something.
-        // return this;
-        throw new ExecutionControl.NotImplementedException("setPassword not implemented yet.");
+    public Account setPassword(String password) {
+        this.password = password;
+        return this;
     }
 
     /**

@@ -9,6 +9,9 @@ import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.*;
 import jdk.jshell.spi.ExecutionControl;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -107,12 +110,34 @@ public class AccountContext implements Context {
      *
      * @author Brandon Watkins
      */
-    public Boolean verifyCredentials(String passwordAttempt) throws ExecutionControl.NotImplementedException {
+    public Boolean verifyCredentials(String passwordAttempt) {
         if (currentAccount instanceof NullAccount) return false;
-        // If Password.Hash(passwordAttempt) == password return true; // or something.
-        // else return false;
-        throw new ExecutionControl.NotImplementedException("verifyCredentials not implemented yet.");
+        else if (generateHash(passwordAttempt) == currentAccount.getPassword()) return true; // or something.
+        else return false;
     }
 
+    /**
+     * Generates a password hash, using the SHA-512 algorithm.
+     *
+     * @param stringBeforeHash (String) The password to generate a hash for.
+     * @return (String) SHA-512 Hashed Password
+     *
+     * @author Brandon Watkins
+     * @author https://www.baeldung.com/java-password-hashing
+     */
+    public String generateHash(String stringBeforeHash) {
+        SecureRandom rand = new SecureRandom();
+        byte[] salt = new byte[32];
+        rand.nextBytes(salt);
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+            messageDigest.update(salt);
+            byte[] hashedBytes = messageDigest.digest(stringBeforeHash.getBytes(StandardCharsets.UTF_8));
+            String hashedPassword = hashedBytes.toString();
+            return hashedPassword;
+        } catch (Exception e) {
+            throw new RuntimeException("Wasn't able to hash password, shutting down to avoid password compromise.");
+        }
+    }
 
 }
