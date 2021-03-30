@@ -1,7 +1,10 @@
 package edu.isu.cs.cs2263.todoListManager.controller;
 
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
+import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class Controller {
@@ -26,7 +29,7 @@ public class Controller {
         this.filters = filters;
     }
 
-    public List<User> getUsers() {
+    public List<UserAccount> getUsers() {
         throw new RuntimeException("not implemented yet.");
     }
 
@@ -42,7 +45,7 @@ public class Controller {
         throw new RuntimeException("not implemented yet.");
     }
 
-    public User login(int ID, String password) {
+    public UserAccount login(int ID, String password) {
         throw new RuntimeException("not implemented yet.");
     }
 
@@ -78,14 +81,15 @@ public class Controller {
     public void createSection(String title, String description) {throw new RuntimeException("not implemented yet.");}
     public void resetPassword(int ID) {throw new RuntimeException("not implemented yet.");}
     public void rescheduleTask(int taskID) {throw new RuntimeException("not implemented yet.");}
-    public Stage showTasks(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
-    public Stage showTaskListInfo(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
-    public Stage ShowTaskInfo(Stage stage) {throw new RuntimeException("not implemented yet.");}
-    public void editTask(Stage stage) {throw new RuntimeException("not implemented yet.");}
-    public void createTask(Stage stage) {throw new RuntimeException("not implemented yet.");}
-    public void createSubtask(Stage stage) {throw new RuntimeException("not implemented yet.");}
-    public Stage registerNew() {throw new RuntimeException("not implemented yet.");}
-    public Stage changeUserInfo() {throw new RuntimeException("not implemented yet.");}
-    public Stage displayLogo() {throw new RuntimeException("not implemented yet.");}
+    public void showTasks(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
+    public void showTaskListInfo(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
+    public void ShowTaskInfo(int taskID) {throw new RuntimeException("not implemented yet.");}
+    public void editTask(int taskID) {throw new RuntimeException("not implemented yet.");}
+    public void createTask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks, int parentTaskID) {
+        throw new RuntimeException("not implemented yet.");}
+    public void createSubtask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, int parentTaskID) {throw new RuntimeException("not implemented yet.");}
+    public void registerNew() {throw new RuntimeException("not implemented yet.");}
+    public void changeUserInfo() {throw new RuntimeException("not implemented yet.");}
+    public void displayLogo() {throw new RuntimeException("not implemented yet.");}
 
 }
