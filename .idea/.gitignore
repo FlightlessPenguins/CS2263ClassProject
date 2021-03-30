@@ -2,7 +2,11 @@
 /shelf/
 /workspace.xml
 # Datasource local storage ignored files
+<<<<<<< HEAD
 /dataSources/
+=======
+/../../../../../../../:\Users\liama\School\CS2263\CS2263ClassProject\.idea/dataSources/
+>>>>>>> 5f460acf803225ee8c96b386bf0c4ed44493cdad
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
