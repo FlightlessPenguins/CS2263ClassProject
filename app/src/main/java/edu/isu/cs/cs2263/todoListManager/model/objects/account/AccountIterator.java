@@ -4,10 +4,22 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.objects.account;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
+
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class AccountIterator implements Iterator<Account> {
+
+    private List<Account> accounts;
+    private int counter = 0;
+
+    public AccountIterator() {
+        this.accounts = ((AccountListState)(AccountListState.instance())).getUsers();
+    }
+
     /**
      * Returns {@code true} if the iteration has more elements.
      * (In other words, returns {@code true} if {@link #next} would
@@ -17,7 +29,7 @@ public class AccountIterator implements Iterator<Account> {
      */
     @Override
     public boolean hasNext() {
-        throw new RuntimeException("not implemented yet.");
+        return counter - accounts.size() >= 0;
     }
 
     /**
@@ -28,6 +40,7 @@ public class AccountIterator implements Iterator<Account> {
      */
     @Override
     public Account next() {
-        throw new RuntimeException("not implemented yet.");
+        if (!hasNext()) throw new NoSuchElementException("No more elements");
+        return accounts.get(counter++);
     }
 }

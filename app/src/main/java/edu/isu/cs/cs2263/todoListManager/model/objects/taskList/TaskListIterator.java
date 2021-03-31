@@ -101,6 +101,7 @@ public class TaskListIterator implements Iterator<Task> {
      */
     @Override
     public Task next() {
+        if (!hasNext()) throw new NoSuchElementException("No more elements");
         return tasks.get(counter++);
     }
 }

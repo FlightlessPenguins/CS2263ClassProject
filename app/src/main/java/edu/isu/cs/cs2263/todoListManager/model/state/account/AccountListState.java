@@ -4,26 +4,30 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.state.account;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.AdminAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import jdk.jshell.spi.ExecutionControl;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class AccountListState implements State {
     //Instance Variables
-    List<UserAccount> users;
+    List<Account> users;
+    private List<Account> accounts = new ArrayList();
 
     //Constructor
     private AccountListState() {}
 
     //Methods
-    public List<UserAccount> getUsers() throws ExecutionControl.NotImplementedException {
-        //if (Account.instance().getCurrentUser().instanceof(AdminAccount.instance()))
-        //return users;
-        throw new ExecutionControl.NotImplementedException("getUsers not implemented yet.");
+    public List<Account> getUsers() {
+        if (((AccountContext)(AccountContext.instance())).getCurrentAccount() instanceof AdminAccount) return users;
+        return new ArrayList<Account>();
     }
 
     public void addUser() throws ExecutionControl.NotImplementedException {
