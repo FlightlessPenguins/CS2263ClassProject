@@ -7,9 +7,17 @@ package edu.isu.cs.cs2263.todoListManager.model.objects.section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class SectionIterator implements Iterator<Task> {
+
+    private List<Task> tasks;
+    private int counter = 0;
+
+    public SectionIterator(Section section) {
+        tasks = section.getTasks();
+    }
 
     /**
      * Returns {@code true} if the iteration has more elements.
@@ -20,7 +28,7 @@ public class SectionIterator implements Iterator<Task> {
      */
     @Override
     public boolean hasNext() {
-        throw new RuntimeException("not implemented yet.");
+        return counter - tasks.size() >= 0;
     }
 
     /**
@@ -31,6 +39,6 @@ public class SectionIterator implements Iterator<Task> {
      */
     @Override
     public Task next() {
-        throw new RuntimeException("not implemented yet.");
+        return tasks.get(counter++);
     }
 }

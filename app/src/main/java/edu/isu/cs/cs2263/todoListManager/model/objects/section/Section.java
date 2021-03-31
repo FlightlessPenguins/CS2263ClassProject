@@ -1,5 +1,5 @@
 /**
- * @author ?
+ * @author Brandon Watkins, ?
  * 3/30/2021
  */
 package edu.isu.cs.cs2263.todoListManager.model.objects.section;
@@ -21,10 +21,68 @@ public class Section implements Searchable {
     private String title;
     private String description;
     private List<Task> tasks;
+    private Boolean defaultSection = false;
 
     //Constructors
     public Section(){}
-    public Section(int ID, String title, String description, List<Task> tasks){}
+
+    /**
+     * Create a new Section.
+     *
+     * @param isDefault (Boolean) Whether this is the nameless default section for a TaskList.
+     *
+     * @author Brandon Watkins
+     */
+    public Section(Boolean isDefault) {
+        this(null, null, null, isDefault);
+    }
+
+    /**
+     * Create a new Section.
+     *
+     * @param id (int) The section's ID number.
+     * @param title (String) The section's title.
+     * @param description (String) The section's description.
+     * @param tasks (List<Task>) The section's contained Tasks.
+     *
+     * @author Brandon Watkins
+     */
+    public Section(int id, String title, String description, List<Task> tasks){
+        this(id, title, description, tasks, false);
+    }
+
+    /**
+     * Create a new Section.
+     *
+     * @param title (String) The section's title.
+     * @param description (String) The section's description.
+     * @param tasks (List<Task>) The section's contained Tasks.
+     * @param isDefault (Boolean) Whether this is the nameless default section for a TaskList.
+     *
+     * @author Brandon Watkins
+     */
+    public Section(String title, String description, List<Task> tasks, Boolean isDefault){
+        this(getNextID(), title, description, tasks, isDefault);
+    }
+
+    /**
+     * Create a new Section.
+     *
+     * @param id (int) The section's ID number.
+     * @param title (String) The section's title.
+     * @param description (String) The section's description.
+     * @param tasks (List<Task>) The section's contained Tasks.
+     * @param isDefault (Boolean) Whether this is the nameless default section for a TaskList.
+     *
+     * @author Brandon Watkins
+     */
+    public Section(int id, String title, String description, List<Task> tasks, Boolean isDefault){
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.tasks = tasks;
+        this.defaultSection = isDefault;
+    }
 
     //Methods
 
@@ -53,12 +111,30 @@ public class Section implements Searchable {
         return tasks;
     }
 
+    /**
+     * Adds the given task to this section.
+     *
+     * @param task (Task) The task to be added.
+     * @return (Section) This section.
+     *
+     * @author Brandon Watkins
+     */
     public Section addTask(Task task){
+        tasks.add(task);
         return this;
     }
 
-    public Task removeTask(int taskID) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("removeTask() not implemented.");
+    /**
+     * Removes the given task from this section.
+     *
+     * @param task (Task) The task to be removed.
+     * @return (Task) The task that was removed.
+     *
+     * @author Brandon Watkins
+     */
+    public Task removeTask(Task task) {
+        tasks.remove(task);
+        return task;
     }
 
     public Section update(int id, String title, String description, String taskIDs){

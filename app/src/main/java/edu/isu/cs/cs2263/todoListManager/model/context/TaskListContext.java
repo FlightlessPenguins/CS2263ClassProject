@@ -5,6 +5,7 @@
 package edu.isu.cs.cs2263.todoListManager.model.context;
 
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
+import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.model.state.taskList.*;
@@ -47,10 +48,26 @@ public class TaskListContext implements Context {
      *
      * @author Brandon Watkins
      */
-    private TaskList convertListsToList(List<TaskList> lists) throws ExecutionControl.NotImplementedException {
+    public TaskList convertTaskListsToTaskList(List<TaskList> lists) {
         TaskList output = new TaskList(0, null, null, null, null);
         for (TaskList list : lists) {
             output.addSubTaskList(list);
+        }
+        return output;
+    }
+
+    /**
+     * Converts a List of Tasks to a single TaskList containing the Tasks
+     *
+     * @param tasks (List<Task>) List of Tasks.
+     * @return (TaskList) TaskList containing all given Tasks.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList convertTasksToTaskList(List<Task> tasks) {
+        TaskList output = new TaskList(0, null, null, null, null);
+        for (Task task : tasks) {
+            output.addTask(task);
         }
         return output;
     }

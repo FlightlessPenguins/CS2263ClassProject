@@ -31,7 +31,58 @@ public class TaskList implements Searchable {
     private Boolean isListArchived;
 
     public TaskList() {}
-    public TaskList(int ID, String title, String description, String comment, List<TaskList> subTaskLists) {}
+
+    /**
+     * Creates a TaskList.
+     *
+     * @param title (String) The TaskList's title.
+     * @param description (String) The TaskList's description.
+     * @param comment (String) The TaskList's comment.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList(String title, String description, String comment) {
+        this(getNextID(), title, description, comment, null, null, false);
+    }
+
+    /**
+     * Creates a TaskList.
+     *
+     * @param title (String) The TaskList's title.
+     * @param description (String) The TaskList's description.
+     * @param comment (String) The TaskList's comment.
+     * @param subTaskLists (List<TaskList>) The TaskList's children TaskLists.
+     * @param sections (List<Section>) The TaskList's sections.
+     * @param isListArchived (Boolean) Whether the TaskList is archived.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList(String title, String description, String comment, List<TaskList> subTaskLists, List<Section> sections, Boolean isListArchived) {
+        this(getNextID(), title, description, comment, subTaskLists, sections, isListArchived);
+    }
+
+    /**
+     * Creates a TaskList.
+     *
+     * @param id (int) The TaskList's ID number.
+     * @param title (String) The TaskList's title.
+     * @param description (String) The TaskList's description.
+     * @param comment (String) The TaskList's comment.
+     * @param subTaskLists (List<TaskList>) The TaskList's children TaskLists.
+     * @param sections (List<Section>) The TaskList's sections.
+     * @param isListArchived (Boolean) Whether the TaskList is archived.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList(int id, String title, String description, String comment, List<TaskList> subTaskLists, List<Section> sections, Boolean isListArchived) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.comment = comment;
+        this.subTaskLists = subTaskLists;
+        this.sections = sections;
+        this.isListArchived = isListArchived;
+    }
 
     public int getId() {
         return id;
@@ -67,13 +118,82 @@ public class TaskList implements Searchable {
 
     public void setComment(String comment) { this.comment = comment; }
 
-    public TaskList addSubTaskList(TaskList taskList) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("addSubTaskList not implemented, yet."); }
+    /**
+     * Adds a child TaskList to this TaskList.
+     *
+     * @param taskList (TaskList) The TaskList to add to this TaskList.
+     * @return (TaskList) This TaskList (parent).
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList addSubTaskList(TaskList taskList) {
+        subTaskLists.add(taskList);
+    }
 
-    public TaskList removeSubTaskList(int taskListID) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("removeSubTaskList not implemented, yet."); }
+    /**
+     * Removes a child TaskList to this TaskList.
+     *
+     * @param taskList (TaskList) The TaskList to remove from this TaskList.
+     * @return (TaskList) The TaskList that was removed.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList removeSubTaskList(TaskList taskList)  {
+        subTaskLists.remove(taskList);
+        return taskList;
+    }
 
-    public TaskList addSection(Section section) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("addSection not implemented, yet."); }
 
-    public Section removeSection(int sectionID) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("removeSection not implemented, yet."); }
+    public TaskList addSection(Section section) {
+        
+    }
+
+
+    public Section removeSection(int sectionID) {
+
+    }
+
+    /**
+     * Adds the given Task to the default section of this TaskList.
+     *
+     * @param task (Task) The task to add.
+     * @return (TaskList) This TaskList.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList addTask(Task task) {
+        for (Section section : sections) {
+            if (section.isDefault()) {
+                section.addTask(task);
+                return this;
+            }
+        }
+        if (sections.size() > 0) {
+            sections.get(0).addTask(task);
+        }
+        return this;
+    }
+
+    /**
+     * Removes the given Task from the default section of this TaskList.
+     *
+     * @param task (Task) The task to be removed.
+     * @return (Task) The task that was removed.
+     *
+     * @author Brandon Watkins
+     */
+    public Task removeTask(Task task) {
+        for (Section section : sections) {
+            if (section.isDefault()) {
+                section.removeTask(task);
+                return task;
+            }
+        }
+        if (sections.size() > 0) {
+            sections.get(0).removeTask(task);
+        }
+        return task;
+    }
 
     /**
      * Determine whether the TaskList is currently archived.
