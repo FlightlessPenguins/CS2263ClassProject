@@ -111,6 +111,18 @@ public class Section implements Searchable {
         return tasks;
     }
 
+    public void setDefaultSection(Boolean def) {
+        defaultSection = def;
+    }
+
+    public Boolean getDefaultSection() {
+        return defaultSection;
+    }
+
+    public Boolean isDefault() {
+        return getDefaultSection();
+    }
+
     /**
      * Adds the given task to this section.
      *

@@ -17,8 +17,10 @@ import java.util.List;
 
 public class TaskListContext implements Context {
 
+    private State currentState;
+    private State[][] transitions;
     private TaskList currentTaskList = ((AccountContext)(AccountContext.instance())).getCurrentAccount() instanceof UserAccount ?
-            ((UserAccount)(((AccountContext)(AccountContext.instance())).getCurrentAccount())).getTaskLists() : new TaskList(0, null, null, null, null);
+            ((UserAccount)(((AccountContext)(AccountContext.instance())).getCurrentAccount())).getTaskLists() : new TaskList(0, null, null, null, null, null, false);
 
     private final List<State> states = new ArrayList<State>(
             Arrays.asList(
@@ -49,7 +51,7 @@ public class TaskListContext implements Context {
      * @author Brandon Watkins
      */
     public TaskList convertTaskListsToTaskList(List<TaskList> lists) {
-        TaskList output = new TaskList(0, null, null, null, null);
+        TaskList output = new TaskList(0, null, null, null, null, null, false);
         for (TaskList list : lists) {
             output.addSubTaskList(list);
         }
@@ -65,7 +67,7 @@ public class TaskListContext implements Context {
      * @author Brandon Watkins
      */
     public TaskList convertTasksToTaskList(List<Task> tasks) {
-        TaskList output = new TaskList(0, null, null, null, null);
+        TaskList output = new TaskList(0, null, null, null, null, null, false);
         for (Task task : tasks) {
             output.addTask(task);
         }

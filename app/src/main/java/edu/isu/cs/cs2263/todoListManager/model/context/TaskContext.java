@@ -13,6 +13,8 @@ import java.util.List;
 
 public class TaskContext implements Context {
 
+    private State currentState;
+    private State[][] transitions;
     private final List<State> states = new ArrayList<State>(
             Arrays.asList(
                     TaskUpdateState.instance(),

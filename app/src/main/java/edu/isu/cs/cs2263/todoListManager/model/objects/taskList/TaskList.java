@@ -13,6 +13,7 @@ import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 public class TaskList implements Searchable {
@@ -128,6 +129,7 @@ public class TaskList implements Searchable {
      */
     public TaskList addSubTaskList(TaskList taskList) {
         subTaskLists.add(taskList);
+        return this;
     }
 
     /**
@@ -145,12 +147,14 @@ public class TaskList implements Searchable {
 
 
     public TaskList addSection(Section section) {
-        
+        sections.add(section);
+        return this;
     }
 
 
-    public Section removeSection(int sectionID) {
-
+    public Section removeSection(Section section) {
+        sections.remove(section);
+        return section;
     }
 
     /**
@@ -229,4 +233,7 @@ public class TaskList implements Searchable {
 
     public List<Task> accept(SearchVisitor v) { throw new RuntimeException("accept not implemented, yet."); }
 
+    public Iterator<Task> iterator() {
+        return new TaskListIterator(this);
+    }
 }

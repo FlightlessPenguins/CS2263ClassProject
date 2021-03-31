@@ -13,6 +13,27 @@ import java.util.List;
 
 public class Task implements Searchable {
 
+    private int id;
+    private String title;
+    private String description;
+    private List<String> labels;
+    private Calendar dueDate;
+    private Calendar dateCompleted;
+    private List<Task> subtasks;
+    private int parentTaskID;
+    private int parentSectionID;
+
+    /**
+     * Gets the list of subtasks belonging to this task.
+     *
+     * @return (List<Task>) List of children Tasks.
+     *
+     * @author Brandon Watkins
+     */
+    public List<Task> getSubtasks() {
+        return subtasks;
+    }
+
     /**
      * Searches via the SearchVisitor, returning a List of Tasks matching the search term.
      *

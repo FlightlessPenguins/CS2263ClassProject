@@ -5,12 +5,12 @@
 package edu.isu.cs.cs2263.todoListManager.model.objects.account;
 
 import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
-import jdk.jshell.spi.ExecutionControl;
+import java.io.Serializable;
 
 /**
  * Abstract Account class
  */
-public abstract class Account {
+public abstract class Account implements Serializable {
 
     // I suspect we will need to change id from final, and we'll need to add a setter (Neither of these are in the class diagram)
     // in order to read in Accounts from file.

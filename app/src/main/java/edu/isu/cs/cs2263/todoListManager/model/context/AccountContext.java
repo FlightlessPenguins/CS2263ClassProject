@@ -18,10 +18,8 @@ import java.util.List;
 
 public class AccountContext implements Context {
 
-    private Account currentAccount = (Account) NullAccount.instance();
-    private final String INFO_FILEPATH = "./config/users.json";
-    private final String PHOTO_FILEPATH = "./photos/" + Integer.toString(currentAccount.getID()) + ".png";
-
+    private State currentState;
+    private State[][] transitions;
     private final List<State> states = new ArrayList<State>(
         Arrays.asList(
             AccountInfoState.instance(),
@@ -30,6 +28,9 @@ public class AccountContext implements Context {
             AccountListState.instance()
         )
     );
+    private Account currentAccount = (Account) NullAccount.instance();
+    private final String INFO_FILEPATH = "./config/users.json";
+    private final String PHOTO_FILEPATH = "./photos/" + Integer.toString(currentAccount.getID()) + ".png";
 
     /**
      * Gets the currently logged in account (or NullAccount)
