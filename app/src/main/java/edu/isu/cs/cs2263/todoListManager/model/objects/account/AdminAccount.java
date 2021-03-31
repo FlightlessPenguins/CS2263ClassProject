@@ -17,7 +17,7 @@ public class AdminAccount extends Account {
         super();
     }
 
-    private Account resetPassword(UserAccount user, String password) {
+    private Account resetPassword(Account user, String password) {
         user.setPassword(password);
         return user;
     }
