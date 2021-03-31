@@ -10,6 +10,7 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.search.Searchable;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.util.Calendar;
@@ -43,7 +44,7 @@ public class TaskList implements Searchable {
      * @author Brandon Watkins
      */
     public TaskList(String title, String description, String comment) {
-        this(getNextID(), title, description, comment, null, null, false);
+        this(Read.readNextID("taskList"), title, description, comment, null, null, false);
     }
 
     /**
@@ -59,7 +60,7 @@ public class TaskList implements Searchable {
      * @author Brandon Watkins
      */
     public TaskList(String title, String description, String comment, List<TaskList> subTaskLists, List<Section> sections, Boolean isListArchived) {
-        this(getNextID(), title, description, comment, subTaskLists, sections, isListArchived);
+        this(Read.readNextID("taskList"), title, description, comment, subTaskLists, sections, isListArchived);
     }
 
     /**

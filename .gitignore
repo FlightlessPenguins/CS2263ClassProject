@@ -30,3 +30,5 @@ build
 
 # Ignore Mac OS layout file
 .DS_Store
+
+.idea

@@ -4,8 +4,9 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.state.account;
 
-import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
+import jdk.jshell.spi.ExecutionControl;
 
 public class AccountCreateState implements State {
 
@@ -18,6 +19,22 @@ public class AccountCreateState implements State {
     @Override
     public void run() {
         throw new RuntimeException("not implemented yet.");
+    }
+
+    /**
+     * Gets the next available ID number.
+     *
+     * @return (int) The next available ID number.
+     *
+     * @author Brandon Watkins
+     */
+    private int getNextID() throws ExecutionControl.NotImplementedException {
+        // Read in ID counter from file
+        Read.readNextID("account");
+        // increment counter
+        // write new counter to file
+        // return counter that was read from file.
+        throw new ExecutionControl.NotImplementedException("getNextID not implemented yet.");
     }
 
     /**

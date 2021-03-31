@@ -9,6 +9,7 @@ import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.search.Searchable;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.util.Iterator;
@@ -62,7 +63,7 @@ public class Section implements Searchable {
      * @author Brandon Watkins
      */
     public Section(String title, String description, List<Task> tasks, Boolean isDefault){
-        this(getNextID(), title, description, tasks, isDefault);
+        this(Read.readNextID("section"), title, description, tasks, isDefault);
     }
 
     /**

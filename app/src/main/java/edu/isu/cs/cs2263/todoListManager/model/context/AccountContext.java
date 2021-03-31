@@ -78,21 +78,6 @@ public class AccountContext implements Context {
     }
 
     /**
-     * Gets the next available ID number.
-     *
-     * @return (int) The next available ID number.
-     *
-     * @author Brandon Watkins
-     */
-    private int getNextID() throws ExecutionControl.NotImplementedException {
-        // Read in ID counter from file
-        // increment counter
-        // write new counter to file
-        // return counter that was read from file.
-        throw new ExecutionControl.NotImplementedException("getNextID not implemented yet.");
-    }
-
-    /**
      * Verifies that the given password attempt is correct.
      *
      * @param passwordAttempt (String) The user's password attempt.

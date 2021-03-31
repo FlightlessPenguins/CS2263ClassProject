@@ -5,6 +5,8 @@
 package edu.isu.cs.cs2263.todoListManager.model.objects.account;
 
 import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
+
 import java.io.Serializable;
 
 /**
@@ -48,8 +50,7 @@ public abstract class Account implements Serializable {
         setPassword(((AccountContext)AccountContext.instance()).generateHash(password));
         this.firstName = firstName;
         this.lastName = lastName;
-        throw new RuntimeException("Account(id) not implemented yet.");
-        //this.id = getNextID();
+        this.id = Read.readNextID("account");
     }
 
     /**

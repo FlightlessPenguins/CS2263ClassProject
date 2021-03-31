@@ -8,7 +8,9 @@ import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.search.Searchable;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class Task implements Searchable {
@@ -22,6 +24,28 @@ public class Task implements Searchable {
     private List<Task> subtasks;
     private int parentTaskID;
     private int parentSectionID;
+
+    public Task(int id, String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.labels = labels;
+        this.dueDate = dueDate;
+        this.dateCompleted = dateCompleted;
+        this.subtasks = subtasks;
+    }
+
+    public Task(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks) {
+        this(Read.readNextID("task"), title, description, labels, dueDate, dateCompleted, subtasks);
+    }
+
+    public Task(String title, String description) {
+        this(Read.readNextID("task"), title, description, null, null, null, null);
+    }
+
+    public Task() {
+
+    }
 
     /**
      * Gets the list of subtasks belonging to this task.
