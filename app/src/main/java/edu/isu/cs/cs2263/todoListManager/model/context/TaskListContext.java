@@ -40,17 +40,6 @@ public class TaskListContext implements Context {
     }
 
     /**
-     * Gets this singleton's instance.
-     *
-     * @return This singleton's instance (concrete Context).
-     *
-     * @author Brandon Watkins
-     */
-    public Object instance() {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    /**
      * Converts a List of TaskLists to a single TaskList containing SubTaskLists
      *
      * @param lists (List<TaskList>) List of TaskLists.
@@ -64,6 +53,26 @@ public class TaskListContext implements Context {
             output.addSubTaskList(list);
         }
         return output;
+    }
+
+    /**
+     * Helper class for singleton implementation
+     *
+     * @author Brandon Watkins
+     */
+    private static final class Helper {
+        private static final Context INSTANCE = new TaskListContext();
+    }
+
+    /**
+     * Gets this singleton's instance.
+     *
+     * @return This singleton's instance (concrete Context).
+     *
+     * @author Brandon Watkins
+     */
+    public static Context instance() {
+        return Helper.INSTANCE;
     }
 
 }

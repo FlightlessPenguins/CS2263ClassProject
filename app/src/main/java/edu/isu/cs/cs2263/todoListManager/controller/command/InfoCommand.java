@@ -2,9 +2,9 @@
  * @author Brandon Watkins
  * 3/30/2021
  */
-package edu.isu.cs.cs2263.todoListManager.view.command;
+package edu.isu.cs.cs2263.todoListManager.controller.command;
 
-public class Cancel implements Command {
+public class InfoCommand implements Command {
 
     /**
      * Executes the command.

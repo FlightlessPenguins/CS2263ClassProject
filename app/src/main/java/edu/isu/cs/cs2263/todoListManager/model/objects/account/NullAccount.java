@@ -4,6 +4,8 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.objects.account;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.Context;
+
 public class NullAccount extends Account {
 
     /**
@@ -14,10 +16,9 @@ public class NullAccount extends Account {
     private NullAccount() {
         super.setID(0);
         super.setEmail("");
-        //super.setPassword("");
+        super.setPassword("");
         super.setFirstName("");
         super.setLastName("");
-        throw new RuntimeException("NullAccount(password) not implemented yet.");
     }
 
     /*
@@ -90,13 +91,23 @@ public class NullAccount extends Account {
     }
 
     /**
+     * Helper class for singleton implementation
+     *
+     * @author Brandon Watkins
+     */
+    private static final class Helper {
+        private static final Account INSTANCE = new NullAccount();
+    }
+
+    /**
      * Gets this singleton's instance.
      *
      * @return This singleton's instance (concrete Context).
      *
      * @author Brandon Watkins
      */
-    public static Object instance() {
-        throw new RuntimeException("not implemented yet.");
+    public static Account instance() {
+        return Helper.INSTANCE;
     }
+
 }

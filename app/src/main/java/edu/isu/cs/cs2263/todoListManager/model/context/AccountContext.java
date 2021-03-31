@@ -77,17 +77,6 @@ public class AccountContext implements Context {
     }
 
     /**
-     * Gets this singleton's instance.
-     *
-     * @return This singleton's instance (concrete Context).
-     *
-     * @author Brandon Watkins
-     */
-    public static Context instance() {
-        throw new RuntimeException("instance not implemented yet.");
-    }
-
-    /**
      * Gets the next available ID number.
      *
      * @return (int) The next available ID number.
@@ -138,6 +127,26 @@ public class AccountContext implements Context {
         } catch (Exception e) {
             throw new RuntimeException("Wasn't able to hash password, shutting down to avoid password compromise.");
         }
+    }
+
+    /**
+     * Helper class for singleton implementation
+     *
+     * @author Brandon Watkins
+     */
+    private static final class Helper {
+        private static final AccountContext INSTANCE = new AccountContext();
+    }
+
+    /**
+     * Gets this singleton's instance.
+     *
+     * @return This singleton's instance (concrete Context).
+     *
+     * @author Brandon Watkins
+     */
+    public static Context instance() {
+        return Helper.INSTANCE;
     }
 
 }

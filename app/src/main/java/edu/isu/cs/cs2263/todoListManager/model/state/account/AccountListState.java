@@ -4,6 +4,7 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.state.account;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import jdk.jshell.spi.ExecutionControl;
@@ -16,9 +17,7 @@ public class AccountListState implements State {
     List<UserAccount> users;
 
     //Constructor
-    private AccountListState() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("AccountListState not implemented yet.");
-    }
+    private AccountListState() {}
 
     //Methods
     public List<UserAccount> getUsers() throws ExecutionControl.NotImplementedException {
@@ -51,6 +50,15 @@ public class AccountListState implements State {
     }
 
     /**
+     * Helper class for singleton implementation
+     *
+     * @author Brandon Watkins
+     */
+    private static final class Helper {
+        private static final State INSTANCE = new AccountListState();
+    }
+
+    /**
      * Gets this singleton's instance.
      *
      * @return This singleton's instance (concrete Context).
@@ -58,7 +66,7 @@ public class AccountListState implements State {
      * @author Brandon Watkins
      */
     public static State instance() {
-        throw new RuntimeException("instance not implemented yet.");
+        return Helper.INSTANCE;
     }
 
 }

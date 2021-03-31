@@ -2,9 +2,9 @@
  * @author Brandon Watkins
  * 3/30/2021
  */
-package edu.isu.cs.cs2263.todoListManager.view.command;
+package edu.isu.cs.cs2263.todoListManager.controller.command;
 
-public class Create implements Command {
+public class ExitCommand implements Command {
 
     /**
      * Executes the command.

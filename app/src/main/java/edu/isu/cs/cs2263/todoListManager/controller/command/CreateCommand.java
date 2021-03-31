@@ -1,9 +1,15 @@
-package edu.isu.cs.cs2263.todoListManager.command;
+/**
+ * @author Brandon Watkins
+ * 3/30/2021
+ */
+package edu.isu.cs.cs2263.todoListManager.controller.command;
 
 public class CreateCommand implements Command {
 
     /**
-     * The logic to be executed when the command is issued.
+     * Executes the command.
+     *
+     * @author Brandon Watkins
      */
     @Override
     public void execute() {

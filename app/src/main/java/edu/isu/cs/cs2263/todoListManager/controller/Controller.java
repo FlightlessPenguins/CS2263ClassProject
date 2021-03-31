@@ -3,21 +3,14 @@ package edu.isu.cs.cs2263.todoListManager.controller;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
+import edu.isu.cs.cs2263.todoListManager.model.state.State;
 
 import java.util.Calendar;
 import java.util.List;
 
 public class Controller {
-    private static Controller singleton = null;
 
     private Controller() {}
-
-    public static Controller Instance() {
-        if (singleton == null) {
-            singleton = new Controller();
-        }
-        return singleton;
-    }
 
     private List<String> filters;
 
@@ -92,4 +85,23 @@ public class Controller {
     public void changeUserInfo() {throw new RuntimeException("not implemented yet.");}
     public void displayLogo() {throw new RuntimeException("not implemented yet.");}
 
+    /**
+     * Helper class for singleton implementation
+     *
+     * @author Brandon Watkins
+     */
+    private static final class Helper {
+        private static final Controller INSTANCE = new Controller();
+    }
+
+    /**
+     * Gets this singleton's instance.
+     *
+     * @return This singleton's instance (concrete Context).
+     *
+     * @author Brandon Watkins
+     */
+    public static Controller instance() {
+        return Helper.INSTANCE;
+    }
 }

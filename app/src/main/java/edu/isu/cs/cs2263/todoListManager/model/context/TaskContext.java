@@ -34,14 +34,23 @@ public class TaskContext implements Context {
     }
 
     /**
+     * Helper class for singleton implementation
+     *
+     * @author Brandon Watkins
+     */
+    private static final class Helper {
+        private static final Context INSTANCE = new TaskContext();
+    }
+
+    /**
      * Gets this singleton's instance.
      *
      * @return This singleton's instance (concrete Context).
      *
      * @author Brandon Watkins
      */
-    public Object instance() {
-        throw new RuntimeException("not implemented yet.");
+    public static Context instance() {
+        return Helper.INSTANCE;
     }
 
 }
