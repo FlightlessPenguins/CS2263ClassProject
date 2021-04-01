@@ -35,4 +35,4 @@ build
 .idea
 
 # Ignore wherever these files came from
-._.*
+._*
