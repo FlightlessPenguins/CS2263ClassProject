@@ -1,3 +1,7 @@
+/**
+ * @author Brandon Watkins
+ * 3/31/2021
+ */
 package edu.isu.cs.cs2263.todoListManager.storage;
 
 import com.google.gson.Gson;
@@ -12,6 +16,14 @@ import java.nio.file.Paths;
 
 public class Write {
 
+    /**
+     * Creates a file, if and only if it doesn't already exist.
+     *
+     * @param path (String) File path to create a file at.
+     * @return (File) The file it created, or found.
+     *
+     * @author Brandon Watkins
+     */
     public static File createFile(String path) {//private
         File file = new File(path);
         try {
@@ -23,10 +35,26 @@ public class Write {
         }
     }
 
+    /**
+     * Increases the counter for the given counter name (path), writes to file.
+     *
+     * @param path (String) File path / counter name.
+     * @param counter (Integer) The previous counter value.
+     *
+     * @author Brandon Watkins
+     */
     public static void incrementCounter(String path, Integer counter) {//protected
         overwriteFile(path, Integer.toString(counter + 1));
     }
 
+    /**
+     * Overwrites all file contents. Creates a new file if it doesn't already exist.
+     *
+     * @param path (String) File path for the file to overwrite.
+     * @param contents (String) The new file contents.
+     *
+     * @author Brandon Watkins
+     */
     public static void overwriteFile(String path, String contents) {//private
         File file = createFile(path);
         FileWriter writer = null;
@@ -41,6 +69,14 @@ public class Write {
         }
     }
 
+    /**
+     * Writes an object to file.
+     *
+     * @param o (Object) The object to write to file.
+     * @param path (String) The file path to store the object at.
+     *
+     * @author Brandon Watkins
+     */
     public static void writeObjectToFile(Object o, String path) {//private
         Writer writer;
         Gson gson;
@@ -55,6 +91,13 @@ public class Write {
         }
     }
 
+    /**
+     * Writes user-specific data to file.
+     *
+     * @param user (Account) The account to store in the file.
+     *
+     * @author Brandon Watkins
+     */
     public static void writeUserData(Account user) {
         writeObjectToFile(user, "./userData/" + user.getID());
     }

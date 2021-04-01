@@ -271,8 +271,11 @@ public class TaskList implements Searchable {
 
     /**
      * Determines whether another object is equal to this object.
+     *
      * @param o (Object) The object being compared to this object.
      * @return (boolean) True if the objects are deemed equal.
+     *
+     * @author Brandon Watkins
      */
     public boolean equals(Object o) {
         if (o instanceof TaskList && ((TaskList)o).getID() >= 0 && this.id == ((TaskList)o).getID()) return true;

@@ -175,8 +175,11 @@ public class Section implements Searchable {
 
     /**
      * Determines whether another object is equal to this object.
+     *
      * @param o (Object) The object being compared to this object.
      * @return (boolean) True if the objects are deemed equal.
+     *
+     * @author Brandon Watkins
      */
     public boolean equals(Object o) {
         if (o instanceof Section && ((Section)o).getID() >= 0 && this.id == ((Section)o).getID()) return true;

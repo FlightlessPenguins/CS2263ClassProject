@@ -26,6 +26,18 @@ public class Task implements Searchable {
     private int parentTaskID;
     private int parentSectionID;
 
+    /**
+     * Creates a Task.
+     * @param id (int) The task's ID number.
+     * @param title (String) The task's title.
+     * @param description (String) The task's description.
+     * @param labels (List<String>) The task's labels/tags.
+     * @param dueDate (Calendar) The date the task is due or scheduled for.
+     * @param dateCompleted (Calendar) The date the task was completed.
+     * @param subtasks (List<Task>) List of the task's subtasks.
+     *
+     * @author Brandon Watkins
+     */
     public Task(int id, String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks) {
         this.id = id;
         this.title = title;
@@ -36,22 +48,57 @@ public class Task implements Searchable {
         this.subtasks = subtasks;
     }
 
+    /**
+     * Creates a Task.
+     * @param title (String) The task's title.
+     * @param description (String) The task's description.
+     * @param labels (List<String>) The task's labels/tags.
+     * @param dueDate (Calendar) The date the task is due or scheduled for.
+     * @param dateCompleted (Calendar) The date the task was completed.
+     * @param subtasks (List<Task>) List of the task's subtasks.
+     *
+     * @author Brandon Watkins
+     */
     public Task(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks) {
         this(Read.readNextID("task"), title, description, labels, dueDate, dateCompleted, subtasks);
     }
 
+    /**
+     * Creates a Task.
+     * @param title (String) The task's title.
+     * @param description (String) The task's description.
+     *
+     * @author Brandon Watkins
+     */
     public Task(String title, String description) {
         this(Read.readNextID("task"), title, description, null, null, null, null);
     }
 
+    /**
+     * Creates a Task.
+     * @param title (String) The task's title.
+     *
+     * @author Brandon Watkins
+     */
     public Task(String title) {
         this(Read.readNextID("task"), title, null, null, null, null, null);
     }
 
+    /**
+     * Creates a Task.
+     *
+     * @author Brandon Watkins
+     */
     public Task() {
 
     }
 
+    /**
+     * Gets the task's ID number.
+     * @return (int) The task's ID number.
+     *
+     * @author Brandon Watkins
+     */
     public int getID() { return id; }
 
     /**
@@ -78,8 +125,11 @@ public class Task implements Searchable {
 
     /**
      * Determines whether another object is equal to this object.
+     *
      * @param o (Object) The object being compared to this object.
      * @return (boolean) True if the objects are deemed equal.
+     *
+     * @author Brandon Watkins
      */
     public boolean equals(Object o) {
         if (o instanceof Task && ((Task)o).getID() >= 0 && this.id == ((Task)o).getID()) return true;

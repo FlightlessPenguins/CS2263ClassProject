@@ -195,8 +195,11 @@ public abstract class Account implements Serializable {
 
     /**
      * Determines whether another object is equal to this object.
+     *
      * @param o (Object) The object being compared to this object.
      * @return (boolean) True if the objects are deemed equal.
+     * 
+     * @author Brandon Watkins
      */
     public boolean equals(Object o) {
         if (o instanceof Account && ((Account)o).getID() >= 0 && this.id == ((Account)o).getID()) return true;
