@@ -4,6 +4,7 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.objects.section;
 
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
@@ -12,6 +13,7 @@ import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import jdk.jshell.spi.ExecutionControl;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -81,14 +83,15 @@ public class Section implements Searchable {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.tasks = tasks;
         this.defaultSection = isDefault;
+        if (tasks == null) this.tasks = new ArrayList<Task>();
+        else this.tasks = tasks;
     }
 
     //Methods
 
     //Getters and Setters
-    public int getId() {
+    public int getID() {
         return id;
     }
 
@@ -168,6 +171,16 @@ public class Section implements Searchable {
 
     public List<Task> accept(SearchVisitor v) {
         throw new RuntimeException("accept not implemented, yet.");
+    }
+
+    /**
+     * Determines whether another object is equal to this object.
+     * @param o (Object) The object being compared to this object.
+     * @return (boolean) True if the objects are deemed equal.
+     */
+    public boolean equals(Object o) {
+        if (o instanceof Section && ((Section)o).getID() >= 0 && this.id == ((Section)o).getID()) return true;
+        return false;
     }
 
 }

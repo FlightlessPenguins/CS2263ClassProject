@@ -5,11 +5,12 @@
 package edu.isu.cs.cs2263.todoListManager.model.objects.account;
 
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
 
 public class UserAccount extends Account {
 
     private String biography;
-    private TaskList taskLists;
+    private TaskList taskLists = new TaskList();
 
     /**
      * Creates a UserAccount
@@ -31,9 +32,7 @@ public class UserAccount extends Account {
      * @author Brandon Watkins
      */
     public UserAccount(String biography, TaskList taskLists, String email, String password, String firstName, String lastName) {
-        super(email, password, firstName, lastName);
-        this.biography = biography;
-        this.taskLists = taskLists;
+        this(Read.readNextID("account"), biography, taskLists, email, password, firstName, lastName);
     }
 
     /**
@@ -53,6 +52,22 @@ public class UserAccount extends Account {
         super(id, email, password, firstName, lastName);
         this.biography = biography;
         this.taskLists = taskLists;
+        if (taskLists == null) this.taskLists = new TaskList();
+        else this.taskLists = taskLists;
+    }
+
+    /**
+     * Creates a UserAccount. Only used for reading in from a file, or for creating a reserved TaskList.
+     *
+     * @param email (String) The user's email address.
+     * @param password (String) The user's password hash.
+     * @param firstName (String) The user's first name.
+     * @param lastName (String) The user's last name.
+     *
+     * @author Brandon Watkins
+     */
+    public UserAccount(String email, String password, String firstName, String lastName) {
+        this(Read.readNextID("account"), null, new TaskList(), email, password, firstName, lastName);
     }
 
     /**
@@ -101,6 +116,21 @@ public class UserAccount extends Account {
     public Account setTaskLists(TaskList taskLists) {
         this.taskLists = taskLists;
         return this;
+    }
+
+    public Account addTaskList(TaskList taskList) {
+        taskLists.addSubTaskList(taskList);
+        return this;
+    }
+
+    /**
+     * Determines whether another object is equal to this object.
+     * @param o (Object) The object being compared to this object.
+     * @return (boolean) True if the objects are deemed equal.
+     */
+    public boolean equals(Object o) {
+        if (o instanceof UserAccount && ((UserAccount)o).getID() >= 0 && this.id == ((UserAccount)o).getID()) return true;
+        return false;
     }
 
 }

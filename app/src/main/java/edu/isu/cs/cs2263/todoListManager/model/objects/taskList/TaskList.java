@@ -5,6 +5,7 @@
 package edu.isu.cs.cs2263.todoListManager.model.objects.taskList;
 
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
@@ -13,6 +14,7 @@ import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import jdk.jshell.spi.ExecutionControl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +34,30 @@ public class TaskList implements Searchable {
     private List<Section> sections;
     private Boolean isListArchived;
 
-    public TaskList() {}
+    public TaskList() { this(null); }
+
+    /**
+     * Creates a TaskList.
+     *
+     * @param title (String) The TaskList's title.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList(String title) {
+        this(Read.readNextID("taskList"), title, null, null, null, null, false);
+    }
+
+    /**
+     * Creates a TaskList.
+     *
+     * @param title (String) The TaskList's title.
+     * @param description (String) The TaskList's description.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList(String title, String description) {
+        this(Read.readNextID("taskList"), title, description, null, null, null, false);
+    }
 
     /**
      * Creates a TaskList.
@@ -82,11 +107,16 @@ public class TaskList implements Searchable {
         this.description = description;
         this.comment = comment;
         this.subTaskLists = subTaskLists;
-        this.sections = sections;
         this.isListArchived = isListArchived;
+        if (sections == null) {
+            List<Section> sects = new ArrayList();
+            sects.add(new Section(true));
+            this.sections = sects;
+        }
+        else this.sections = sections;
     }
 
-    public int getId() {
+    public int getID() {
         return id;
     }
 
@@ -129,6 +159,7 @@ public class TaskList implements Searchable {
      * @author Brandon Watkins
      */
     public TaskList addSubTaskList(TaskList taskList) {
+        if (subTaskLists == null) subTaskLists = new ArrayList<TaskList>();
         subTaskLists.add(taskList);
         return this;
     }
@@ -237,4 +268,15 @@ public class TaskList implements Searchable {
     public Iterator<Task> iterator() {
         return new TaskListIterator(this);
     }
+
+    /**
+     * Determines whether another object is equal to this object.
+     * @param o (Object) The object being compared to this object.
+     * @return (boolean) True if the objects are deemed equal.
+     */
+    public boolean equals(Object o) {
+        if (o instanceof TaskList && ((TaskList)o).getID() >= 0 && this.id == ((TaskList)o).getID()) return true;
+        return false;
+    }
+
 }

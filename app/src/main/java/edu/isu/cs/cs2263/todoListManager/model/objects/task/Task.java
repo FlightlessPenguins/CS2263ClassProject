@@ -5,6 +5,7 @@
 package edu.isu.cs.cs2263.todoListManager.model.objects.task;
 
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.search.Searchable;
@@ -43,9 +44,15 @@ public class Task implements Searchable {
         this(Read.readNextID("task"), title, description, null, null, null, null);
     }
 
+    public Task(String title) {
+        this(Read.readNextID("task"), title, null, null, null, null, null);
+    }
+
     public Task() {
 
     }
+
+    public int getID() { return id; }
 
     /**
      * Gets the list of subtasks belonging to this task.
@@ -68,4 +75,15 @@ public class Task implements Searchable {
     public List<Task> accept(SearchVisitor v) {
         throw new RuntimeException("accept not implemented, yet.");
     }
+
+    /**
+     * Determines whether another object is equal to this object.
+     * @param o (Object) The object being compared to this object.
+     * @return (boolean) True if the objects are deemed equal.
+     */
+    public boolean equals(Object o) {
+        if (o instanceof Task && ((Task)o).getID() >= 0 && this.id == ((Task)o).getID()) return true;
+        return false;
+    }
+
 }
