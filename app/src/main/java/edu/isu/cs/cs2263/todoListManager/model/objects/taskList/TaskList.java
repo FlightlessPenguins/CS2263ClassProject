@@ -14,12 +14,13 @@ import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import jdk.jshell.spi.ExecutionControl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
-public class TaskList implements Searchable {
+public class TaskList implements Searchable, Serializable {
     /* Reserved IDs:
         0: currently viewed tasklist, unfiltered
         1: currently viewed tasklist, filtered

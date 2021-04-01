@@ -6,6 +6,10 @@ package edu.isu.cs.cs2263.todoListManager.storage;
 
 import com.google.gson.Gson;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
+import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
+import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
+
 import java.io.File;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -53,6 +57,22 @@ public class Read {
         if (output == null) output = "0";
         Write.incrementCounter("./counters/" + path + ".txt", Integer.parseInt(output));
         return Integer.parseInt(output);
+    }
+
+    public static int getNextID(Object objectYouNeedAnIdFor) {
+        if (objectYouNeedAnIdFor == null) return -1;
+        else {
+            String name = objectYouNeedAnIdFor.getClass().getName();
+            if (name != null) name = name.substring(0, 1).toLowerCase() + name.substring(1);
+            if (name == "userAccount" || name == "adminAccount" || name == "nullAccount") name = "account";
+            return readNextID(name);
+        }
+        /*
+        if (objectYouNeedAnIdFor instanceof Account) return readNextID("account");
+        else if (objectYouNeedAnIdFor instanceof Section) return readNextID("section");
+        else if (objectYouNeedAnIdFor instanceof Task) return readNextID("task");
+        else if (objectYouNeedAnIdFor instanceof TaskList) return readNextID("taskList");
+        else return readNextID(Object.class.getName());*/
     }
 
     /**
@@ -119,16 +139,17 @@ public class Read {
      */
     public static List<Account> readAllUserData() {
         List<Account> accounts = new ArrayList();
-        Boolean proceed = true;
-        int counter = 0;
-        try {
-            while (proceed) {
-                Object o = readUserData(counter++);
-                if (o != null && o instanceof Account) accounts.add((Account) o);
-                else proceed = false;
+        File directory = new File("./userData/");
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                try {
+                    Object o = readUserData(Integer.parseInt(file.getName()));
+                    if (o != null && o instanceof Account) accounts.add((Account) o);
+                } catch (Exception ex) {
+                    System.out.printf("storage.Read.readAllUserData() failed to read file (%s) with exception: %s", file.getName(), ex.getMessage());
+                }
             }
-        } catch (Exception ex) {
-            System.out.printf("storage.Read.readAllUserData() failed with exception: %s", ex.getMessage());
         }
         return accounts;
     }

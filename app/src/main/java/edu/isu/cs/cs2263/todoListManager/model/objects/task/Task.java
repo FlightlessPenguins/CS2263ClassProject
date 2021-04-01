@@ -11,10 +11,11 @@ import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 
-public class Task implements Searchable {
+public class Task implements Searchable, Serializable {
 
     private int id;
     private String title;

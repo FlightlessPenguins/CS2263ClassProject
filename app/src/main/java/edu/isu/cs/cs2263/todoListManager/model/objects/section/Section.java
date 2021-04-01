@@ -13,11 +13,12 @@ import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import jdk.jshell.spi.ExecutionControl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Section implements Searchable {
+public class Section implements Searchable, Serializable {
 
     //Instance Variables
     private int id;
