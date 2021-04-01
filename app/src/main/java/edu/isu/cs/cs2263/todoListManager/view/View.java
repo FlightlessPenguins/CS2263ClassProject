@@ -29,4 +29,21 @@ public class View {
     public static View instance() {
         return Helper.INSTANCE;
     }
+
+
+    /**
+     * closes app
+     *
+     * @author Grant Baird
+     */
+    public void close() {
+        Controller.instance().close();
+    }
+
+
+
+
+
+
+
 }
