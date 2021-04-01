@@ -68,7 +68,18 @@ public class Controller {
 
     public void searchTasks(String searchTerm) {throw new RuntimeException("not implemented yet.");}
     public void filterTasks(List<String> filters) {throw new RuntimeException("not implemented yet.");}
-    public void close() {throw new RuntimeException("not implemented yet.");}
+
+    /**
+     * called by UI.
+     * saves data, logs user out, shuts down system.
+     *
+     * @author Grant Baird
+     */
+    public void close() {
+        instance().saveData();
+        instance().logout();
+        System.exit(0);
+    }
     public void createTaskList(String name, String comment) {throw new RuntimeException("not implemented yet.");}
     public void getCurrentUser(int currentUserID) {throw new RuntimeException("not implemented yet.");}
     public void createSection(String title, String description) {throw new RuntimeException("not implemented yet.");}
