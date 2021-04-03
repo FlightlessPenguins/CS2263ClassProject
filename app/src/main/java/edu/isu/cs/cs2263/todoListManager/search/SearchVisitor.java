@@ -12,6 +12,14 @@ import java.util.List;
 
 public interface SearchVisitor {
 
+    public String getSearchTerm();
+
+    public void setSearchTerm(String searchTerm);
+
+    public List<Task> getSearchResults();
+
+    public void setSearchResults(List<Task> tasks);
+
     /**
      * Searches a taskList for searchTerm
      *
@@ -40,6 +48,6 @@ public interface SearchVisitor {
      *
      * @author Brandon Watkins
      */
-    public List<Task> visit(Task task, String searchTerm);
+    public Task visit(Task task, String searchTerm);
 
 }

@@ -166,12 +166,27 @@ public class Section implements Searchable, Serializable {
         throw new ExecutionControl.NotImplementedException("moveTaskToSection() not implemented.");
     }
 
-    public Iterator<Task> iterator() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("iterator() not implemented.");
+    public Iterator<Task> iterator() {
+        return new SectionIterator(this);
     }
 
     public List<Task> accept(SearchVisitor v) {
-        throw new RuntimeException("accept not implemented, yet.");
+        String s = v.getSearchTerm();
+        Iterator<Task> iterator = iterator();
+        List<Task> tasks = new ArrayList();
+        if (title.contains(s) || description.contains(s) {
+            while(iterator.hasNext()) {
+                tasks.add(iterator.next());
+            }
+        }
+        else {
+            while(iterator.hasNext()) {
+                Task t = iterator.next();
+                Task task = t.accept(v);
+                if (task != null) tasks.add(task);
+            }
+        }
+        return tasks;
     }
 
     /**

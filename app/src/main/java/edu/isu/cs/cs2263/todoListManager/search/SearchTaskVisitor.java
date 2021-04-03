@@ -34,6 +34,10 @@ public class SearchTaskVisitor implements SearchVisitor {
         return searchResults;
     }
 
+    public void setSearchResults(List<Task> tasks) {
+        this.searchResults = tasks;
+    }
+
     /**
      * Searches a taskList for searchTerm
      *
@@ -66,7 +70,7 @@ public class SearchTaskVisitor implements SearchVisitor {
      *
      * @author Brandon Watkins
      */
-    public List<Task> visit(Task task, String searchTerm) {
+    public Task visit(Task task, String searchTerm) {
         return task.accept(this);
     }
 

@@ -262,9 +262,45 @@ public class TaskList implements Searchable, Serializable {
 
     public TaskList moveTaskToList(Task task, TaskList destination) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("moveTaskToList not implemented, yet."); }
 
-    public TaskList search(String searchTerm) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("search not implemented, yet."); }
+    public TaskList search(String searchTerm) {
+        SearchVisitor visitor = new SearchTaskVisitor(searchTerm);
+        List<Task> tasks = accept(visitor);
+        TaskList taskList = convertTasksToTaskList(tasks);
+        return taskList;
+    }
 
-    public List<Task> accept(SearchVisitor v) { throw new RuntimeException("accept not implemented, yet."); }
+    private TaskList convertTasksToTaskList(List<Task> tasks) {
+        TaskList output = new TaskList(0, null, null, null, null, null, false);
+        for (Task task : tasks) {
+            output.addTask(task);
+        }
+        return output;
+    }
+
+    public List<Task> accept(SearchVisitor v) {
+        String s = v.getSearchTerm();
+        Iterator<Task> iterator = iterator();
+        List<Task> tasks = new ArrayList();
+        if (title.contains(s) || comment.contains(s) || description.contains(s) {
+            while(iterator.hasNext()) {
+                tasks.add(iterator.next());
+            }
+        }
+        else {
+            while(iterator.hasNext()) {
+                Task task = iterator.next();
+                Task t = task.accept(v);
+                if (t != null) tasks.add(t);
+            }
+        }
+        for (TaskList taskList : subTaskLists) {
+            tasks.add(taskList.accept(v));
+        }
+        for (Section section : sections) {
+            tasks.add(section.accept(v));
+        }
+        return tasks;
+    }
 
     public Iterator<Task> iterator() {
         return new TaskListIterator(this);

@@ -117,11 +117,15 @@ public class Task implements Searchable, Serializable {
      * Searches via the SearchVisitor, returning a List of Tasks matching the search term.
      *
      * @param v (SearchVisitor) The visitor used to search with.
-     * @return (List < Task >) List of Tasks matching the visitor's search criteria.
+     * @return (Task) Task matching the visitor's search criteria.
      */
     @Override
-    public List<Task> accept(SearchVisitor v) {
-        throw new RuntimeException("accept not implemented, yet.");
+    public Task accept(SearchVisitor v) {
+        String s = v.getSearchTerm();
+        if (title.contains(s) || description().contains(s)) {
+            return this;
+        }
+        return null;
     }
 
     /**
