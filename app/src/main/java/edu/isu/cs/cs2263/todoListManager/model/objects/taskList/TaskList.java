@@ -9,6 +9,7 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.search.SearchTaskVisitor;
 import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
@@ -281,7 +282,7 @@ public class TaskList implements Searchable, Serializable {
         String s = v.getSearchTerm();
         Iterator<Task> iterator = iterator();
         List<Task> tasks = new ArrayList();
-        if (title.contains(s) || comment.contains(s) || description.contains(s) {
+        if (title.contains(s) || comment.contains(s) || description.contains(s)) {
             while(iterator.hasNext()) {
                 tasks.add(iterator.next());
             }
