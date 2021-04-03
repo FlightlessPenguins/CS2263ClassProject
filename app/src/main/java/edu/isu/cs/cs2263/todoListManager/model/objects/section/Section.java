@@ -182,8 +182,7 @@ public class Section implements Searchable, Serializable {
         else {
             while(iterator.hasNext()) {
                 Task t = iterator.next();
-                Task task = t.accept(v);
-                if (task != null) tasks.add(task);
+                tasks.addAll(t.accept(v));
             }
         }
         return tasks;

@@ -12,6 +12,7 @@ import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -120,12 +121,13 @@ public class Task implements Searchable, Serializable {
      * @return (Task) Task matching the visitor's search criteria.
      */
     @Override
-    public Task accept(SearchVisitor v) {
+    public List<Task> accept(SearchVisitor v) {
         String s = v.getSearchTerm();
-        if (title.contains(s) || description().contains(s)) {
-            return this;
+        List<Task> output = new ArrayList();
+        if (title.contains(s) || description.contains(s)) {
+            output.add(this);
         }
-        return null;
+        return output;
     }
 
     /**

@@ -290,15 +290,14 @@ public class TaskList implements Searchable, Serializable {
         else {
             while(iterator.hasNext()) {
                 Task task = iterator.next();
-                Task t = task.accept(v);
-                if (t != null) tasks.add(t);
+                tasks.addAll(task.accept(v));
             }
         }
         for (TaskList taskList : subTaskLists) {
-            tasks.add(taskList.accept(v));
+            tasks.addAll(taskList.accept(v));
         }
         for (Section section : sections) {
-            tasks.add(section.accept(v));
+            tasks.addAll(section.accept(v));
         }
         return tasks;
     }

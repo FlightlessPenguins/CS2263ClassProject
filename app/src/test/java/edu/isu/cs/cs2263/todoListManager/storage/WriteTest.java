@@ -17,7 +17,8 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WriteTest {
+class
+WriteTest {
 
     /**
      * NOTE: These will royally screw up the data if run after legit users have been created.

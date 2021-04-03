@@ -70,7 +70,7 @@ public class SearchTaskVisitor implements SearchVisitor {
      *
      * @author Brandon Watkins
      */
-    public Task visit(Task task, String searchTerm) {
+    public List<Task> visit(Task task, String searchTerm) {
         return task.accept(this);
     }
 
