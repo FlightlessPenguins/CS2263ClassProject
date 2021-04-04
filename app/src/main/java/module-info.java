@@ -1,4 +1,4 @@
-module TodoListManager.app.main {
+module todoListManager.app.main {
     requires javafx.controls;
     requires com.google.common;
     requires jdk.jshell;
