@@ -4,6 +4,7 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.objects.account;
 
+import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 
@@ -133,4 +134,7 @@ public class UserAccount extends Account {
         return false;
     }
 
+
+
+    public Task getTask(int taskID) {throw new RuntimeException("not implemented yet.");}
 }

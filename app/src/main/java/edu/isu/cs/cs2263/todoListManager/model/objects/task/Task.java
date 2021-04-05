@@ -143,4 +143,7 @@ public class Task implements Searchable, Serializable {
         return false;
     }
 
+    public void setDueDate(Calendar dueDate) {
+        this.dueDate = dueDate;
+    }
 }
