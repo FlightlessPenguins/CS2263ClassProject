@@ -30,14 +30,30 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 }
 
+/* Before:
 application {
     // Define the main class for the application.
     mainClass = 'edu/isu/cs/cs2263/TodoListManager.App'
 }
+After: */
+application {
+    // Define the main class for the application.
+    mainClass = 'edu.isu.cs.cs2263.todoListManager.App'
+}
 
 javafx {
     version = "15"
-    modules = ['javafx.controls']
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+sourceSets.main() {
+    java {
+        srcDir 'src/main/java' //assume that your source codes are inside this path
+    }
+    resources {
+        srcDirs = ['src/main/java', 'src/main/resources']
+        exclude "**/*.java"
+    }
 }
 
 tasks.named('test') {

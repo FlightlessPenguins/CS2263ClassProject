@@ -3,9 +3,24 @@
  */
 package edu.isu.cs.cs2263.todoListManager;
 
-public class App {
+import edu.isu.cs.cs2263.todoListManager.view.View;
+import javafx.animation.PauseTransition;
+import javafx.application.Application;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Path;
+
+public class App{
 
     public static void main(String[] args) {
-
+        Application.launch(View.instance().getClass());
     }
 }

@@ -4,11 +4,23 @@
  */
 package edu.isu.cs.cs2263.todoListManager.view;
 
-import edu.isu.cs.cs2263.todoListManager.controller.Controller;
+import javafx.animation.PauseTransition;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
-public class View {
+import java.io.File;
+import java.io.IOException;
 
+public class View extends Application {
 
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        getSplash();
+    }
 
     /**
      * Helper class for singleton implementation
@@ -30,20 +42,89 @@ public class View {
         return Helper.INSTANCE;
     }
 
-
     /**
-     * closes app
+     * Shows splash screen intro
      *
-     * @author Grant Baird
+     * @return This class's splash Scene
+     *
+     * @author Alex Losser
      */
-    public void close() {
-        Controller.instance().close();
+    public void getSplash() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(new File("app/src/main/resources/fxml/splash.fxml").toURI().toURL());
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+
+        Stage stage = new Stage();
+        stage.setScene(scene);
+
+        stage.show();
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(5));
+        delay.setOnFinished(value -> {
+            stage.close();
+            try {
+                login();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        delay.play();
+
+
     }
 
+    /**
+     * Shows login screen
+     *
+     * @return This class's login Scene
+     *
+     * @author Alex Losser
+     */
+    public void login() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(new File("app/src/main/resources/fxml/login.fxml").toURI().toURL());
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
 
+        Stage stage = new Stage();
+        stage.setTitle("Login");
+        stage.setScene(scene);
 
+        stage.show();
+    }
 
+    /**
+     * Shows register screen
+     *
+     * @return This class's register Scene
+     *
+     * @author Alex Losser
+     */
+    public void register() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(new File("app/src/main/resources/fxml/register.fxml").toURI().toURL());
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
 
+        Stage stage = new Stage();
+        stage.setTitle("Register");
+        stage.setScene(scene);
 
+        stage.show();
+    }
+
+    public void notImplemented() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(new File("app/src/main/resources/fxml/register.fxml").toURI().toURL());
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+
+        Stage stage = new Stage();
+        stage.setTitle("Register");
+        stage.setScene(scene);
+
+        stage.show();
+    }
 
 }

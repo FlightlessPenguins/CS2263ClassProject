@@ -4,13 +4,22 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.view.View;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class Controller {
+public class Controller implements Initializable {
 
-    private Controller() {}
+    public Controller() {}
 
     private List<String> filters;
 
@@ -95,6 +104,23 @@ public class Controller {
     public void registerNew() {throw new RuntimeException("not implemented yet.");}
     public void changeUserInfo() {throw new RuntimeException("not implemented yet.");}
     public void displayLogo() {throw new RuntimeException("not implemented yet.");}
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    @FXML
+    public Button loginRegisterBtn;
+    public Button closeNotImplemented;
+
+    @FXML
+    private void testAction(ActionEvent event) throws IOException {
+        Stage stage = (Stage) loginRegisterBtn.getScene().getWindow();
+        stage.close();
+        View.instance().register();
+    }
+
 
     /**
      * Helper class for singleton implementation
