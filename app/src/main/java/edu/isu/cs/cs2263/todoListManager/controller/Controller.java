@@ -18,13 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
-<<<<<<< HEAD
 public class Controller implements Initializable {
-=======
-//import static org.graalvm.compiler.options.OptionType.User;
-
-public class Controller {
->>>>>>> 9b662f3a19988ca5b60094956d4afecc6692389c
 
     public Controller() {}
 
