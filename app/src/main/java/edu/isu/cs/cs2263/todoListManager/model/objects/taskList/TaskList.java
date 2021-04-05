@@ -9,17 +9,19 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.search.SearchTaskVisitor;
 import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import jdk.jshell.spi.ExecutionControl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
-public class TaskList implements Searchable {
+public class TaskList implements Searchable, Serializable {
     /* Reserved IDs:
         0: currently viewed tasklist, unfiltered
         1: currently viewed tasklist, filtered
@@ -261,9 +263,44 @@ public class TaskList implements Searchable {
 
     public TaskList moveTaskToList(Task task, TaskList destination) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("moveTaskToList not implemented, yet."); }
 
-    public TaskList search(String searchTerm) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("search not implemented, yet."); }
+    public TaskList search(String searchTerm) {
+        SearchVisitor visitor = new SearchTaskVisitor(searchTerm);
+        List<Task> tasks = accept(visitor);
+        TaskList taskList = convertTasksToTaskList(tasks);
+        return taskList;
+    }
 
-    public List<Task> accept(SearchVisitor v) { throw new RuntimeException("accept not implemented, yet."); }
+    private TaskList convertTasksToTaskList(List<Task> tasks) {
+        TaskList output = new TaskList(0, null, null, null, null, null, false);
+        for (Task task : tasks) {
+            output.addTask(task);
+        }
+        return output;
+    }
+
+    public List<Task> accept(SearchVisitor v) {
+        String s = v.getSearchTerm();
+        Iterator<Task> iterator = iterator();
+        List<Task> tasks = new ArrayList();
+        if (title.contains(s) || comment.contains(s) || description.contains(s)) {
+            while(iterator.hasNext()) {
+                tasks.add(iterator.next());
+            }
+        }
+        else {
+            while(iterator.hasNext()) {
+                Task task = iterator.next();
+                tasks.addAll(task.accept(v));
+            }
+        }
+        for (TaskList taskList : subTaskLists) {
+            tasks.addAll(taskList.accept(v));
+        }
+        for (Section section : sections) {
+            tasks.addAll(section.accept(v));
+        }
+        return tasks;
+    }
 
     public Iterator<Task> iterator() {
         return new TaskListIterator(this);

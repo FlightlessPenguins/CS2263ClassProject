@@ -33,7 +33,7 @@ dependencies {
 /* Before:
 application {
     // Define the main class for the application.
-    mainClass = 'edu/isu/cs/cs2263/TodoListManager.App'
+    mainClass = 'edu.isu.cs.cs2263.todoListManager.App'
 }
 After: */
 application {

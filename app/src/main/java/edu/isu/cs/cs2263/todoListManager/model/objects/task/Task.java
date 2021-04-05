@@ -11,10 +11,12 @@ import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class Task implements Searchable {
+public class Task implements Searchable, Serializable {
 
     private int id;
     private String title;
@@ -116,11 +118,16 @@ public class Task implements Searchable {
      * Searches via the SearchVisitor, returning a List of Tasks matching the search term.
      *
      * @param v (SearchVisitor) The visitor used to search with.
-     * @return (List < Task >) List of Tasks matching the visitor's search criteria.
+     * @return (Task) Task matching the visitor's search criteria.
      */
     @Override
     public List<Task> accept(SearchVisitor v) {
-        throw new RuntimeException("accept not implemented, yet.");
+        String s = v.getSearchTerm();
+        List<Task> output = new ArrayList();
+        if (title.contains(s) || description.contains(s)) {
+            output.add(this);
+        }
+        return output;
     }
 
     /**
@@ -136,4 +143,7 @@ public class Task implements Searchable {
         return false;
     }
 
+    public void setDueDate(Calendar dueDate) {
+        this.dueDate = dueDate;
+    }
 }

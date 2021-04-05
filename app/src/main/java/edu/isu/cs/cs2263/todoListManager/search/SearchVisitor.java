@@ -12,6 +12,14 @@ import java.util.List;
 
 public interface SearchVisitor {
 
+    public String getSearchTerm();
+
+    public void setSearchTerm(String searchTerm);
+
+    public List<Task> getSearchResults();
+
+    public void setSearchResults(List<Task> tasks);
+
     /**
      * Searches a taskList for searchTerm
      *

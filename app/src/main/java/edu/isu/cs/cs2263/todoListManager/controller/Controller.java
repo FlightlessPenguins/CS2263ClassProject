@@ -1,5 +1,6 @@
 package edu.isu.cs.cs2263.todoListManager.controller;
 
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
@@ -17,7 +18,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
+<<<<<<< HEAD
 public class Controller implements Initializable {
+=======
+//import static org.graalvm.compiler.options.OptionType.User;
+
+public class Controller {
+>>>>>>> 9b662f3a19988ca5b60094956d4afecc6692389c
 
     public Controller() {}
 
@@ -90,10 +97,20 @@ public class Controller implements Initializable {
         System.exit(0);
     }
     public void createTaskList(String name, String comment) {throw new RuntimeException("not implemented yet.");}
-    public void getCurrentUser(int currentUserID) {throw new RuntimeException("not implemented yet.");}
+    public UserAccount getCurrentUser() {throw new RuntimeException("not implemented yet."); }
     public void createSection(String title, String description) {throw new RuntimeException("not implemented yet.");}
     public void resetPassword(int ID) {throw new RuntimeException("not implemented yet.");}
-    public void rescheduleTask(int taskID) {throw new RuntimeException("not implemented yet.");}
+
+    /**
+     * reschedule task based on ID
+     *
+     * @author Grant Baird
+     */
+    public void rescheduleTask(int taskID, Calendar newDueDate) {
+        getCurrentUser().getTask(taskID).setDueDate(newDueDate);
+
+    }
+
     public void showTasks(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
     public void showTaskListInfo(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
     public void ShowTaskInfo(int taskID) {throw new RuntimeException("not implemented yet.");}

@@ -13,11 +13,12 @@ import edu.isu.cs.cs2263.todoListManager.search.Searchable;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import jdk.jshell.spi.ExecutionControl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Section implements Searchable {
+public class Section implements Searchable, Serializable {
 
     //Instance Variables
     private int id;
@@ -165,12 +166,26 @@ public class Section implements Searchable {
         throw new ExecutionControl.NotImplementedException("moveTaskToSection() not implemented.");
     }
 
-    public Iterator<Task> iterator() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("iterator() not implemented.");
+    public Iterator<Task> iterator() {
+        return new SectionIterator(this);
     }
 
     public List<Task> accept(SearchVisitor v) {
-        throw new RuntimeException("accept not implemented, yet.");
+        String s = v.getSearchTerm();
+        Iterator<Task> iterator = iterator();
+        List<Task> tasks = new ArrayList();
+        if (title.contains(s) || description.contains(s)) {
+            while(iterator.hasNext()) {
+                tasks.add(iterator.next());
+            }
+        }
+        else {
+            while(iterator.hasNext()) {
+                Task t = iterator.next();
+                tasks.addAll(t.accept(v));
+            }
+        }
+        return tasks;
     }
 
     /**

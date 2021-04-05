@@ -34,6 +34,10 @@ public class SearchTaskVisitor implements SearchVisitor {
         return searchResults;
     }
 
+    public void setSearchResults(List<Task> tasks) {
+        this.searchResults = tasks;
+    }
+
     /**
      * Searches a taskList for searchTerm
      *

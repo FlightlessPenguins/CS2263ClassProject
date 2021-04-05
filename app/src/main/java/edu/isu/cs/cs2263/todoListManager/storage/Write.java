@@ -7,6 +7,7 @@ package edu.isu.cs.cs2263.todoListManager.storage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -100,6 +101,20 @@ public class Write {
      */
     public static void writeUserData(Account user) {
         writeObjectToFile(user, "./userData/" + user.getID());
+    }
+
+    /**
+     * Writes all accounts to file(s).
+     *
+     * @author Brandon Watkins
+     */
+    public static void writeAllAccountsToFile() {
+        // Makes it easier to find user-specific data, premature optimization though.
+        for (Account account : (((AccountListState)(AccountListState.instance()))).getAccountsBackdoor()) {
+            writeUserData(account);
+        }
+        // writes the account list state, containing all accounts, which in turn contain all other data needing to be saved.
+        writeObjectToFile(AccountListState.instance(), "./accounts/");
     }
 
 }
