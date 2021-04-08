@@ -16,6 +16,7 @@ public class Observable {
      * Adds an observer to the set of observers for this object, provided that it is not the same as some observer already in the set.
      *
      * @param o (Observer) The observer.
+     * @throws NullPointerException when "o" parameter is null.
      *
      * @author Brandon Watkins
      */

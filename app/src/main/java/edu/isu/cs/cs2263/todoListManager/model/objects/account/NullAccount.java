@@ -14,7 +14,7 @@ public class NullAccount extends Account {
      * @author Brandon Watkins
      */
     private NullAccount() {
-        super.setID(0);
+        super.setID(-1);
         super.setEmail("");
         super.setPassword("");
         super.setFirstName("");

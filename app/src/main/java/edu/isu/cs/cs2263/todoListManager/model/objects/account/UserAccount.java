@@ -33,7 +33,7 @@ public class UserAccount extends Account {
      * @author Brandon Watkins
      */
     public UserAccount(String biography, TaskList taskLists, String email, String password, String firstName, String lastName) {
-        this(Read.readNextID("account"), biography, taskLists, email, password, firstName, lastName);
+        this(Account.NEW_ACCOUNT_ID, biography, taskLists, email, password, firstName, lastName);
     }
 
     /**
@@ -68,7 +68,7 @@ public class UserAccount extends Account {
      * @author Brandon Watkins
      */
     public UserAccount(String email, String password, String firstName, String lastName) {
-        this(Read.readNextID("account"), null, new TaskList(), email, password, firstName, lastName);
+        this(Account.NEW_ACCOUNT_ID, null, new TaskList(), email, password, firstName, lastName);
     }
 
     /**

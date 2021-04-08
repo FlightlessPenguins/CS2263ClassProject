@@ -35,6 +35,7 @@ public class TaskList implements Searchable, Serializable {
     private List<TaskList> subTaskLists;
     private List<Section> sections;
     private Boolean isListArchived;
+    private static final int NEW_TASKLIST_ID = -12;
 
     public TaskList() { this(null); }
 
@@ -46,7 +47,7 @@ public class TaskList implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public TaskList(String title) {
-        this(Read.readNextID("taskList"), title, null, null, null, null, false);
+        this(title, null, null, null, null, false);
     }
 
     /**
@@ -58,7 +59,7 @@ public class TaskList implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public TaskList(String title, String description) {
-        this(Read.readNextID("taskList"), title, description, null, null, null, false);
+        this(title, description, null, null, null, false);
     }
 
     /**
@@ -71,7 +72,7 @@ public class TaskList implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public TaskList(String title, String description, String comment) {
-        this(Read.readNextID("taskList"), title, description, comment, null, null, false);
+        this(title, description, comment, null, null, false);
     }
 
     /**
@@ -87,7 +88,7 @@ public class TaskList implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public TaskList(String title, String description, String comment, List<TaskList> subTaskLists, List<Section> sections, Boolean isListArchived) {
-        this(Read.readNextID("taskList"), title, description, comment, subTaskLists, sections, isListArchived);
+        this(NEW_TASKLIST_ID, title, description, comment, subTaskLists, sections, isListArchived);
     }
 
     /**
@@ -104,7 +105,7 @@ public class TaskList implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public TaskList(int id, String title, String description, String comment, List<TaskList> subTaskLists, List<Section> sections, Boolean isListArchived) {
-        this.id = id;
+        this.id = id == NEW_TASKLIST_ID ? Read.getNextID(this) : id;
         this.title = title;
         this.description = description;
         this.comment = comment;
@@ -256,8 +257,6 @@ public class TaskList implements Searchable, Serializable {
     }
 
     public Boolean update(int ID, String title, String description, String comment, String subTaskListIDs) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("update not implemented, yet."); }
-
-    public int getNextID() throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("getNextID not implemented, yet."); }
 
     public void changeDueDates(TaskList uiList, Calendar date) {}
 

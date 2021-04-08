@@ -27,6 +27,7 @@ public class Task implements Searchable, Serializable {
     private List<Task> subtasks;
     private int parentTaskID;
     private int parentSectionID;
+    private static final int NEW_TASK_ID = -13;
 
     /**
      * Creates a Task.
@@ -41,7 +42,7 @@ public class Task implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Task(int id, String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks) {
-        this.id = id;
+        this.id = id == NEW_TASK_ID ? Read.getNextID(this) : id;
         this.title = title;
         this.description = description;
         this.labels = labels;
@@ -62,7 +63,7 @@ public class Task implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Task(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks) {
-        this(Read.readNextID("task"), title, description, labels, dueDate, dateCompleted, subtasks);
+        this(NEW_TASK_ID, title, description, labels, dueDate, dateCompleted, subtasks);
     }
 
     /**
@@ -73,7 +74,7 @@ public class Task implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Task(String title, String description) {
-        this(Read.readNextID("task"), title, description, null, null, null, null);
+        this(title, description, null, null, null, null);
     }
 
     /**
@@ -83,7 +84,7 @@ public class Task implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Task(String title) {
-        this(Read.readNextID("task"), title, null, null, null, null, null);
+        this(title, null, null, null, null, null);
     }
 
     /**

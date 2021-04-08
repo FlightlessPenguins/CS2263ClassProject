@@ -1,0 +1,38 @@
+{
+  "taskLists": {
+    "id": 20,
+    "subTaskLists": [
+      {
+        "id": 22,
+        "sections": [
+          {
+            "id": 22,
+            "tasks": [],
+            "defaultSection": true
+          }
+        ],
+        "isListArchived": false
+      }
+    ],
+    "sections": [
+      {
+        "id": 20,
+        "tasks": [
+          {
+            "id": 2,
+            "title": "Do stuff",
+            "parentTaskID": 0,
+            "parentSectionID": 0
+          }
+        ],
+        "defaultSection": true
+      }
+    ],
+    "isListArchived": false
+  },
+  "id": 11,
+  "email": "Stuff@gmail.com",
+  "password": "password",
+  "firstName": "Tom",
+  "lastName": "Bombadil"
+}

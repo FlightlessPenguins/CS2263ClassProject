@@ -21,7 +21,15 @@ class ReadTest {
      */
     @BeforeEach
     void setUp() {
-        File file = new File("./counters/account.txt");
+        File file = new File("./counters/userAccount.txt");
+        file.delete();
+        file = new File("./counters/adminAccount.txt");
+        file.delete();
+        file = new File("./counters/section.txt");
+        file.delete();
+        file = new File("./counters/task.txt");
+        file.delete();
+        file = new File("./counters/taskList.txt");
         file.delete();
         file = new File("./userData/0.json");
         file.delete();
@@ -38,7 +46,15 @@ class ReadTest {
      */
     @AfterEach
     void tearDown() {
-        File file = new File("./counters/account.txt");
+        File file = new File("./counters/userAccount.txt");
+        file.delete();
+        file = new File("./counters/adminAccount.txt");
+        file.delete();
+        file = new File("./counters/section.txt");
+        file.delete();
+        file = new File("./counters/task.txt");
+        file.delete();
+        file = new File("./counters/taskList.txt");
         file.delete();
         file = new File("./userData/0.json");
         file.delete();
@@ -49,34 +65,26 @@ class ReadTest {
     }
 
     @Test
-    void readSingleLineFile() {
-    }
-
-    @Test
-    void getNextID1() {
+    void getNextIDTest1() {
         assertEquals(0, Read.getNextID(new UserAccount()));
     }
 
     @Test
-    void getNextID2() {
+    void getNextIDTest2() {
         Read.getNextID(new UserAccount());
         Read.getNextID(new AdminAccount());
-        assertEquals(2, Read.getNextID(new UserAccount()));
-    }
-
-    @Test
-    void readNextLineFromFile() {
+        assertEquals(1, Read.getNextID(new UserAccount()));
     }
 
     /**
      * Writes object to file, which can be read back into memory.
      */
-    @Test
-    void readObjectFromFile() {
+    /*@Test
+    void readObjectFromFileTest() {
         Task task = new Task("Stuff", "Things");
         Write.writeObjectToFile(task, "./userData/test");
         assertEquals(task, (Task)Read.readObjectFromFile(Task.class, "./userData/test"));
-    }
+    }*/
 
     /**
      * Writes user to file, which can be read back into memory.
@@ -84,10 +92,10 @@ class ReadTest {
      * @author Brandon Watkins
      */
     @Test
-    void readUserData1() {
+    void readUserDataTest1() {
         UserAccount act = new UserAccount("Stuff@gmail.com", "password", "Tom", "Bombadil");
-        Write.writeObjectToFile(act, "./userData/0");
-        assertEquals(act, (UserAccount)Read.readObjectFromFile(UserAccount.class, "./userData/0"));
+        Write.writeAccountData(act);
+        assertEquals(act, Read.readUserData(0));
     }
 
     /**
@@ -96,15 +104,16 @@ class ReadTest {
      * @author Brandon Watkins
      */
     @Test
-    void readUserData2() {
+    void readUserDataTest2() {
         UserAccount act = new UserAccount("Stuff@gmail.com", "password", "Tom", "Bombadil");
         act.addTaskList(new TaskList());
         act.getTaskLists().addTask(new Task("Do stuff"));
-        Write.writeObjectToFile(act, "./userData/0");
-        assertEquals(act, (UserAccount)Read.readObjectFromFile(UserAccount.class, "./userData/0"));
+        Write.writeAccountData(act);
+        assertEquals(act, Read.readUserData(0));
     }
 
     @Test
-    void readAllUserData() {
+    void readAllUserDataTest() {
+
     }
 }

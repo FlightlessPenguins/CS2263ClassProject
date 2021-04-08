@@ -22,22 +22,6 @@ public class AccountCreateState implements State {
     }
 
     /**
-     * Gets the next available ID number.
-     *
-     * @return (int) The next available ID number.
-     *
-     * @author Brandon Watkins
-     */
-    private int getNextID() throws ExecutionControl.NotImplementedException {
-        // Read in ID counter from file
-        Read.readNextID("account");
-        // increment counter
-        // write new counter to file
-        // return counter that was read from file.
-        throw new ExecutionControl.NotImplementedException("getNextID not implemented yet.");
-    }
-
-    /**
      * Helper class for singleton implementation
      *
      * @author Brandon Watkins

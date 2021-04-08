@@ -1,0 +1,18 @@
+{
+  "taskLists": {
+    "id": 18,
+    "sections": [
+      {
+        "id": 18,
+        "tasks": [],
+        "defaultSection": true
+      }
+    ],
+    "isListArchived": false
+  },
+  "id": 10,
+  "email": "Stuff@gmail.com",
+  "password": "password",
+  "firstName": "Tom",
+  "lastName": "Bombadil"
+}

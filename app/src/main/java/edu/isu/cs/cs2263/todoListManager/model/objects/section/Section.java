@@ -26,6 +26,7 @@ public class Section implements Searchable, Serializable {
     private String description;
     private List<Task> tasks;
     private Boolean defaultSection = false;
+    private static final int NEW_SECTION_ID = -14;
 
     //Constructors
     public Section(){}
@@ -66,7 +67,7 @@ public class Section implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Section(String title, String description, List<Task> tasks, Boolean isDefault){
-        this(Read.readNextID("section"), title, description, tasks, isDefault);
+        this(NEW_SECTION_ID, title, description, tasks, isDefault);
     }
 
     /**
@@ -81,7 +82,7 @@ public class Section implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Section(int id, String title, String description, List<Task> tasks, Boolean isDefault){
-        this.id = id;
+        this.id = id == NEW_SECTION_ID ? Read.getNextID(this) : id;
         this.title = title;
         this.description = description;
         this.defaultSection = isDefault;
@@ -156,10 +157,6 @@ public class Section implements Searchable, Serializable {
 
     public Section update(int id, String title, String description, String taskIDs){
         return this;
-    }
-
-    private int getNextID() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("getNextID() not implemented.");
     }
 
     public Section moveTaskToSection(Task task, Section destination) throws ExecutionControl.NotImplementedException {

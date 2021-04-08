@@ -25,15 +25,48 @@ public class Write {
      *
      * @author Brandon Watkins
      */
-    public static File createFile(String path) {//private
+    protected static File createFile(String path) {
         File file = new File(path);
         try {
+            createDirectory(path);
             file.createNewFile();
         } catch (Exception ex) {
-            System.out.printf("storage.Write.createFile() failed with exception: %s", ex.getMessage());
+            System.out.printf("\r\nstorage.Write.createFile() failed with exception: %s", ex.getMessage());
         } finally {
             return file;
         }
+    }
+
+    /**
+     * Creates a directory if one doesn't already exist at the given path.
+     *
+     * @param path (String) The filepath to the directory (including the directory itself).
+     * @return (File) The file (directory) located at the given path.
+     *
+     * @author Brandon Watkins
+     */
+    private static File createDirectory(String path) {
+        String[] dirs = path.split("\\/");
+        String dir = "";
+        // path contains path, but no filename
+        if ((dirs.length == 1 && (dirs[0] == "." || !dirs[0].contains("."))) ||
+                (dirs.length > 1 && !dirs[dirs.length - 1].contains("."))) {
+            for (int i = 0; i < dirs.length; i++) {
+                dir += (dirs[i] + "/");
+            }
+        }
+        // path contains both a path and filename
+        else if (dirs.length > 1 && dirs[dirs.length -1].contains(".")) {
+            for (int i = 0; i < dirs.length - 1; i++) {
+                dir += (dirs[i] + "/");
+            }
+        }
+        // else no directory path given
+        else dir = "./";
+
+        File directory = new File(dir);
+        if (!directory.exists()) directory.mkdirs();
+        return new File(dir);
     }
 
     /**
@@ -44,7 +77,7 @@ public class Write {
      *
      * @author Brandon Watkins
      */
-    public static void incrementCounter(String path, Integer counter) {//protected
+    protected static void incrementCounter(String path, Integer counter) {
         overwriteFile(path, Integer.toString(counter + 1));
     }
 
@@ -56,7 +89,7 @@ public class Write {
      *
      * @author Brandon Watkins
      */
-    public static void overwriteFile(String path, String contents) {//private
+    private static void overwriteFile(String path, String contents) {
         File file = createFile(path);
         FileWriter writer = null;
         if (file.exists()) {
@@ -65,7 +98,7 @@ public class Write {
                 writer.write(contents);
                 if (writer != null) writer.close();
             } catch (Exception ex) {
-                System.out.printf("storage.Write.overwriteFile() failed with exception: %s", ex.getMessage());
+                System.out.printf("\r\nstorage.Write.overwriteFile() failed with exception: %s", ex.getMessage());
             }
         }
     }
@@ -78,17 +111,19 @@ public class Write {
      *
      * @author Brandon Watkins
      */
-    public static void writeObjectToFile(Object o, String path) {//private
+    private static void writeObjectToFile(Object o, String path) {
         Writer writer;
         Gson gson;
         try {
+
+
             File file = createFile(path + ".json");
             writer = Files.newBufferedWriter(Paths.get(path + ".json"));
             gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(o, writer);
             if (writer != null) writer.close();
         } catch (Exception ex) {
-            System.out.printf("storage.Write.writeObjectToFile() failed with exception: %s", ex.getMessage());
+            System.out.printf("\r\nstorage.Write.writeObjectToFile() failed with exception: %s", ex.getMessage());
         }
     }
 
@@ -99,19 +134,20 @@ public class Write {
      *
      * @author Brandon Watkins
      */
-    public static void writeUserData(Account user) {
+    public static void writeAccountData(Account user) {
         writeObjectToFile(user, "./userData/" + user.getID());
     }
 
     /**
      * Writes all accounts to file(s).
+     * <p>Use (Questionably) when you close the app, and whenever admin updates an account.
      *
      * @author Brandon Watkins
      */
     public static void writeAllAccountsToFile() {
         // Makes it easier to find user-specific data, premature optimization though.
         for (Account account : (((AccountListState)(AccountListState.instance()))).getAccountsBackdoor()) {
-            writeUserData(account);
+            writeAccountData(account);
         }
         // writes the account list state, containing all accounts, which in turn contain all other data needing to be saved.
         writeObjectToFile(AccountListState.instance(), "./accounts/");

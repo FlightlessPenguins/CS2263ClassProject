@@ -5,7 +5,12 @@
 package edu.isu.cs.cs2263.todoListManager.storage;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.AdminAccount;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
@@ -28,17 +33,17 @@ public class Read {
      *
      * @author Brandon Watkins
      */
-    public static String readSingleLineFile(String path) {
+    private static String readSingleLineFile(String path) {
         Scanner reader = null;
         String output = null;
         try {
             File file = Write.createFile(path);
-            if (!file.exists()) return null;
+            if (!file.exists() || file.isDirectory()) return null;
             reader = new Scanner(file);
             output = readNextLineFromFile(reader);
             if (reader != null) reader.close();
         } catch (Exception ex) {
-            System.out.printf("storage.Read.readSingleLineFile() failed with exception: %s", ex.getMessage());
+            System.out.printf("\r\nstorage.Read.readSingleLineFile() failed with exception: %s", ex.getMessage());
         } finally {
             return output;
         }
@@ -52,27 +57,29 @@ public class Read {
      *
      * @author Brandon Watkins
      */
-    public static int readNextID(String path) {
+    private static int readNextID(String path) {
         String output = readSingleLineFile("./counters/" + path + ".txt");
         if (output == null) output = "0";
         Write.incrementCounter("./counters/" + path + ".txt", Integer.parseInt(output));
         return Integer.parseInt(output);
     }
 
+    /**
+     * Gets the next available ID from it's associated file, and increments the counter.
+     *
+     * @param objectYouNeedAnIdFor (Object) The object you need an ID for.
+     * @return (int) The next available ID for this type of object.
+     *
+     * @author Brandon Watkins
+     */
     public static int getNextID(Object objectYouNeedAnIdFor) {
         if (objectYouNeedAnIdFor == null) return -1;
         else {
-            String name = objectYouNeedAnIdFor.getClass().getName();
+            String name = objectYouNeedAnIdFor.getClass().getSimpleName();
             if (name != null) name = name.substring(0, 1).toLowerCase() + name.substring(1);
             if (name == "userAccount" || name == "adminAccount" || name == "nullAccount") name = "account";
             return readNextID(name);
         }
-        /*
-        if (objectYouNeedAnIdFor instanceof Account) return readNextID("account");
-        else if (objectYouNeedAnIdFor instanceof Section) return readNextID("section");
-        else if (objectYouNeedAnIdFor instanceof Task) return readNextID("task");
-        else if (objectYouNeedAnIdFor instanceof TaskList) return readNextID("taskList");
-        else return readNextID(Object.class.getName());*/
     }
 
     /**
@@ -83,11 +90,11 @@ public class Read {
      *
      * @author Brandon Watkins
      */
-    public static String readNextLineFromFile(Scanner reader) {//private
+    private static String readNextLineFromFile(Scanner reader) {
         try {
             return reader.hasNextLine() ? reader.nextLine() : null;
         } catch (Exception ex) {
-            System.out.printf("storage.Read.readNextLineFromFile() failed with exception: %s", ex.getMessage());
+            System.out.printf("\r\nstorage.Read.readNextLineFromFile() failed with exception: %s", ex.getMessage());
         }
         return null;
     }
@@ -101,7 +108,7 @@ public class Read {
      *
      * @author Brandon Watkins
      */
-    public static Object readObjectFromFile(Class c, String path) {//private
+    private static Object readObjectFromFile(Class c, String path) {
         Object object = null;
         Reader reader = null;
         try {
@@ -109,11 +116,55 @@ public class Read {
             reader = Files.newBufferedReader(Paths.get(path + ".json"));
             if (reader == null) return null;
             Gson gson = new Gson();
-            object = gson.fromJson(reader, c);
+            object = (Object)(gson.fromJson(reader, c));
         } catch (Exception ex) {
-            System.out.printf("storage.Read.readObjectFromFile() failed with exception: %s", ex.getMessage());
+            System.out.printf("\r\nstorage.Read.readObjectFromFile() failed with exception: %s", ex.getMessage());
         }
         return object;
+    }
+
+    /**
+     * Determines which account type the given user id belongs to.
+     *
+     * @param userID (int) The user's ID number.
+     * @return (Account) The account belonging to the user with the given ID. (Null) If no matching user was found.
+     *
+     * @author Brandon Watkins
+     */
+    private static Account determineAccountType(int userID) {
+        Class c = null;
+        try {
+            File file = Write.createFile("./userData/" + userID + ".json");
+            if (!file.exists() || file.isDirectory()) return null;
+
+            Reader reader = Files.newBufferedReader(Paths.get("./userData/" + userID + ".json"));
+            JsonElement obj = JsonParser.parseReader(reader);
+            String str = obj.toString();
+            c = userOrAdmin(str);
+            return (Account) readObjectFromFile(c, "./userData/" + userID);
+        } catch (Exception ex) {
+            System.out.printf("\r\nstorage.Read.determineAccountType() failed with exception: %s", ex.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Determines whether a json object is an admin or a user.
+     *
+     * @param jsonString (String) The JSON string to search through.
+     * @return (Class) The concrete Account class stored in the JSON string.
+     *
+     * @author Brandon Watkins
+     */
+    private static Class userOrAdmin(String jsonString) {
+        // User Account
+        if (jsonString.contains("taskLists")) {
+            return UserAccount.class;
+        }
+        // Admin Account
+        else {
+            return AdminAccount.class;
+        }
     }
 
     /**
@@ -124,14 +175,29 @@ public class Read {
      *
      * @author Brandon Watkins
      */
-    public static Account readUserData(int userID) {//private
-        Object o = readObjectFromFile(Account.class, "./userData/" + userID + ".json");
-        if (o != null && o instanceof Account) return (Account)o;
+    public static Account readUserData(int userID) {
+        Account account = determineAccountType(userID);
+        if (account != null && (account instanceof UserAccount || account instanceof AdminAccount)) return account;
         else return null;
+
+        /*String path = "./userData/" + userID + ".json";
+        Object account = null;
+        Reader reader = null;
+        try {
+            if (!(new File("./userData/" + userID + ".json")).exists()) return null;
+            reader = Files.newBufferedReader(Paths.get(path + ".json"));
+            if (reader == null) return null;
+            Gson gson = new Gson();
+            object = (Object)(gson.fromJson(reader, c));
+        } catch (Exception ex) {
+            System.out.printf("\r\nstorage.Read.readObjectFromFile() failed with exception: %s", ex.getMessage());
+        }
+        return object;*/
     }
 
     /**
      * Reads all of the user data in from files.
+     * <p>Use only once, when app opens.
      *
      * @return (List<Account>) List of all Accounts.
      *
@@ -147,7 +213,7 @@ public class Read {
                     Object o = readUserData(Integer.parseInt(file.getName()));
                     if (o != null && o instanceof Account) accounts.add((Account) o);
                 } catch (Exception ex) {
-                    System.out.printf("storage.Read.readAllUserData() failed to read file (%s) with exception: %s", file.getName(), ex.getMessage());
+                    System.out.printf("\r\nstorage.Read.readAllUserData() failed to read file (%s) with exception: %s", file.getName(), ex.getMessage());
                 }
             }
         }
