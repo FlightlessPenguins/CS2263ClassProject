@@ -179,20 +179,6 @@ public class Read {
         Account account = determineAccountType(userID);
         if (account != null && (account instanceof UserAccount || account instanceof AdminAccount)) return account;
         else return null;
-
-        /*String path = "./userData/" + userID + ".json";
-        Object account = null;
-        Reader reader = null;
-        try {
-            if (!(new File("./userData/" + userID + ".json")).exists()) return null;
-            reader = Files.newBufferedReader(Paths.get(path + ".json"));
-            if (reader == null) return null;
-            Gson gson = new Gson();
-            object = (Object)(gson.fromJson(reader, c));
-        } catch (Exception ex) {
-            System.out.printf("\r\nstorage.Read.readObjectFromFile() failed with exception: %s", ex.getMessage());
-        }
-        return object;*/
     }
 
     /**

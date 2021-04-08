@@ -1,10 +1,14 @@
 package edu.isu.cs.cs2263.todoListManager.controller;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.AdminAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
+import edu.isu.cs.cs2263.todoListManager.storage.Write;
 import edu.isu.cs.cs2263.todoListManager.view.View;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,15 +18,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    public Controller() {}
-
     private List<String> filters;
+
+    public Controller() {}
 
     public List<String> getFilters() {
         return filters;
@@ -32,8 +37,18 @@ public class Controller implements Initializable {
         this.filters = filters;
     }
 
-    public List<UserAccount> getUsers() {
-        throw new RuntimeException("not implemented yet.");
+    /**
+     * Gets a list of all accounts, if current user is an admin.
+     *
+     * @return (List<Account>) List of all accounts, or an empty list if user is not an admin.
+     *
+     * @author Brandon Watkins
+     */
+    public List<Account> getUsers() {
+        if (((AccountContext) AccountContext.instance()).getCurrentAccount() instanceof AdminAccount) {
+            return ((AccountListState) AccountListState.instance()).getUsers();
+        }
+        else return new ArrayList<Account>();
     }
 
     public TaskList getUIList() {
@@ -64,8 +79,24 @@ public class Controller implements Initializable {
         throw new RuntimeException("not implemented yet.");
     }
 
-    public Boolean saveData() {
-        throw new RuntimeException("not implemented yet.");
+    /**
+     * Saves the currently logged in user's data to file.
+     *
+     * @author Brandon Watkins
+     */
+    public void saveData() {
+        Write.writeAccountData(((AccountContext) AccountContext.instance()).getCurrentAccount());
+    }
+
+    /**
+     * Saves the specified user's data to file.
+     *
+     * @param accountToSave (Account) The account to save to file.
+     *
+     * @author Brandon Watkins
+     */
+    public void saveData(Account accountToSave) {
+        Write.writeAccountData(accountToSave);
     }
 
     public Boolean readData() {
@@ -76,8 +107,13 @@ public class Controller implements Initializable {
         throw new RuntimeException("not implemented yet.");
     }
 
-    public void searchTasks(String searchTerm) {throw new RuntimeException("not implemented yet.");}
-    public void filterTasks(List<String> filters) {throw new RuntimeException("not implemented yet.");}
+    public void searchTasks(String searchTerm) {
+        throw new RuntimeException("not implemented yet.");
+    }
+
+    public void filterTasks(List<String> filters) {
+        throw new RuntimeException("not implemented yet.");
+    }
 
     /**
      * called by UI.
