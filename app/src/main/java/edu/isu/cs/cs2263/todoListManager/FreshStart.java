@@ -4,6 +4,7 @@
  */
 package edu.isu.cs.cs2263.todoListManager;
 
+import com.google.gson.GsonBuilder;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.*;
 import edu.isu.cs.cs2263.todoListManager.storage.Write;
 
@@ -41,8 +42,13 @@ public class FreshStart {
         // create subtask in one of the tasks in tasklist2, section1
         // create a subtasklist - "subtasklist" - in tasklist2
         // create 1 task in subtasklist, default section
+        System.out.printf("\r\nTest user created:\r\nID: %s\r\nEmail: %s\r\nPassword Hash: %s\r\nName: %s %s\r\nBiography: %s\r\n",
+                user.getID(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), ((UserAccount) user).getBiography());
 
+        // Save test user
+        System.out.println("\r\nSaving test user");
         Write.writeAccountData(user);
+
     }
 
 }

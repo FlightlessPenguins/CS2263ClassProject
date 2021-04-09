@@ -1,0 +1,19 @@
+{
+  "biography": "I was here.",
+  "taskLists": {
+    "id": 1,
+    "sections": [
+      {
+        "id": 1,
+        "tasks": [],
+        "defaultSection": true
+      }
+    ],
+    "isListArchived": false
+  },
+  "id": 0,
+  "email": "test@gmail.com",
+  "password": "password",
+  "firstName": "Brandon",
+  "lastName": "Watkins"
+}
