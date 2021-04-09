@@ -1,10 +1,13 @@
 package edu.isu.cs.cs2263.todoListManager.controller;
 
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.AccountIterator;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
+import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import edu.isu.cs.cs2263.todoListManager.view.View;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -72,8 +76,48 @@ public class Controller implements Initializable {
         throw new RuntimeException("not implemented yet.");
     }
 
-    public void archiveList(int listID) {
-        throw new RuntimeException("not implemented yet.");
+
+    /** Retrieves the specific TaskList and archives it
+     *
+     *
+     * @param listID
+     * @author Liam Andrus
+     */
+    public void archiveList(int listID, int userID) {
+
+        Boolean bool = true;
+        Integer i = userID;
+        String stringID = i.toString();
+
+
+        Object o = Read.readUserData(userID);
+        UserAccount acct = (UserAccount)o;
+
+        //Iterator<TaskList> iter = acct.getTaskLists().iterator();
+        // - instance variable taskLists in TaskList might need to be a List<TaskList> rather than
+        //   a single taskList. not sure though
+
+    }
+
+    /**
+     * Resets the password of the target account
+     *
+     * @param ID
+     * @param password
+     * @author Liam Andrus
+     */
+    public void resetPassword(int ID, String password) {
+
+        Iterator<UserAccount> iter = getUsers().iterator();
+        int target = ID;
+        UserAccount currentAccount = null;
+
+        while(iter.hasNext()){
+            currentAccount = iter.next();
+            if(currentAccount.getID() == target) break;
+        }
+        currentAccount.setPassword(password);
+
     }
 
     public void searchTasks(String searchTerm) {throw new RuntimeException("not implemented yet.");}
@@ -92,8 +136,23 @@ public class Controller implements Initializable {
     }
     public void createTaskList(String name, String comment) {throw new RuntimeException("not implemented yet.");}
     public UserAccount getCurrentUser() {throw new RuntimeException("not implemented yet."); }
-    public void createSection(String title, String description) {throw new RuntimeException("not implemented yet.");}
-    public void resetPassword(int ID) {throw new RuntimeException("not implemented yet.");}
+
+    /**
+     * Creates new section
+     *
+     * @param id (int)
+     * @param title (String)
+     * @param description (String)
+     * @param tasks (List<Task>)
+     * @return newSection (Section)
+     * @author Liam Andrus
+     */
+    public Section createSection(int id, String title, String description, List<Task> tasks) {
+
+        Section newSection = new Section(id, title, description, tasks);
+
+        return newSection;
+    }
 
     /**
      * reschedule task based on ID
@@ -111,6 +170,7 @@ public class Controller implements Initializable {
     public void editTask(int taskID) {throw new RuntimeException("not implemented yet.");}
     public void createTask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks, int parentTaskID) {
         throw new RuntimeException("not implemented yet.");}
+
     public void createSubtask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, int parentTaskID) {throw new RuntimeException("not implemented yet.");}
     public void registerNew() {throw new RuntimeException("not implemented yet.");}
     public void changeUserInfo() {throw new RuntimeException("not implemented yet.");}

@@ -21,7 +21,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
-public class TaskList implements Searchable, Serializable {
+public class
+TaskList implements Searchable, Serializable {
     /* Reserved IDs:
         0: currently viewed tasklist, unfiltered
         1: currently viewed tasklist, filtered
