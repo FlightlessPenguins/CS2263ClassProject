@@ -39,21 +39,19 @@ public class Section implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Section(Boolean isDefault) {
-        this(null, null, null, isDefault);
+        this(NEW_SECTION_ID, null, null, null, isDefault);
     }
 
     /**
      * Create a new Section.
      *
-     * @param id (int) The section's ID number.
      * @param title (String) The section's title.
      * @param description (String) The section's description.
-     * @param tasks (List<Task>) The section's contained Tasks.
      *
      * @author Brandon Watkins
      */
-    public Section(int id, String title, String description, List<Task> tasks){
-        this(id, title, description, tasks, false);
+    public Section(String title, String description){
+        this(NEW_SECTION_ID, title, description, null, false);
     }
 
     /**
@@ -82,7 +80,7 @@ public class Section implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Section(int id, String title, String description, List<Task> tasks, Boolean isDefault){
-        this.id = id == NEW_SECTION_ID ? Read.getNextID(this) : id;
+        this.id = id == NEW_SECTION_ID ? Read.getNextID(new Section()) : id;
         this.title = title;
         this.description = description;
         this.defaultSection = isDefault;

@@ -21,9 +21,9 @@ class ReadTest {
      */
     @BeforeEach
     void setUp() {
-        File file = new File("./counters/userAccount.txt");
+        File file = new File("./counters/account.txt");
         file.delete();
-        file = new File("./counters/adminAccount.txt");
+        file = new File("./counters/account.txt");
         file.delete();
         file = new File("./counters/section.txt");
         file.delete();
@@ -46,9 +46,9 @@ class ReadTest {
      */
     @AfterEach
     void tearDown() {
-        File file = new File("./counters/userAccount.txt");
+        File file = new File("./counters/account.txt");
         file.delete();
-        file = new File("./counters/adminAccount.txt");
+        file = new File("./counters/account.txt");
         file.delete();
         file = new File("./counters/section.txt");
         file.delete();
@@ -73,7 +73,7 @@ class ReadTest {
     void getNextIDTest2() {
         Read.getNextID(new UserAccount());
         Read.getNextID(new AdminAccount());
-        assertEquals(1, Read.getNextID(new UserAccount()));
+        assertEquals(2, Read.getNextID(new UserAccount()));
     }
 
     /**

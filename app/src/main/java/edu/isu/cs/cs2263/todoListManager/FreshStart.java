@@ -4,6 +4,9 @@
  */
 package edu.isu.cs.cs2263.todoListManager;
 
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.*;
+import edu.isu.cs.cs2263.todoListManager.storage.Write;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
@@ -19,13 +22,17 @@ public class FreshStart {
      * @author Brandon Watkins
      */
     public static void run() {
+        System.out.println("\r\nDeleting existing userData and counters...");
         // delete userData folder (and its contents)
-        delete("app/userData/");
-
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/");
         // delete counter folder (and its contents)
-        delete("app/counters/");
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/counters/");
+        System.out.println("");
 
-        // create test user with username: "test" and password: "password" (auto-creates a default tasklist with a default section)
+        // create test user with username: "test@gmail.com" and password: "password" (auto-creates a default tasklist with a default section)
+        System.out.println("Creating test user...");
+        Account user = new UserAccount("I was here.", null, "test@gmail.com", "password", "Brandon", "Watkins");
+
         // create tasklist - "tasklist2" (auto-creates a default section)
         // create section - "section1" - add to tasklist2
         // create 2 tasks in default tasklist/section
@@ -35,45 +42,7 @@ public class FreshStart {
         // create a subtasklist - "subtasklist" - in tasklist2
         // create 1 task in subtasklist, default section
 
+        Write.writeAccountData(user);
     }
 
-    /**
-     * Deletes all files and directories nested inside the given path, and the given path itself.
-     *
-     * @param directoryPath (String) The path to the directory to be deleted.
-     *
-     * @author Brandon Watkins
-     */
-    private static void delete(String directoryPath) {
-        File file = new File(directoryPath);
-        System.out.printf("\r\nFile path: %s", file.getAbsolutePath());
-        if (file.exists()) {
-            String[] files = file.list();
-            File nestedFile = null;
-            for (String f : files) {
-                nestedFile = new File(f);
-                System.out.printf("\r\n     File path: %s", nestedFile.getAbsolutePath());
-                if (nestedFile.exists() && nestedFile.isDirectory()) {
-                    delete(f);
-                }
-                nestedFile.delete();
-            }
-            file.delete();
-        }
-    }
-
-    /**
-     * deletes a specific file/directory (that cannot have any children).
-     *
-     * @param path (Path) The path to the file or directory to be deleted.
-     *
-     * @author Brandon Watkins
-     */
-    private static void deleteDirectory(Path path) {
-        try {
-            Files.delete(path);
-        } catch (IOException ex) {
-            System.out.printf("\r\nFreshStart.deleteDirectory() failed due to exception: %s", ex.getMessage());
-        }
-    }
 }

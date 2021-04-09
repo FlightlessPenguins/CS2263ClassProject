@@ -153,4 +153,33 @@ public class Write {
         writeObjectToFile(AccountListState.instance(), "./accounts/");
     }
 
+    /**
+     * Deletes all files and directories nested inside the given path, and the given path itself.
+     *
+     * @param directoryPath (String) The path to the directory to be deleted.
+     *
+     * @author Brandon Watkins
+     */
+    public static void deleteFolder(String directoryPath) {
+        File file = new File(directoryPath);
+        if (file.exists()) {
+            String[] files = file.list();
+            File nestedFile = null;
+            // if it is a directory
+            if (files != null) {
+                for (String f : files) {
+                    nestedFile = new File(file.getAbsolutePath() + "/" + f);
+                    if (nestedFile.exists()) {
+                        deleteFolder(nestedFile.getAbsolutePath());
+                        if (nestedFile.isDirectory()) System.out.printf("\r\nDeleted folder: %s", nestedFile.getAbsolutePath());
+                        else System.out.printf("\r\nDeleted file: %s", nestedFile.getAbsolutePath());
+                        nestedFile.delete();
+                    }
+                }
+            }
+            if (file.isDirectory()) System.out.printf("\r\nDeleted folder: %s", file.getAbsolutePath());
+            file.delete();
+        }
+    }
+
 }

@@ -77,7 +77,7 @@ public class Read {
         else {
             String name = objectYouNeedAnIdFor.getClass().getSimpleName();
             if (name != null) name = name.substring(0, 1).toLowerCase() + name.substring(1);
-            if (name == "userAccount" || name == "adminAccount" || name == "nullAccount") name = "account";
+            if (name.contains("Account")) name = "account";
             return readNextID(name);
         }
     }
