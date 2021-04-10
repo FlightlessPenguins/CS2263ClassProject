@@ -37,6 +37,7 @@ public class Read {
         Scanner reader = null;
         String output = null;
         try {
+            //System.out.println("Reading single line file: " + path);
             File file = Write.createFile(path);
             if (!file.exists() || file.isDirectory()) return null;
             reader = new Scanner(file);
@@ -58,9 +59,9 @@ public class Read {
      * @author Brandon Watkins
      */
     private static int readNextID(String path) {
-        String output = readSingleLineFile("./counters/" + path + ".txt");
+        String output = readSingleLineFile("app/counters/" + path + ".txt");
         if (output == null) output = "0";
-        Write.incrementCounter("./counters/" + path + ".txt", Integer.parseInt(output));
+        Write.incrementCounter("counters/" + path + ".txt", Integer.parseInt(output));
         return Integer.parseInt(output);
     }
 
@@ -112,8 +113,8 @@ public class Read {
         Object object = null;
         Reader reader = null;
         try {
-            if (!(new File(path + ".json")).exists()) return null;
-            reader = Files.newBufferedReader(Paths.get(path + ".json"));
+            if (!(new File(Paths.get("").toAbsolutePath().normalize().toString() + "/" + path + ".json")).exists()) return null;
+            reader = Files.newBufferedReader(Paths.get(Paths.get("").toAbsolutePath().normalize().toString() + "/" + path + ".json"));
             if (reader == null) return null;
             Gson gson = new Gson();
             object = (Object)(gson.fromJson(reader, c));
@@ -134,14 +135,13 @@ public class Read {
     private static Account determineAccountType(int userID) {
         Class c = null;
         try {
-            File file = Write.createFile("./userData/" + userID + ".json");
+            File file = Write.createFile("app/userData/" + userID + ".json");
             if (!file.exists() || file.isDirectory()) return null;
-
-            Reader reader = Files.newBufferedReader(Paths.get("./userData/" + userID + ".json"));
+            Reader reader = Files.newBufferedReader(Paths.get(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/" + userID + ".json"));
             JsonElement obj = JsonParser.parseReader(reader);
             String str = obj.toString();
             c = userOrAdmin(str);
-            return (Account) readObjectFromFile(c, "./userData/" + userID);
+            return (Account) readObjectFromFile(c, "app/userData/" + userID);
         } catch (Exception ex) {
             System.out.printf("\r\nstorage.Read.determineAccountType() failed with exception: %s", ex.getMessage());
         }
@@ -191,7 +191,7 @@ public class Read {
      */
     public static List<Account> readAllUserData() {
         List<Account> accounts = new ArrayList();
-        File directory = new File("./userData/");
+        File directory = new File(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/");
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {

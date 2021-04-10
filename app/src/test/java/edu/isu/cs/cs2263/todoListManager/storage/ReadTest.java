@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,21 +22,11 @@ class ReadTest {
      */
     @BeforeEach
     void setUp() {
-        File file = new File("./counters/account.txt");
-        file.delete();
-        file = new File("./counters/account.txt");
-        file.delete();
-        file = new File("./counters/section.txt");
-        file.delete();
-        file = new File("./counters/task.txt");
-        file.delete();
-        file = new File("./counters/taskList.txt");
-        file.delete();
-        file = new File("./userData/0.json");
-        file.delete();
-        file = new File("./userData/1.json");
-        file.delete();
-        file = new File("./userData/2.json");
+        // delete userData folder (and its contents)
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/", true);
+        // delete counter folder (and its contents)
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/counters/", true);
+        File file = new File("./app");
         file.delete();
     }
 
@@ -46,21 +37,11 @@ class ReadTest {
      */
     @AfterEach
     void tearDown() {
-        File file = new File("./counters/account.txt");
-        file.delete();
-        file = new File("./counters/account.txt");
-        file.delete();
-        file = new File("./counters/section.txt");
-        file.delete();
-        file = new File("./counters/task.txt");
-        file.delete();
-        file = new File("./counters/taskList.txt");
-        file.delete();
-        file = new File("./userData/0.json");
-        file.delete();
-        file = new File("./userData/1.json");
-        file.delete();
-        file = new File("./userData/2.json");
+        // delete userData folder (and its contents)
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/", true);
+        // delete counter folder (and its contents)
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/counters/", true);
+        File file = new File("./app");
         file.delete();
     }
 

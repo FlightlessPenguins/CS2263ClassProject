@@ -26,12 +26,13 @@ public class Write {
      * @author Brandon Watkins
      */
     protected static File createFile(String path) {
-        File file = new File(path);
+        File file = new File(Paths.get("").toAbsolutePath().normalize().toString() + "/" + path);
         try {
-            createDirectory(path);
+            createDirectory(Paths.get("").toAbsolutePath().normalize().toString() + "/" + path);
             file.createNewFile();
+            //System.out.println("Creating file: " + Paths.get("").toAbsolutePath().normalize().toString() + "/" + path);
         } catch (Exception ex) {
-            System.out.printf("\r\nstorage.Write.createFile() failed with exception: %s", ex.getMessage());
+            System.out.printf("\r\nstorage.Write.createFile() failed with exception: %s: %s", ex.getMessage(), Paths.get("").toAbsolutePath().normalize().toString() + "/" + path);
         } finally {
             return file;
         }
@@ -62,7 +63,7 @@ public class Write {
             }
         }
         // else no directory path given
-        else dir = "./";
+        else dir = Paths.get("").toAbsolutePath().normalize().toString() + "/app/";
 
         File directory = new File(dir);
         if (!directory.exists()) directory.mkdirs();
@@ -90,11 +91,13 @@ public class Write {
      * @author Brandon Watkins
      */
     private static void overwriteFile(String path, String contents) {
-        File file = createFile(path);
+        //System.out.println("Overwriting file: " + path);
+        File file = createFile("app/" + path);
         FileWriter writer = null;
         if (file.exists()) {
             try {
-                writer = new FileWriter(path);
+                //createDirectory(Paths.get("").toAbsolutePath().normalize().toString() + "/app/" + path);
+                writer = new FileWriter(Paths.get("").toAbsolutePath().normalize().toString() + "/app/" + path);
                 writer.write(contents);
                 if (writer != null) writer.close();
             } catch (Exception ex) {
@@ -115,10 +118,9 @@ public class Write {
         Writer writer;
         Gson gson;
         try {
-
-
-            File file = createFile(path + ".json");
-            writer = Files.newBufferedWriter(Paths.get(path + ".json"));
+            //System.out.println("Writing object to file: /app/" + path + ".json");
+            File file = createFile("app/" + path + ".json");
+            writer = Files.newBufferedWriter(Paths.get(Paths.get("").toAbsolutePath().normalize().toString() + "/app/" + path + ".json"));
             gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(o, writer);
             if (writer != null) writer.close();
@@ -135,7 +137,7 @@ public class Write {
      * @author Brandon Watkins
      */
     public static void writeAccountData(Account user) {
-        writeObjectToFile(user, "./userData/" + user.getID());
+        writeObjectToFile(user, "userData/" + user.getID());
     }
 
     /**
@@ -150,7 +152,7 @@ public class Write {
             writeAccountData(account);
         }
         // writes the account list state, containing all accounts, which in turn contain all other data needing to be saved.
-        writeObjectToFile(AccountListState.instance(), "./accounts/");
+        writeObjectToFile(AccountListState.instance(), "accounts/");
     }
 
     /**
@@ -161,6 +163,18 @@ public class Write {
      * @author Brandon Watkins
      */
     public static void deleteFolder(String directoryPath) {
+        deleteFolder(directoryPath, false);
+    }
+
+    /**
+     * Deletes all files and directories nested inside the given path, and the given path itself.
+     *
+     * @param directoryPath (String) The path to the directory to be deleted.
+     * @param suppressSystemMessages (Boolean) Whether you want to display system messages with progress.
+     *
+     * @author Brandon Watkins
+     */
+    public static void deleteFolder(String directoryPath, Boolean suppressSystemMessages) {
         File file = new File(directoryPath);
         if (file.exists()) {
             String[] files = file.list();
@@ -171,13 +185,15 @@ public class Write {
                     nestedFile = new File(file.getAbsolutePath() + "/" + f);
                     if (nestedFile.exists()) {
                         deleteFolder(nestedFile.getAbsolutePath());
-                        if (nestedFile.isDirectory()) System.out.printf("\r\nDeleted folder: %s", nestedFile.getAbsolutePath());
-                        else System.out.printf("\r\nDeleted file: %s", nestedFile.getAbsolutePath());
+                        if (!suppressSystemMessages) {
+                            if (nestedFile.isDirectory()) System.out.printf("\r\nDeleted folder: %s", nestedFile.getAbsolutePath());
+                            else System.out.printf("\r\nDeleted file: %s", nestedFile.getAbsolutePath());
+                        }
                         nestedFile.delete();
                     }
                 }
             }
-            if (file.isDirectory()) System.out.printf("\r\nDeleted folder: %s", file.getAbsolutePath());
+            if (file.isDirectory() && !suppressSystemMessages) System.out.printf("\r\nDeleted folder: %s", file.getAbsolutePath());
             file.delete();
         }
     }

@@ -6,6 +6,7 @@ package edu.isu.cs.cs2263.todoListManager.model.objects.section;
 
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
+import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
@@ -21,12 +22,14 @@ import java.util.List;
 public class Section implements Searchable, Serializable {
 
     //Instance Variables
+    private static final int NO_PARENT_TASKLIST = -1;
     private int id;
     private String title;
     private String description;
     private List<Task> tasks;
     private Boolean defaultSection = false;
     private static final int NEW_SECTION_ID = -14;
+    private int parentTaskListID = NO_PARENT_TASKLIST;
 
     //Constructors
     public Section(){}
@@ -137,6 +140,7 @@ public class Section implements Searchable, Serializable {
      */
     public Section addTask(Task task){
         tasks.add(task);
+        task.setParentSection(this);
         return this;
     }
 
@@ -150,6 +154,7 @@ public class Section implements Searchable, Serializable {
      */
     public Task removeTask(Task task) {
         tasks.remove(task);
+        task.setParentSection(null);
         return task;
     }
 
@@ -196,4 +201,30 @@ public class Section implements Searchable, Serializable {
         return false;
     }
 
+    /**
+     * Sets this section's parent tasklist.
+     *
+     * @param taskList (TaskList) This section's parent tasklist.
+     * @return (Section) This child section.
+     *
+     * @author Brandon Watkins
+     */
+    public Section setParentTaskList(TaskList taskList) {
+        if (taskList == null) parentTaskListID = NO_PARENT_TASKLIST;
+        else parentTaskListID = taskList.getID();
+        return this;
+    }
+
+    /**
+     * Sets this section's parent tasklist's ID number.
+     *
+     * @param parentTaskListID (int) This tasklist's parent tasklist's ID number.
+     * @return (Section) This child section.
+     *
+     * @author Brandon Watkins
+     */
+    public Section setParentTaskListID(int parentTaskListID) {
+        this.parentTaskListID = parentTaskListID;
+        return this;
+    }
 }
