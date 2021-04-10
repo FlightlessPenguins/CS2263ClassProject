@@ -29,6 +29,8 @@ TaskList implements Searchable, Serializable {
 
      */
 
+    private static final int NEW_TASKLIST_ID = -12;
+    private static final int NO_PARENT_TASKLIST = -1;
     protected int id;
     private String title;
     private String description;
@@ -36,7 +38,8 @@ TaskList implements Searchable, Serializable {
     private List<TaskList> subTaskLists;
     private List<Section> sections;
     private Boolean isListArchived;
-    private static final int NEW_TASKLIST_ID = -12;
+    private int parentTaskListID = NO_PARENT_TASKLIST;
+
 
     public TaskList() { this(null); }
 
@@ -165,6 +168,7 @@ TaskList implements Searchable, Serializable {
     public TaskList addSubTaskList(TaskList taskList) {
         if (subTaskLists == null) subTaskLists = new ArrayList<TaskList>();
         subTaskLists.add(taskList);
+        taskList.setParentTaskList(this);
         return this;
     }
 
@@ -178,19 +182,74 @@ TaskList implements Searchable, Serializable {
      */
     public TaskList removeSubTaskList(TaskList taskList)  {
         subTaskLists.remove(taskList);
+        taskList.setParentTaskList(null);
         return taskList;
     }
 
-
+    /**
+     * Adds a section to this TaskList.
+     *
+     * @param section (Section) The section to add to this TaskList.
+     * @return (TaskList) This TaskList.
+     *
+     * @author Brandon Watkins
+     */
     public TaskList addSection(Section section) {
         sections.add(section);
+        section.setParentTaskList(this);
         return this;
     }
 
-
+    /**
+     * Removes a section from this tasklist.
+     *
+     * @param section (Section) The section to be removed.
+     * @return (Section) The section that was removed.
+     *
+     * @author Brandon Watkins
+     */
     public Section removeSection(Section section) {
         sections.remove(section);
+        section.setParentTaskList(null);
         return section;
+    }
+
+    /**
+     * Sets the parent tasklist for this tasklist.
+     *
+     * @param parentTaskList (TaskList) This tasklist's parent tasklist.
+     * @return (TaskList) The child tasklist.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList setParentTaskList(TaskList parentTaskList) {
+        if (parentTaskList == null) parentTaskListID = NO_PARENT_TASKLIST;
+        else parentTaskListID = parentTaskList.getID();
+        return this;
+    }
+
+    /**
+     * Sets this tasklist's parent's tasklist's ID.
+     *
+     * @param parentTaskListID (int) The parent tasklist's ID number.
+     * @return (TaskList) The child Tasklist.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList setParentTaskListID(int parentTaskListID) {
+        this.parentTaskListID = parentTaskListID;
+        return this;
+    }
+
+    /**
+     * Gets this tasklist's parent tasklist's ID.
+     *
+     * @return (int) The parent TaskList's ID number.
+     *
+     * @author Brandon Watkins
+     */
+    public int getParentTaskListID() {
+        return parentTaskListID;
     }
 
     /**

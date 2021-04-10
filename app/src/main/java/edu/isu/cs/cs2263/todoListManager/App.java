@@ -21,6 +21,7 @@ import java.nio.file.Path;
 public class App{
 
     public static void main(String[] args) {
+        //FreshStart.run();// This will ERASE all user data, and generate a test user. Do NOT USE once we're done testing the app.
         Application.launch(View.instance().getClass());
     }
 }

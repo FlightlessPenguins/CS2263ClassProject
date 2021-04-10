@@ -6,6 +6,7 @@ package edu.isu.cs.cs2263.todoListManager.model.objects.task;
 
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.search.Searchable;
@@ -18,6 +19,9 @@ import java.util.List;
 
 public class Task implements Searchable, Serializable {
 
+    private static final int HAS_NO_PARENT_TASK = -1;
+    private static final int NO_PARENT_SECTION = -2;
+    private static final int NEW_TASK_ID = -13;
     private int id;
     private String title;
     private String description;
@@ -25,9 +29,9 @@ public class Task implements Searchable, Serializable {
     private Calendar dueDate;
     private Calendar dateCompleted;
     private List<Task> subtasks;
-    private int parentTaskID;
-    private int parentSectionID;
-    private static final int NEW_TASK_ID = -13;
+    private int parentTaskID = HAS_NO_PARENT_TASK;
+    private int parentSectionID = NO_PARENT_SECTION;
+
 
     /**
      * Creates a Task.
@@ -116,6 +120,158 @@ public class Task implements Searchable, Serializable {
     }
 
     /**
+     * Sets this task's subtasks.
+     *
+     * @param subtasks (List<Task>) Subtasks to add to this task.
+     * @return (Task) The parent task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task setSubtasks(List<Task> subtasks) {
+        this.subtasks = subtasks;
+        return this;
+    }
+
+    /**
+     * Adds a subtask to this task.
+     *
+     * @param subtask (Task) The task to be added as a child.
+     * @return (Task) The parent task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task addSubTask(Task subtask) {
+        if (canAddSubtask()) {
+            if (this.subtasks == null) this.subtasks = new ArrayList<Task>();
+            this.subtasks.add(subtask);
+            subtask.setParentTask(this);
+        }
+        return this;
+    }
+
+    /**
+     * Removes a subtask from this task.
+     *
+     * @param subtask (Task) The task to be removed from the parent task.
+     * @return (Task) The parent task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task removeSubTask(Task subtask) {
+        subtask.setParentTask(null);
+        this.subtasks.remove(subtask);
+        return this;
+    }
+
+    /**
+     * Determines whether the task can have children tasks.
+     *
+     * @return (Boolean) True if the task can have subtasks (ie. it has no parent task).
+     *
+     * @author Brandon Watkins
+     */
+    public Boolean canAddSubtask() {
+        return parentTaskID == HAS_NO_PARENT_TASK;
+    }
+
+    /**
+     * Sets the task's parent task's ID.
+     *
+     * @param parentTask (Task) The parent task.
+     * @return (Task) The child task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task setParentTask(Task parentTask) {
+        if (parentTask != null) this.parentTaskID = parentTask.getID();
+        else this.parentTaskID = HAS_NO_PARENT_TASK;
+        return this;
+    }
+
+    /**
+     * Sets the task's parent task's ID.
+     *
+     * @param id (int) The parent's ID number.
+     * @return (Task) The child task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task setParentTaskID(int id) {
+        this.parentTaskID = id;
+        return this;
+    }
+
+    /**
+     * Gets the task's parent task's ID.
+     * @return (int) The parent task's ID number.
+     *
+     * @author Brandon Watkins
+     */
+    public int getParentTaskID() {
+        return parentTaskID;
+    }
+
+    /**
+     * Sets the task's parent Section's ID.
+     *
+     * @param id (int) The parent's ID number.
+     * @return (Task) The child task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task setParentSectionID(int id) {
+        this.parentSectionID = id;
+        return this;
+    }
+
+    /**
+     * Gets the task's parent Section's ID.
+     * @return (int) The parent Section's ID number.
+     *
+     * @author Brandon Watkins
+     */
+    public int getParentSectionID() {
+        return parentSectionID;
+    }
+
+    /**
+     * Gets the task's due date.
+     * @return (Calendar) The task's due date.
+     *
+     * @author Brandon Watkins
+     */
+    public Calendar getDueDate() {
+        return dueDate;
+    }
+
+    /**
+     * Sets the task's due date.
+     *
+     * @param dueDate (Calendar) The date to set the task's due date to.
+     * @return (Task) The task being modified.
+     *
+     * @author Brandon Watkins
+     */
+    public Task setDueDate(Calendar dueDate) {
+        this.dueDate = dueDate;
+        return this;
+    }
+
+    /**
+     * Sets the due date for today's date plus the given number of days.
+     *
+     * @param daysToAdd (int) Number of days from now to set the due date to.
+     * @return (Task) The task being modified.
+     *
+     * @author Brandon Watkins
+     */
+    public Task addDaysToDueDate(int daysToAdd) {
+        if (dueDate == null) dueDate = Calendar.getInstance();
+        dueDate.add(Calendar.DAY_OF_YEAR, daysToAdd);
+        return this;
+    }
+
+    /**
      * Searches via the SearchVisitor, returning a List of Tasks matching the search term.
      *
      * @param v (SearchVisitor) The visitor used to search with.
@@ -144,7 +300,9 @@ public class Task implements Searchable, Serializable {
         return false;
     }
 
-    public void setDueDate(Calendar dueDate) {
-        this.dueDate = dueDate;
+    public Task setParentSection(Section parentSection) {
+        if (parentSection == null) this.parentSectionID = NO_PARENT_SECTION;
+        else this.parentSectionID = parentSection.getID();
+        return this;
     }
 }
