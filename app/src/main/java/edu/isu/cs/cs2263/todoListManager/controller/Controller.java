@@ -50,7 +50,7 @@ public class Controller implements Initializable {
      */
     public List<Account> getUsers() {
         if (((AccountContext) AccountContext.instance()).getCurrentAccount() instanceof AdminAccount) {
-            return ((AccountListState) AccountListState.instance()).getUsers();
+            return ((AccountListState) AccountListState.instance()).getAccounts();
         }
         else return new ArrayList<Account>();
     }
@@ -121,8 +121,7 @@ public class Controller implements Initializable {
         String stringID = i.toString();
 
 
-        Object o = Read.readUserData(userID);
-        UserAccount acct = (UserAccount)o;
+        Account account = ((AccountContext)AccountContext.instance()).getCurrentAccount();
 
         //Iterator<TaskList> iter = acct.getTaskLists().iterator();
         // - instance variable taskLists in TaskList might need to be a List<TaskList> rather than

@@ -45,7 +45,10 @@ public class AccountListState implements State, Serializable {
      *
      * @author Brandon Watkins
      */
-    public List<Account> getAccounts() { return getUsers(); }
+    public List<Account> getAccounts() {
+        if (((AccountContext)(AccountContext.instance())).getCurrentAccount() instanceof AdminAccount) return accounts;
+        return new ArrayList<Account>();
+    }
 
     /**
      * Sets the list of accounts.
@@ -65,14 +68,14 @@ public class AccountListState implements State, Serializable {
      *
      * @author Brandon Watkins
      */
-    public List<Account> getUsers() {
+    /*public List<Account> getUsers() {
         if (((AccountContext)(AccountContext.instance())).getCurrentAccount() instanceof AdminAccount) return accounts;
         return new ArrayList<Account>();
-    }
+    }*/
 
     /**
      * Gets a list of all accounts.
-     * <p>Note: This should NOT be called for anything other than saving users to file, or other internal purposes.
+     * <p>Note: This should NOT be called for anything other than saving users to file, or other internal purposes (that don't require a user to be logged in for).
      *
      * @return (List<Account>) A list of all accounts.
      *

@@ -4,6 +4,7 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.context;
 
+import com.google.common.hash.Hashing;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.*;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.*;
@@ -41,6 +42,17 @@ public class AccountContext implements Context {
      */
     public Account getCurrentAccount() {
         return currentAccount;
+    }
+
+    /**
+     * Sets the current account to point to the given user.
+     *
+     * @param account (Account) The account to set as current account (The account that is currently logged in).
+     * @return (AccountContext) This AccountContext.
+     */
+    public AccountContext setCurrentAccount(Account account) {
+        this.currentAccount = account;
+        return this;
     }
 
     /**
@@ -87,8 +99,9 @@ public class AccountContext implements Context {
      */
     public Boolean verifyCredentials(String passwordAttempt) {
         if (currentAccount instanceof NullAccount) return false;
-        else if (generateHash(passwordAttempt) == currentAccount.getPassword()) return true; // or something.
-        else return false;
+        else {
+            return Hashing.sha512().hashString(passwordAttempt, StandardCharsets.UTF_8).toString().equals(currentAccount.getPassword());
+        }
     }
 
     /**
@@ -101,15 +114,8 @@ public class AccountContext implements Context {
      * @author https://www.baeldung.com/java-password-hashing
      */
     public String generateHash(String stringBeforeHash) {
-        SecureRandom rand = new SecureRandom();
-        byte[] salt = new byte[32];
-        rand.nextBytes(salt);
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
-            messageDigest.update(salt);
-            byte[] hashedBytes = messageDigest.digest(stringBeforeHash.getBytes(StandardCharsets.UTF_8));
-            String hashedPassword = hashedBytes.toString();
-            return hashedPassword;
+            return Hashing.sha512().hashString(stringBeforeHash, StandardCharsets.UTF_8).toString();
         } catch (Exception e) {
             throw new RuntimeException("Wasn't able to hash password, shutting down to avoid password compromise.");
         }

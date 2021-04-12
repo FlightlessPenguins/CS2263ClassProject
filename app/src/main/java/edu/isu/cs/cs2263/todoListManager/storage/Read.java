@@ -69,7 +69,7 @@ public class Read {
      * Gets the next available ID from it's associated file, and increments the counter.
      *
      * @param objectYouNeedAnIdFor (Object) The object you need an ID for.
-     * @return (int) The next available ID for this type of object.
+     * @return (int) The next available ID for this type of object, or -1 if null object was received.
      *
      * @author Brandon Watkins
      */
@@ -118,6 +118,7 @@ public class Read {
             if (reader == null) return null;
             Gson gson = new Gson();
             object = (Object)(gson.fromJson(reader, c));
+            if (reader != null) reader.close();
         } catch (Exception ex) {
             System.out.printf("\r\nstorage.Read.readObjectFromFile() failed with exception: %s", ex.getMessage());
         }
@@ -139,6 +140,7 @@ public class Read {
             if (!file.exists() || file.isDirectory()) return null;
             Reader reader = Files.newBufferedReader(Paths.get(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/" + userID + ".json"));
             JsonElement obj = JsonParser.parseReader(reader);
+            if (reader != null) reader.close();
             String str = obj.toString();
             c = userOrAdmin(str);
             return (Account) readObjectFromFile(c, "app/userData/" + userID);
@@ -196,8 +198,10 @@ public class Read {
         if (files != null) {
             for (File file : files) {
                 try {
-                    Object o = readUserData(Integer.parseInt(file.getName()));
-                    if (o != null && o instanceof Account) accounts.add((Account) o);
+                    String accountFileName = file.getName();
+                    if (accountFileName.length() > 5) accountFileName = accountFileName.substring(0, accountFileName.length() - 5);
+                    Account account = readUserData(Integer.parseInt(accountFileName));
+                    if (account != null && account instanceof Account) accounts.add((Account) account);
                 } catch (Exception ex) {
                     System.out.printf("\r\nstorage.Read.readAllUserData() failed to read file (%s) with exception: %s", file.getName(), ex.getMessage());
                 }

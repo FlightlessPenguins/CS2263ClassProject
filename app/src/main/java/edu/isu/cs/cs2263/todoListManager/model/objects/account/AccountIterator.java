@@ -17,7 +17,7 @@ public class AccountIterator implements Iterator<Account> {
     private int counter = 0;
 
     public AccountIterator() {
-        this.accounts = ((AccountListState)(AccountListState.instance())).getUsers();
+        this.accounts = ((AccountListState)(AccountListState.instance())).getAccounts();
     }
 
     /**

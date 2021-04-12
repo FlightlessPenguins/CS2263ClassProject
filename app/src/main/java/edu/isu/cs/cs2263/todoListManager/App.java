@@ -3,6 +3,11 @@
  */
 package edu.isu.cs.cs2263.todoListManager;
 
+import com.google.common.hash.Hashing;
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import edu.isu.cs.cs2263.todoListManager.view.View;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
@@ -16,12 +21,49 @@ import javafx.util.Duration;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 public class App{
 
     public static void main(String[] args) {
-        //FreshStart.run();// This will ERASE all user data, and generate a test user. Do NOT USE once we're done testing the app.
+        // Make sure this (runTests) is commented out whenever you push, especially for our submission. It will wipe all data every time it's run, otherwise.
+        //runTests();
+
         Application.launch(View.instance().getClass());
+    }
+
+    /**
+     * Runs a bunch of tests and builds a test user for us to play with.
+     *
+     * @author Brandon Watkins
+     */
+    private static void runTests() {
+        FreshStart.run();// This will ERASE all user data, and generate a test user. Do NOT USE once we're done testing the app.
+
+        // Read in all accounts to AccountListState
+        AccountListState als = (AccountListState)AccountListState.instance();
+        als.setAccounts(Read.readAllUserData());
+
+        // Retrieve test user by ID (even though it's the only user, just to show how it's done), and setting it to be the current account.
+        for (Account account : als.getAccountsBackdoor()) {
+            if (account.getID() == 0) {
+                ((AccountContext)AccountContext.instance()).setCurrentAccount(account);
+            }
+        }
+
+        // gets the newly set account
+        Account account = ((AccountContext)AccountContext.instance()).getCurrentAccount();
+
+        // checking the password (password)
+        String actualPassword = account.getPassword();
+        String attemptedPassword = Hashing.sha512().hashString("password", StandardCharsets.UTF_8).toString();
+        // invalid password
+        Boolean verified = ((AccountContext)AccountContext.instance()).verifyCredentials("Password");
+        // valid password
+        Boolean verified2 = ((AccountContext)AccountContext.instance()).verifyCredentials("password");
+
+
+        int breakPoint = 2;
     }
 }

@@ -25,7 +25,7 @@ public class AdminAccount extends Account {
     private List<Account> getUsers() {
 
         List<Account> users = new ArrayList<>();
-        Iterator<Account> iterator = ((AccountListState)(AccountListState.instance())).getUsers().iterator();
+        Iterator<Account> iterator = ((AccountListState)(AccountListState.instance())).getAccounts().iterator();
         while (iterator.hasNext()) {
             users.add(iterator.next());
         }
