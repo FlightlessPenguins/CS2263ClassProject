@@ -108,6 +108,10 @@ public class AccountListState implements State, Serializable {
         throw new RuntimeException("run not implemented yet.");
     }
 
+    public void addAccount(Account account) {
+        accounts.add(account);
+    }
+
     /**
      * Helper class for singleton implementation
      *
