@@ -1,6 +1,7 @@
 package edu.isu.cs.cs2263.todoListManager.controller;
 
 import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
+import edu.isu.cs.cs2263.todoListManager.model.context.TaskContext;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.AccountIterator;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.AdminAccount;
@@ -169,6 +170,8 @@ public class Controller implements Initializable {
         instance().logout();
         System.exit(0);
     }
+
+
     public void createTaskList(String name, String comment) {throw new RuntimeException("not implemented yet.");}
     public UserAccount getCurrentUser() {throw new RuntimeException("not implemented yet."); }
 
@@ -201,8 +204,39 @@ public class Controller implements Initializable {
     public void showTaskListInfo(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
     public void ShowTaskInfo(int taskID) {throw new RuntimeException("not implemented yet.");}
     public void editTask(int taskID) {throw new RuntimeException("not implemented yet.");}
-    public void createTask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks, int parentTaskID) {
-        throw new RuntimeException("not implemented yet.");}
+
+
+
+    /**
+     * creates a task.
+     *
+     * @param title (String) title of task
+     * @param description (String) description of task
+     * @param labels (List<String>) List of labels applied to task
+     * @param dueDate (Calendar) desired due date
+     * @param dateCompleted (Calendar) date completed. empty/null if incomplete
+     * @param subtasks (List<Task>) List of subtasks. Null if already a subtask
+     *
+     * @author Grant Baird
+     */
+    public Task createTask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks) {
+        Task newTask = new Task();
+        //Task newTask = new Task(title, description, labels, dueDate, dateCompleted, subtasks, parentTaskID)
+        if(title != null | description != null | labels != null | dueDate != null | dateCompleted != null | subtasks != null) {
+            newTask = new Task(title, description, labels, dueDate, dateCompleted, subtasks);
+        }
+        else if(title != null | description != null) {
+            newTask = new Task(title, description);
+        }
+        else if(title != null) {
+            newTask = new Task(title);
+        }
+
+        return newTask;
+    }
+
+
+
     public void createSubtask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, int parentTaskID) {throw new RuntimeException("not implemented yet.");}
     public void registerNew() {throw new RuntimeException("not implemented yet.");}
     public void changeUserInfo() {throw new RuntimeException("not implemented yet.");}
