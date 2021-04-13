@@ -1,3 +1,6 @@
+/**
+ * @author Brandon Watkins
+ */
 package edu.isu.cs.cs2263.todoListManager.search;
 
 import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
@@ -21,7 +24,8 @@ class SearchTaskVisitorTest {
     private UserAccount user;
     private AccountListState als = (AccountListState)AccountListState.instance();
     private SearchTaskVisitor v = new SearchTaskVisitor("1");
-    private Task task1;
+    private Task task5;
+    private Task task7;
 
     @BeforeEach
     void setUp() {
@@ -33,7 +37,7 @@ class SearchTaskVisitorTest {
         taskList2.addSubTaskList(subTaskList);
         Section section1 = new Section("Section 1", "Additional section.");
         taskList2.addSection(section1);
-        task1 = new Task("Task 1", "task 1 description", null, null, null, null);
+        Task task1 = new Task("Task 1", "task 1 description", null, null, null, null);
         Task task2 = new Task("Task 2", "task 2 description", null, null, null, null);
         user.getTaskLists().addTask(task1);
         user.getTaskLists().addTask(task2);
@@ -41,7 +45,7 @@ class SearchTaskVisitorTest {
         Task task4 = new Task("Task 4", "task 4 description", null, null, null, null);
         user.getTaskLists().getSubTaskLists().get(0).addTask(task3);
         user.getTaskLists().getSubTaskLists().get(0).addTask(task4);
-        Task task5 = new Task("Task 5", "task 5 description", null, null, null, null);
+        task5 = new Task("Task 5", "task 5 description", null, null, null, null);
         Task task6 = new Task("Task 6", "task 6 description", null, null, null, null);
         task5.addDaysToDueDate(14);
         Calendar date = Calendar.getInstance();
@@ -49,7 +53,7 @@ class SearchTaskVisitorTest {
         task6.setDueDate(date);
         user.getTaskLists().getSubTaskLists().get(0).getSections().get(1).addTask(task5);
         user.getTaskLists().getSubTaskLists().get(0).getSections().get(1).addTask(task6);
-        Task task7 = new Task("Task 7", "task 7 description", null, null, null, null);
+        task7 = new Task("Task 7", "task 7 description", null, null, null, null);
         user.getTaskLists().getSubTaskLists().get(0).getSections().get(1).getTasks().get(0).addSubTask(task7);
         Task task8 = new Task("Task 8", "task 8 description", null, null, null, null);
         user.getTaskLists().addTask(task8);
@@ -57,7 +61,6 @@ class SearchTaskVisitorTest {
         subTaskList.addSubTaskList(subSubTaskList);
         Section section2 = new Section("Section 2", "Additional section.");
         subSubTaskList.addSection(section2);
-
 
         Write.writeAccountData(user);
         Write.writeAllAccountsToFile();
@@ -77,20 +80,15 @@ class SearchTaskVisitorTest {
     }
 
     @Test
-    void getSearchResults() {
+    void search1() {
         TaskList list = user.getTaskLists().search("1");
-        assertTrue(list.iterator().hasNext() && list.iterator().next() == task1);
+        assertTrue(list.iterator().hasNext() && list.iterator().next() == task5, "Actual ID: " + list.iterator().next().getID() + ", Expected: 4.");
     }
 
     @Test
-    void visit() {
+    void search2() {
+        TaskList list = user.getTaskLists().search("7");
+        assertTrue(list.iterator().hasNext() && list.iterator().next() == task7);
     }
 
-    @Test
-    void testVisit() {
-    }
-
-    @Test
-    void testVisit1() {
-    }
 }

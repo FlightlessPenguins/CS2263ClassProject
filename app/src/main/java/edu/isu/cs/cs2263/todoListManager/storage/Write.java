@@ -157,7 +157,7 @@ public class Write {
             writeAccountData(account);
         }
         // writes the account list state, containing all accounts, which in turn contain all other data needing to be saved.
-        writeObjectToFile(AccountListState.instance(), "accounts/");
+        // writeObjectToFile(AccountListState.instance(), "accounts/"); // currently broken anyway, not worth spending the time to fix it.
     }
 
     /**

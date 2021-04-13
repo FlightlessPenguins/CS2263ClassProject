@@ -281,8 +281,18 @@ public class Task implements Searchable, Serializable {
     public List<Task> accept(SearchVisitor v) {
         String s = v.getSearchTerm();
         List<Task> output = new ArrayList();
-        if (title != null && title.contains(s) || description != null && description.contains(s)) {
+        if ((title != null && title.contains(s)) || (description != null && description.contains(s))) {
             output.add(this);
+            if (subtasks != null && subtasks.size() > 0) {
+                for (Task task : subtasks) {
+                    output.add(task);
+                }
+            }
+        }
+        else if (subtasks != null && subtasks.size() > 0) {
+            for (Task task : subtasks) {
+                output.addAll(task.accept(v));
+            }
         }
         return output;
     }
@@ -300,6 +310,14 @@ public class Task implements Searchable, Serializable {
         return false;
     }
 
+    /**
+     * Sets the Task's parent Section.
+     *
+     * @param parentSection (Section) The containing parent of this task.
+     * @return (Task) This task.
+     *
+     * @author Brandon Watkins
+     */
     public Task setParentSection(Section parentSection) {
         if (parentSection == null) this.parentSectionID = NO_PARENT_SECTION;
         else this.parentSectionID = parentSection.getID();

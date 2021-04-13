@@ -29,7 +29,7 @@ public class AccountIterator implements Iterator<Account> {
      */
     @Override
     public boolean hasNext() {
-        return counter - accounts.size() >= 0;
+        return accounts.size() - counter > 0;
     }
 
     /**

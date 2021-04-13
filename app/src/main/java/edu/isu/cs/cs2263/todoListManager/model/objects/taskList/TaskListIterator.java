@@ -94,7 +94,7 @@ public class TaskListIterator implements Iterator<Task> {
      */
     @Override
     public boolean hasNext() {
-        return tasks.size() > 0 && counter - tasks.size() >= 0;
+        return tasks.size() > 0 && tasks.size() - counter > 0;
     }
 
     /**
