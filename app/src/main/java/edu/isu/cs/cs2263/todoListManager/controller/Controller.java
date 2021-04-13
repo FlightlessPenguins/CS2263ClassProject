@@ -216,21 +216,37 @@ public class Controller implements Initializable {
      * @param dueDate (Calendar) desired due date
      * @param dateCompleted (Calendar) date completed. empty/null if incomplete
      * @param subtasks (List<Task>) List of subtasks. Null if already a subtask
+     * @param desiredTaskList (TaskList) desired TaskList that will hold the Task. Null and it will be in the
      *
      * @author Grant Baird
      */
-    public Task createTask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks) {
+    public Task createTask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks, TaskList desiredTaskList, Section desiredTaskSection) {
+        UserAccount account = ((AccountContext)AccountContext.instance()).getCurrentUserAccount();
         Task newTask = new Task();
         //Task newTask = new Task(title, description, labels, dueDate, dateCompleted, subtasks, parentTaskID)
-        if(title != null | description != null | labels != null | dueDate != null | dateCompleted != null | subtasks != null) {
+        if(title != null && description != null && labels != null && dueDate != null && dateCompleted != null && subtasks != null) {
             newTask = new Task(title, description, labels, dueDate, dateCompleted, subtasks);
         }
-        else if(title != null | description != null) {
+        else if(title != null && description != null) {
             newTask = new Task(title, description);
         }
         else if(title != null) {
             newTask = new Task(title);
         }
+
+        if (desiredTaskList != null && desiredTaskSection == null) {
+            account.getTaskLists().addTask(newTask);
+        }
+        else if (desiredTaskList == null && desiredTaskSection == null) {
+            account.getTaskLists().addTask(newTask);
+        }
+        else if (desiredTaskList != null && desiredTaskSection != null) {
+            account.getTaskLists().getSections().get(desiredTaskSection.getID()).addTask(newTask);
+        }
+        else if (desiredTaskList == null && desiredTaskSection != null) {
+            account.getTaskLists().getSections().;
+        }
+
 
         return newTask;
     }
