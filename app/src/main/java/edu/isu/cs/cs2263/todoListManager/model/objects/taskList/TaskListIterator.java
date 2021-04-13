@@ -38,6 +38,8 @@ public class TaskListIterator implements Iterator<Task> {
      */
     private void addTaskListToTasks(TaskList taskList) {
         addSectionsToTasks(taskList);
+        List<TaskList> tl = taskList.getSubTaskLists();
+        if (tl == null) return;
         for (TaskList list : taskList.getSubTaskLists()) {
             addSectionsToTasks(list);
         }
@@ -66,7 +68,9 @@ public class TaskListIterator implements Iterator<Task> {
     private void addTasksToTasks(Section section) {
         for (Task task : section.getTasks()) {
             tasks.add(task);
-            for (Task t : task.getSubtasks()) {
+            List<Task> tasksInner = task.getSubtasks();
+            if (tasksInner == null) break;
+            for (Task t : tasksInner) {
                 tasks.add(t);
             }
         }
@@ -90,7 +94,7 @@ public class TaskListIterator implements Iterator<Task> {
      */
     @Override
     public boolean hasNext() {
-        return counter - tasks.size() >= 0;
+        return tasks.size() > 0 && counter - tasks.size() >= 0;
     }
 
     /**

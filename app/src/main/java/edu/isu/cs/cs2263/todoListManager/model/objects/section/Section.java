@@ -174,7 +174,7 @@ public class Section implements Searchable, Serializable {
         String s = v.getSearchTerm();
         Iterator<Task> iterator = iterator();
         List<Task> tasks = new ArrayList();
-        if (title.contains(s) || description.contains(s)) {
+        if (title != null && title.contains(s) || description != null && description.contains(s)) {
             while(iterator.hasNext()) {
                 tasks.add(iterator.next());
             }

@@ -281,7 +281,7 @@ public class Task implements Searchable, Serializable {
     public List<Task> accept(SearchVisitor v) {
         String s = v.getSearchTerm();
         List<Task> output = new ArrayList();
-        if (title.contains(s) || description.contains(s)) {
+        if (title != null && title.contains(s) || description != null && description.contains(s)) {
             output.add(this);
         }
         return output;

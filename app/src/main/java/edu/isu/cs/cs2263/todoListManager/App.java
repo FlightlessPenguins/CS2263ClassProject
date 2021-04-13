@@ -49,9 +49,12 @@ public class App {
         AccountListState als = (AccountListState)AccountListState.instance();
         als.setAccounts(Read.readAllUserData());
 
-        // Retrieve test user by ID (even though it's the only user, just to show how it's done), and setting it to be the current account.
+        // Retrieve test user by username and password. Note this requires that you setAccounts(readAll), like above, first.
+        // You can use verifyCredentials instead, if the user is already stored as the current user.
         for (Account account : als.getAccountsBackdoor()) {
-            if (account.getEmail().equals("test@gmail.com") && account.getPassword().equals(((AccountContext)AccountContext.instance()).generateHash("password"))) {
+            if (account.getEmail().equals("test@gmail.com") && account.getPassword().equals(
+                    ((AccountContext)AccountContext.instance()).generateHash("password"))
+            ) {
                 ((AccountContext)AccountContext.instance()).setCurrentAccount(account);
             }
         }

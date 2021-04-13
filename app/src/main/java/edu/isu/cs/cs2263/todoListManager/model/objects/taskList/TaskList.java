@@ -322,6 +322,13 @@ TaskList implements Searchable, Serializable {
 
     public TaskList moveTaskToList(Task task, TaskList destination) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("moveTaskToList not implemented, yet."); }
 
+    /**
+     *
+     * @param searchTerm
+     * @return
+     *
+     * @author Brandon Watkins
+     */
     public TaskList search(String searchTerm) {
         SearchVisitor visitor = new SearchTaskVisitor(searchTerm);
         List<Task> tasks = accept(visitor);
@@ -329,6 +336,13 @@ TaskList implements Searchable, Serializable {
         return taskList;
     }
 
+    /**
+     *
+     * @param tasks
+     * @return
+     *
+     * @author Brandon Watkins
+     */
     private TaskList convertTasksToTaskList(List<Task> tasks) {
         TaskList output = new TaskList(0, null, null, null, null, null, false);
         for (Task task : tasks) {
@@ -337,11 +351,18 @@ TaskList implements Searchable, Serializable {
         return output;
     }
 
+    /**
+     *
+     * @param v (SearchVisitor) The visitor used to search with.
+     * @return
+     *
+     * @author Brandon Watkins
+     */
     public List<Task> accept(SearchVisitor v) {
         String s = v.getSearchTerm();
         Iterator<Task> iterator = iterator();
         List<Task> tasks = new ArrayList();
-        if (title.contains(s) || comment.contains(s) || description.contains(s)) {
+        if (title != null && title.contains(s) || comment != null && comment.contains(s) || description != null && description.contains(s)) {
             while(iterator.hasNext()) {
                 tasks.add(iterator.next());
             }
@@ -352,15 +373,25 @@ TaskList implements Searchable, Serializable {
                 tasks.addAll(task.accept(v));
             }
         }
-        for (TaskList taskList : subTaskLists) {
-            tasks.addAll(taskList.accept(v));
+        if (subTaskLists != null) {
+            for (TaskList taskList : subTaskLists) {
+                tasks.addAll(taskList.accept(v));
+            }
         }
-        for (Section section : sections) {
-            tasks.addAll(section.accept(v));
+        if (sections != null) {
+            for (Section section : sections) {
+                tasks.addAll(section.accept(v));
+            }
         }
         return tasks;
     }
 
+    /**
+     *
+     * @return
+     *
+     * @author Brandon Watkins
+     */
     public Iterator<Task> iterator() {
         return new TaskListIterator(this);
     }

@@ -28,7 +28,7 @@ public class SectionIterator implements Iterator<Task> {
      */
     @Override
     public boolean hasNext() {
-        return counter - tasks.size() >= 0;
+        return tasks.size() > 0 && counter - tasks.size() >= 0;
     }
 
     /**
