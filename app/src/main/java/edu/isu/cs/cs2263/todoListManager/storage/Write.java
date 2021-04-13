@@ -6,6 +6,7 @@ package edu.isu.cs.cs2263.todoListManager.storage;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import edu.isu.cs.cs2263.todoListManager.App;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 
@@ -34,6 +35,7 @@ public class Write {
         } catch (Exception ex) {
             System.out.printf("\r\nstorage.Write.createFile() failed with exception: %s: %s", ex.getMessage(), Paths.get("").toAbsolutePath().normalize().toString() + "/" + path);
         } finally {
+            if (App.LOGGING_ENABLED) System.out.println("Creating new file: " + Paths.get("").toAbsolutePath().normalize().toString() + "/" + path + ".");
             return file;
         }
     }
@@ -67,6 +69,7 @@ public class Write {
 
         File directory = new File(dir);
         if (!directory.exists()) directory.mkdirs();
+        if (App.LOGGING_ENABLED) System.out.println("Creating directory: " + dir + ".");
         return new File(dir);
     }
 
@@ -79,6 +82,7 @@ public class Write {
      * @author Brandon Watkins
      */
     protected static void incrementCounter(String path, Integer counter) {
+        if (App.LOGGING_ENABLED) System.out.println("Incrementing " + path + " counter to: " + counter);
         overwriteFile(path, Integer.toString(counter + 1));
     }
 
@@ -97,6 +101,7 @@ public class Write {
         if (file.exists()) {
             try {
                 //createDirectory(Paths.get("").toAbsolutePath().normalize().toString() + "/app/" + path);
+                if (App.LOGGING_ENABLED) System.out.println("Overwriting file: " + "app/" + path + ".json" + ".");
                 writer = new FileWriter(Paths.get("").toAbsolutePath().normalize().toString() + "/app/" + path);
                 writer.write(contents);
                 if (writer != null) writer.close();
@@ -118,7 +123,7 @@ public class Write {
         Writer writer;
         Gson gson;
         try {
-            //System.out.println("Writing object to file: /app/" + path + ".json");
+            if (App.LOGGING_ENABLED) System.out.println("Writing " + o.getClass().getSimpleName() + " to " + "/app/" + path + ".json" + ".");
             File file = createFile("app/" + path + ".json");
             writer = Files.newBufferedWriter(Paths.get(Paths.get("").toAbsolutePath().normalize().toString() + "/app/" + path + ".json"));
             gson = new GsonBuilder().setPrettyPrinting().create();
@@ -163,18 +168,6 @@ public class Write {
      * @author Brandon Watkins
      */
     public static void deleteFolder(String directoryPath) {
-        deleteFolder(directoryPath, false);
-    }
-
-    /**
-     * Deletes all files and directories nested inside the given path, and the given path itself.
-     *
-     * @param directoryPath (String) The path to the directory to be deleted.
-     * @param suppressSystemMessages (Boolean) Whether you want to display system messages with progress.
-     *
-     * @author Brandon Watkins
-     */
-    public static void deleteFolder(String directoryPath, Boolean suppressSystemMessages) {
         File file = new File(directoryPath);
         if (file.exists()) {
             String[] files = file.list();
@@ -185,7 +178,7 @@ public class Write {
                     nestedFile = new File(file.getAbsolutePath() + "/" + f);
                     if (nestedFile.exists()) {
                         deleteFolder(nestedFile.getAbsolutePath());
-                        if (!suppressSystemMessages) {
+                        if (App.LOGGING_ENABLED) {
                             if (nestedFile.isDirectory()) System.out.printf("\r\nDeleted folder: %s", nestedFile.getAbsolutePath());
                             else System.out.printf("\r\nDeleted file: %s", nestedFile.getAbsolutePath());
                         }
@@ -193,7 +186,7 @@ public class Write {
                     }
                 }
             }
-            if (file.isDirectory() && !suppressSystemMessages) System.out.printf("\r\nDeleted folder: %s", file.getAbsolutePath());
+            if (App.LOGGING_ENABLED) System.out.printf("\r\nDeleted folder: %s", file.getAbsolutePath());
             file.delete();
         }
     }

@@ -11,6 +11,7 @@ import edu.isu.cs.cs2263.todoListManager.model.state.account.*;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -29,9 +30,9 @@ public class AccountContext implements Context {
             AccountListState.instance()
         )
     );
-    private Account currentAccount = (Account) NullAccount.instance();
-    private final String INFO_FILEPATH = "./config/users.json";
-    private final String PHOTO_FILEPATH = "./photos/" + Integer.toString(currentAccount.getID()) + ".png";
+    public static Account CURRENT_ACCOUNT = (Account) NullAccount.instance();
+    private String INFO_FILEPATH = Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/" + Integer.toString(CURRENT_ACCOUNT.getID()) + ".json";
+    private String PHOTO_FILEPATH = Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/photos/" + Integer.toString(CURRENT_ACCOUNT.getID()) + ".png";
 
     /**
      * Gets the currently logged in account (or NullAccount)
@@ -41,7 +42,7 @@ public class AccountContext implements Context {
      * @author Brandon Watkins
      */
     public Account getCurrentAccount() {
-        return currentAccount;
+        return CURRENT_ACCOUNT;
     }
 
     /**
@@ -51,7 +52,9 @@ public class AccountContext implements Context {
      * @return (AccountContext) This AccountContext.
      */
     public AccountContext setCurrentAccount(Account account) {
-        this.currentAccount = account;
+        this.CURRENT_ACCOUNT = account;
+        this.INFO_FILEPATH = Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/" + Integer.toString(account.getID()) + ".json";
+        this.PHOTO_FILEPATH = Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/photos/" + Integer.toString(account.getID()) + ".png";
         return this;
     }
 
@@ -98,9 +101,9 @@ public class AccountContext implements Context {
      * @author Brandon Watkins
      */
     public Boolean verifyCredentials(String passwordAttempt) {
-        if (currentAccount instanceof NullAccount) return false;
+        if (CURRENT_ACCOUNT instanceof NullAccount) return false;
         else {
-            return Hashing.sha512().hashString(passwordAttempt, StandardCharsets.UTF_8).toString().equals(currentAccount.getPassword());
+            return Hashing.sha512().hashString(passwordAttempt, StandardCharsets.UTF_8).toString().equals(CURRENT_ACCOUNT.getPassword());
         }
     }
 
@@ -111,7 +114,6 @@ public class AccountContext implements Context {
      * @return (String) SHA-512 Hashed Password
      *
      * @author Brandon Watkins
-     * @author https://www.baeldung.com/java-password-hashing
      */
     public String generateHash(String stringBeforeHash) {
         try {

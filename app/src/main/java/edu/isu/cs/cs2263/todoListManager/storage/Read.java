@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import edu.isu.cs.cs2263.todoListManager.App;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.AdminAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
@@ -46,6 +47,7 @@ public class Read {
         } catch (Exception ex) {
             System.out.printf("\r\nstorage.Read.readSingleLineFile() failed with exception: %s", ex.getMessage());
         } finally {
+            if (App.LOGGING_ENABLED) System.out.println("Reading from " + path + ": " + output + ".");
             return output;
         }
     }
@@ -62,6 +64,7 @@ public class Read {
         String output = readSingleLineFile("app/counters/" + path + ".txt");
         if (output == null) output = "0";
         Write.incrementCounter("counters/" + path + ".txt", Integer.parseInt(output));
+        if (App.LOGGING_ENABLED) System.out.println("Read next available ID for " + path + ": " + output + ".");
         return Integer.parseInt(output);
     }
 
@@ -79,6 +82,7 @@ public class Read {
             String name = objectYouNeedAnIdFor.getClass().getSimpleName();
             if (name != null) name = name.substring(0, 1).toLowerCase() + name.substring(1);
             if (name.contains("Account")) name = "account";
+            if (App.LOGGING_ENABLED) System.out.println("About to read next ID for " + name + ".");
             return readNextID(name);
         }
     }
@@ -93,6 +97,7 @@ public class Read {
      */
     private static String readNextLineFromFile(Scanner reader) {
         try {
+            if (App.LOGGING_ENABLED) System.out.println("Reading next line from some file.");
             return reader.hasNextLine() ? reader.nextLine() : null;
         } catch (Exception ex) {
             System.out.printf("\r\nstorage.Read.readNextLineFromFile() failed with exception: %s", ex.getMessage());
@@ -113,6 +118,7 @@ public class Read {
         Object object = null;
         Reader reader = null;
         try {
+            if (App.LOGGING_ENABLED) System.out.println("Reading object " + c.getSimpleName() + " from " + path + ": " + path + ".");
             if (!(new File(Paths.get("").toAbsolutePath().normalize().toString() + "/" + path + ".json")).exists()) return null;
             reader = Files.newBufferedReader(Paths.get(Paths.get("").toAbsolutePath().normalize().toString() + "/" + path + ".json"));
             if (reader == null) return null;
@@ -179,7 +185,10 @@ public class Read {
      */
     public static Account readUserData(int userID) {
         Account account = determineAccountType(userID);
-        if (account != null && (account instanceof UserAccount || account instanceof AdminAccount)) return account;
+        if (account != null && (account instanceof UserAccount || account instanceof AdminAccount)) {
+            if (App.LOGGING_ENABLED) System.out.println("Read user data for " + account.getID() + ": " + account.getFirstName() + account.getLastName() + ".");
+            return account;
+        }
         else return null;
     }
 
@@ -193,7 +202,10 @@ public class Read {
      */
     public static List<Account> readAllUserData() {
         List<Account> accounts = new ArrayList();
+        //String path = Paths.get("").toAbsolutePath().normalize().toString();
         File directory = new File(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/");
+        //if (App.LOGGING_ENABLED) System.out.println("Reading all user data from: " + directory.getAbsolutePath() + ".");
+        //String dir = directory.getAbsolutePath();
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {

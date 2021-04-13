@@ -24,11 +24,15 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
-public class App{
+public class App {
+
+    // Make sure this (LOGGING_ENABLED) is set to false whenever you push, especially for our submission. It will print read/write logs, and
+    // will wipe all data every time it's run, otherwise.
+    public static final Boolean LOGGING_ENABLED = false;
 
     public static void main(String[] args) {
         // Make sure this (runTests) is commented out whenever you push, especially for our submission. It will wipe all data every time it's run, otherwise.
-        //runTests();
+        if (LOGGING_ENABLED) runTests();
 
         Application.launch(View.instance().getClass());
     }
@@ -47,13 +51,15 @@ public class App{
 
         // Retrieve test user by ID (even though it's the only user, just to show how it's done), and setting it to be the current account.
         for (Account account : als.getAccountsBackdoor()) {
-            if (account.getID() == 0) {
+            if (account.getEmail().equals("test@gmail.com") && account.getPassword().equals(((AccountContext)AccountContext.instance()).generateHash("password"))) {
                 ((AccountContext)AccountContext.instance()).setCurrentAccount(account);
             }
         }
 
         // gets the newly set account
         Account account = ((AccountContext)AccountContext.instance()).getCurrentAccount();
+        // or use
+        // AccountContext.CURRENT_ACCOUNT
 
         // checking the password (password)
         String actualPassword = account.getPassword();
