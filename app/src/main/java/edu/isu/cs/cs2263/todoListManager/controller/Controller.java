@@ -271,8 +271,7 @@ public class Controller implements Initializable {
      */
     public Task createTask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks, TaskList desiredTaskList, Section desiredTaskSection) {
         UserAccount account = (UserAccount)((AccountContext)AccountContext.instance()).getCurrentAccount();
-        Task newTask = new Task();
-        //Task newTask = new Task(title, description, labels, dueDate, dateCompleted, subtasks, parentTaskID)
+        Task newTask = null;
         if(title != null && description != null && labels != null && dueDate != null && dateCompleted != null && subtasks != null) {
             newTask = new Task(title, description, labels, dueDate, dateCompleted, subtasks);
         }
@@ -291,9 +290,6 @@ public class Controller implements Initializable {
         }
         else if (desiredTaskList != null && desiredTaskSection != null) {
             account.getTaskLists().getSections().get(desiredTaskSection.getID()).addTask(newTask);
-        }
-        else if (desiredTaskList == null && desiredTaskSection != null) {
-            account.getTaskLists().getSections();
         }
 
 
