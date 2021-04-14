@@ -6,10 +6,12 @@ package edu.isu.cs.cs2263.todoListManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.*;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import edu.isu.cs.cs2263.todoListManager.storage.Write;
 
@@ -40,6 +42,10 @@ public class FreshStart {
         UserAccount user = new UserAccount("I was here.", null, "test@gmail.com", "password", "Brandon", "Watkins");
         System.out.printf("Test user created:\r\nID: %s\r\nEmail: %s\r\nPassword Hash: %s\r\nName: %s %s\r\nBiography: %s\r\n",
                 user.getID(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getBiography());
+
+        // create temporary second test user
+        UserAccount user2 = new UserAccount("I was here. Again.", null, "test2@gmail.com", "password2", "Tom", "Bombadil");
+        (((AccountListState) AccountListState.instance())).addAccount(user2);
 
         // create tasklist - "taskList2" (auto-creates a default section)
         TaskList taskList2 = new TaskList("TaskList 2", "Second tasklist", "When the default tasklist just isn't good enough.", null, null, false);
@@ -94,6 +100,7 @@ public class FreshStart {
         // Save test user
         System.out.println("\r\nSaving test user...");
         Write.writeAccountData(user);
+        Write.writeAllAccountsToFile();
 
         // print out user data
         System.out.println("\r\nReading test user...");

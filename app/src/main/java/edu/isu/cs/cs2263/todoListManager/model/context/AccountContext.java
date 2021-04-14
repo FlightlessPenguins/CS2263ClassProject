@@ -4,12 +4,14 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.context;
 
+import com.google.common.hash.Hashing;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.*;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.*;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -28,9 +30,9 @@ public class AccountContext implements Context {
             AccountListState.instance()
         )
     );
-    private Account currentAccount = (Account) NullAccount.instance();
-    private final String INFO_FILEPATH = "./config/users.json";
-    private final String PHOTO_FILEPATH = "./photos/" + Integer.toString(currentAccount.getID()) + ".png";
+    public static Account CURRENT_ACCOUNT = (Account) NullAccount.instance();
+    private String INFO_FILEPATH = Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/" + Integer.toString(CURRENT_ACCOUNT.getID()) + ".json";
+    private String PHOTO_FILEPATH = Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/photos/" + Integer.toString(CURRENT_ACCOUNT.getID()) + ".png";
 
     /**
      * Gets the currently logged in account (or NullAccount)
@@ -40,7 +42,20 @@ public class AccountContext implements Context {
      * @author Brandon Watkins
      */
     public Account getCurrentAccount() {
-        return currentAccount;
+        return CURRENT_ACCOUNT;
+    }
+
+    /**
+     * Sets the current account to point to the given user.
+     *
+     * @param account (Account) The account to set as current account (The account that is currently logged in).
+     * @return (AccountContext) This AccountContext.
+     */
+    public AccountContext setCurrentAccount(Account account) {
+        this.CURRENT_ACCOUNT = account;
+        this.INFO_FILEPATH = Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/" + Integer.toString(account.getID()) + ".json";
+        this.PHOTO_FILEPATH = Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/photos/" + Integer.toString(account.getID()) + ".png";
+        return this;
     }
 
     /**
@@ -86,9 +101,10 @@ public class AccountContext implements Context {
      * @author Brandon Watkins
      */
     public Boolean verifyCredentials(String passwordAttempt) {
-        if (currentAccount instanceof NullAccount) return false;
-        else if (generateHash(passwordAttempt) == currentAccount.getPassword()) return true; // or something.
-        else return false;
+        if (CURRENT_ACCOUNT instanceof NullAccount) return false;
+        else {
+            return Hashing.sha512().hashString(passwordAttempt, StandardCharsets.UTF_8).toString().equals(CURRENT_ACCOUNT.getPassword());
+        }
     }
 
     /**
@@ -98,18 +114,10 @@ public class AccountContext implements Context {
      * @return (String) SHA-512 Hashed Password
      *
      * @author Brandon Watkins
-     * @author https://www.baeldung.com/java-password-hashing
      */
     public String generateHash(String stringBeforeHash) {
-        SecureRandom rand = new SecureRandom();
-        byte[] salt = new byte[32];
-        rand.nextBytes(salt);
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
-            messageDigest.update(salt);
-            byte[] hashedBytes = messageDigest.digest(stringBeforeHash.getBytes(StandardCharsets.UTF_8));
-            String hashedPassword = hashedBytes.toString();
-            return hashedPassword;
+            return Hashing.sha512().hashString(stringBeforeHash, StandardCharsets.UTF_8).toString();
         } catch (Exception e) {
             throw new RuntimeException("Wasn't able to hash password, shutting down to avoid password compromise.");
         }
@@ -134,5 +142,6 @@ public class AccountContext implements Context {
     public static Context instance() {
         return Helper.INSTANCE;
     }
+
 
 }

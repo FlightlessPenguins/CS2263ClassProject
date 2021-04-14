@@ -67,7 +67,7 @@ public abstract class Account implements Serializable {
      */
     public Account(int id, String email, String password, String firstName, String lastName) {
         this.email = email;
-        setPassword(password);
+        setPassword(id == NEW_ACCOUNT_ID ? ((AccountContext)AccountContext.instance()).generateHash(password) : password);
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = id == NEW_ACCOUNT_ID ? Read.getNextID(this) : id;

@@ -21,7 +21,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
-public class TaskList implements Searchable, Serializable {
+public class
+TaskList implements Searchable, Serializable {
     /* Reserved IDs:
         0: currently viewed tasklist, unfiltered
         1: currently viewed tasklist, filtered
@@ -41,6 +42,10 @@ public class TaskList implements Searchable, Serializable {
 
 
     public TaskList() { this(null); }
+
+    public TaskList(int id) {
+        this(id, null, null, null, null, null, false);
+    }
 
     /**
      * Creates a TaskList.
@@ -321,6 +326,13 @@ public class TaskList implements Searchable, Serializable {
 
     public TaskList moveTaskToList(Task task, TaskList destination) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("moveTaskToList not implemented, yet."); }
 
+    /**
+     * Searches through the tasklist, it's sub lists, sections, tasks, and subtasks, for the given search term.
+     * @param searchTerm (String) The term to search for.
+     * @return (TaskList) A new TaskList containing all matching terms and their children.
+     *
+     * @author Brandon Watkins
+     */
     public TaskList search(String searchTerm) {
         SearchVisitor visitor = new SearchTaskVisitor(searchTerm);
         List<Task> tasks = accept(visitor);
@@ -328,6 +340,14 @@ public class TaskList implements Searchable, Serializable {
         return taskList;
     }
 
+    /**
+     * Converts a list of tasks into a TaskList.
+     *
+     * @param tasks (List<Task>) List of tasks to convert into a TaskList.
+     * @return (TaskList) A new TaskList containing the converted tasks.
+     *
+     * @author Brandon Watkins
+     */
     private TaskList convertTasksToTaskList(List<Task> tasks) {
         TaskList output = new TaskList(0, null, null, null, null, null, false);
         for (Task task : tasks) {
@@ -336,11 +356,19 @@ public class TaskList implements Searchable, Serializable {
         return output;
     }
 
+    /**
+     * Searches through the tasklist, it's sub lists, sections, tasks, and subtasks, for the given search term.
+     *
+     * @param v (SearchVisitor) The visitor used to search with.
+     * @return (List<Task>) List of all tasks matching (or belonging to something that does) the search term.
+     *
+     * @author Brandon Watkins
+     */
     public List<Task> accept(SearchVisitor v) {
         String s = v.getSearchTerm();
         Iterator<Task> iterator = iterator();
         List<Task> tasks = new ArrayList();
-        if (title.contains(s) || comment.contains(s) || description.contains(s)) {
+        if ((title != null && title.contains(s)) || (comment != null && comment.contains(s)) || (description != null && description.contains(s))) {
             while(iterator.hasNext()) {
                 tasks.add(iterator.next());
             }
@@ -351,15 +379,39 @@ public class TaskList implements Searchable, Serializable {
                 tasks.addAll(task.accept(v));
             }
         }
-        for (TaskList taskList : subTaskLists) {
-            tasks.addAll(taskList.accept(v));
+        if (subTaskLists != null) {
+            for (TaskList taskList : subTaskLists) {
+                tasks.addAll(taskList.accept(v));
+            }
         }
-        for (Section section : sections) {
-            tasks.addAll(section.accept(v));
+        if (sections != null) {
+            for (Section section : sections) {
+                tasks.addAll(section.accept(v));
+            }
+        }
+        Boolean[] taskIncluded = new Boolean[1000000000];
+        List<Task> toBeDeleted = new ArrayList();
+        for (Task task : tasks) {
+            if (taskIncluded[task.getID()] == null || !taskIncluded[task.getID()]) {
+                taskIncluded[task.getID()] = true;
+            }
+            else {
+                toBeDeleted.add(task);
+            }
+        }
+        for (Task task : toBeDeleted) {
+            tasks.remove(task);
         }
         return tasks;
     }
 
+    /**
+     * Creates an iterator to cycle through all of this TaskList's Tasks.
+     *
+     * @return (Iterator<Task>) Iterator of Tasks within this TaskList.
+     *
+     * @author Brandon Watkins
+     */
     public Iterator<Task> iterator() {
         return new TaskListIterator(this);
     }

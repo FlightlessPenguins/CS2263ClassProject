@@ -23,9 +23,9 @@ class ReadTest {
     @BeforeEach
     void setUp() {
         // delete userData folder (and its contents)
-        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/", true);
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/");
         // delete counter folder (and its contents)
-        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/counters/", true);
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/counters/");
         File file = new File("./app");
         file.delete();
     }
@@ -38,9 +38,9 @@ class ReadTest {
     @AfterEach
     void tearDown() {
         // delete userData folder (and its contents)
-        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/", true);
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/");
         // delete counter folder (and its contents)
-        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/counters/", true);
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/counters/");
         File file = new File("./app");
         file.delete();
     }

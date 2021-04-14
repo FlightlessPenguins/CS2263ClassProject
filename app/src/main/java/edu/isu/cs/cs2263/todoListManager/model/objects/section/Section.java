@@ -83,7 +83,7 @@ public class Section implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Section(int id, String title, String description, List<Task> tasks, Boolean isDefault){
-        this.id = id == NEW_SECTION_ID ? Read.getNextID(new Section()) : id;
+        this.id = id == NEW_SECTION_ID ? Read.getNextID(this) : id;
         this.title = title;
         this.description = description;
         this.defaultSection = isDefault;
@@ -130,6 +130,7 @@ public class Section implements Searchable, Serializable {
         return getDefaultSection();
     }
 
+
     /**
      * Adds the given task to this section.
      *
@@ -162,6 +163,12 @@ public class Section implements Searchable, Serializable {
         return this;
     }
 
+    public Section updateBasicInfo(String title, String description){
+        this.title = title;
+        this.description = description;
+        return this;
+    }
+
     public Section moveTaskToSection(Task task, Section destination) throws ExecutionControl.NotImplementedException {
         throw new ExecutionControl.NotImplementedException("moveTaskToSection() not implemented.");
     }
@@ -174,7 +181,7 @@ public class Section implements Searchable, Serializable {
         String s = v.getSearchTerm();
         Iterator<Task> iterator = iterator();
         List<Task> tasks = new ArrayList();
-        if (title.contains(s) || description.contains(s)) {
+        if ((title != null && title.contains(s)) || (description != null && description.contains(s))) {
             while(iterator.hasNext()) {
                 tasks.add(iterator.next());
             }
