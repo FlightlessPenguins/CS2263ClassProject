@@ -6,12 +6,12 @@ package edu.isu.cs.cs2263.todoListManager.controller.command;
 
 import edu.isu.cs.cs2263.todoListManager.view.Event;
 
-public class UpdateCommand implements Command {
+public class SystemCommand implements Command {
 
     Event event;
     String[] necessaryClassFields;
 
-    public UpdateCommand(Event event, String[] necessaryClassFields) {
+    public SystemCommand(Event event, String[] necessaryClassFields) {
         this.event = event;
         this.necessaryClassFields = necessaryClassFields;
     }
@@ -23,18 +23,21 @@ public class UpdateCommand implements Command {
      */
     @Override
     public void execute() {
-        if (necessaryClassFields != null && event != null) {
+        if (event != null) {
             switch (event) {
-                case UpdateUser:
+                case Cancel:
 
                     break;
-                case UpdateTaskList:
+                case CloseApp:
 
                     break;
-                case UpdateSection:
+                case OpenApp:
 
                     break;
-                case UpdateTask:
+                case Login:
+
+                    break;
+                case Logout:
 
                     break;
                 default:

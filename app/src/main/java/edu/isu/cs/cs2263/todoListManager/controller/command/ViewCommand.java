@@ -6,12 +6,12 @@ package edu.isu.cs.cs2263.todoListManager.controller.command;
 
 import edu.isu.cs.cs2263.todoListManager.view.Event;
 
-public class UpdateCommand implements Command {
+public class ViewCommand implements Command {
 
     Event event;
     String[] necessaryClassFields;
 
-    public UpdateCommand(Event event, String[] necessaryClassFields) {
+    public ViewCommand(Event event, String[] necessaryClassFields) {
         this.event = event;
         this.necessaryClassFields = necessaryClassFields;
     }
@@ -25,16 +25,13 @@ public class UpdateCommand implements Command {
     public void execute() {
         if (necessaryClassFields != null && event != null) {
             switch (event) {
-                case UpdateUser:
+                case SortTasks:
 
                     break;
-                case UpdateTaskList:
+                case SearchTasks:
 
                     break;
-                case UpdateSection:
-
-                    break;
-                case UpdateTask:
+                case FilterTasks:
 
                     break;
                 default:

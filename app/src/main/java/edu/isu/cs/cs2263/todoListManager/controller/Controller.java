@@ -5,6 +5,7 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.AdminAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
+import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
@@ -15,7 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-
+import java.util.Iterator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class Controller implements Initializable {
      */
     public List<Account> getUsers() {
         if (((AccountContext) AccountContext.instance()).getCurrentAccount() instanceof AdminAccount) {
-            return ((AccountListState) AccountListState.instance()).getUsers();
+            return ((AccountListState) AccountListState.instance()).getAccounts();
         }
         else return new ArrayList<Account>();
     }
@@ -103,8 +104,50 @@ public class Controller implements Initializable {
         throw new RuntimeException("not implemented yet.");
     }
 
+
+    /** Retrieves the specific TaskList and archives it
+     *
+     *
+     * @param listID
+     * @author Liam Andrus
+     */
     public void archiveList(int listID) {
-        throw new RuntimeException("not implemented yet.");
+        //Get current user account
+        UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
+
+        //Create iterator to retrieve list
+        Iterator<TaskList> iter = account.getTaskLists().getSubTaskLists().iterator();
+        TaskList currentList = null;
+        while(iter.hasNext()){
+            currentList = iter.next();
+            if(currentList.getID() == listID) break;
+        }
+
+        //archive TaskList and save
+        currentList.setArchived(true);
+        saveData();
+
+    }
+
+    /**
+     * Resets the password of the target account
+     *
+     * @param ID
+     * @param password
+     * @author Liam Andrus
+     */
+    public void resetPassword(int ID, String password) {
+
+        Iterator<Account> iter = getUsers().iterator();
+        Account currentAccount = null;
+
+        while(iter.hasNext()){
+            currentAccount = iter.next();
+            if(currentAccount.getID() == ID) break;
+        }
+        currentAccount.setPassword(password);
+        saveData();
+
     }
 
     public void searchTasks(String searchTerm) {
@@ -126,11 +169,71 @@ public class Controller implements Initializable {
         instance().logout();
         System.exit(0);
     }
+
+
     public void createTaskList(String name, String comment) {throw new RuntimeException("not implemented yet.");}
     public UserAccount getCurrentUser() {throw new RuntimeException("not implemented yet."); }
-    public void createSection(String title, String description) {throw new RuntimeException("not implemented yet.");}
-    public void resetPassword(int ID) {throw new RuntimeException("not implemented yet.");}
 
+    /**
+     * Creates new section and adds it to specific list
+     *
+     * @param listID (int)
+     * @param title (String)
+     * @param description (String)
+     * @author Liam Andrus
+     */
+    public void createSection(String title, String description, int listID) {
+        //Get current user account
+        UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
+
+        //Create section
+        Section newSection = new Section(title, description);
+
+        //Create iterator to retrieve list
+        Iterator<TaskList> iter = account.getTaskLists().getSubTaskLists().iterator();
+        TaskList currentList = null;
+        while(iter.hasNext()){
+            currentList = iter.next();
+            if(currentList.getID() == listID) break;
+        }
+        //Add section to list and save
+        currentList.addSection(newSection);
+        saveData();
+    }
+
+    /**Updates a section that belongs to the target TaskList
+     *
+     * @param sectionID
+     * @param listID
+     * @param title
+     * @param desc
+     * @author Liam Andrus
+     */
+    public void updateSection(int sectionID, int listID, String title, String desc){
+        //Get current user account
+        UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
+
+        //Get specific TaskList where the section is found
+        Iterator<TaskList> iter = account.getTaskLists().getSubTaskLists().iterator();
+        TaskList currentList = null;
+        while(iter.hasNext()){
+            currentList = iter.next();
+            if(currentList.getID() == listID) break;
+        }
+
+        //Get specific section in the TaskLists sections
+        Iterator<Section> iter2 = currentList.getSections().iterator();
+        Section currentSection = null;
+        while(iter2.hasNext()){
+            currentSection = iter2.next();
+            if(currentSection.getID() == sectionID) break;
+        }
+        //Update the title and description and save operations
+        currentSection.setTitle(title);
+        currentSection.setDescription(desc);
+        saveData();
+
+    }
     /**
      * reschedule task based on ID
      *
@@ -145,9 +248,71 @@ public class Controller implements Initializable {
     public void showTaskListInfo(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
     public void ShowTaskInfo(int taskID) {throw new RuntimeException("not implemented yet.");}
     public void editTask(int taskID) {throw new RuntimeException("not implemented yet.");}
-    public void createTask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks, int parentTaskID) {
-        throw new RuntimeException("not implemented yet.");}
-    public void createSubtask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, int parentTaskID) {throw new RuntimeException("not implemented yet.");}
+
+
+
+    /**
+     * creates a task.
+     *
+     * @param title (String) title of task
+     * @param description (String) description of task
+     * @param labels (List<String>) List of labels applied to task
+     * @param dueDate (Calendar) desired due date
+     * @param dateCompleted (Calendar) date completed. empty/null if incomplete
+     * @param subtasks (List<Task>) List of subtasks. Null if already a subtask
+     * @param desiredTaskList (TaskList) desired TaskList that will hold the Task. Null and it will be in the
+     *
+     * @author Grant Baird
+     */
+    public Task createTask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks, TaskList desiredTaskList, Section desiredTaskSection) {
+        UserAccount account = (UserAccount)((AccountContext)AccountContext.instance()).getCurrentAccount();
+        Task newTask = new Task();
+        //Task newTask = new Task(title, description, labels, dueDate, dateCompleted, subtasks, parentTaskID)
+        if(title != null && description != null && labels != null && dueDate != null && dateCompleted != null && subtasks != null) {
+            newTask = new Task(title, description, labels, dueDate, dateCompleted, subtasks);
+        }
+        else if(title != null && description != null) {
+            newTask = new Task(title, description);
+        }
+        else if(title != null) {
+            newTask = new Task(title);
+        }
+
+        if (desiredTaskList != null && desiredTaskSection == null) {
+            account.getTaskLists().addTask(newTask);
+        }
+        else if (desiredTaskList == null && desiredTaskSection == null) {
+            account.getTaskLists().addTask(newTask);
+        }
+        else if (desiredTaskList != null && desiredTaskSection != null) {
+            account.getTaskLists().getSections().get(desiredTaskSection.getID()).addTask(newTask);
+        }
+        else if (desiredTaskList == null && desiredTaskSection != null) {
+            account.getTaskLists().getSections();
+        }
+
+
+        return newTask;
+    }
+
+
+    /**Creates a subtask and adds it to target taskList //WIP
+     *
+     * @param title
+     * @param description
+     * @param labels
+     * @param dueDate
+     * @param dateCompleted
+     * @param parentTaskID
+     * @author Liam Andrus
+     */
+    public void createSubtask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, int parentTaskID) {
+        //Get current user account
+        UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
+
+        Task newSubTask = new Task(title, description);
+        newSubTask.setDueDate(dueDate);
+    }
     public void registerNew() {throw new RuntimeException("not implemented yet.");}
     public void changeUserInfo() {throw new RuntimeException("not implemented yet.");}
     public void displayLogo() {throw new RuntimeException("not implemented yet.");}
