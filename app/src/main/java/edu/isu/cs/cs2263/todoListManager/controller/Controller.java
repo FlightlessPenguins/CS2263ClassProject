@@ -2,10 +2,8 @@ package edu.isu.cs.cs2263.todoListManager.controller;
 
 import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import edu.isu.cs.cs2263.todoListManager.model.context.TaskContext;
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.AccountIterator;
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.AdminAccount;
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
+import edu.isu.cs.cs2263.todoListManager.model.context.TaskListContext;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.*;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
@@ -31,6 +29,8 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     private List<String> filters;
+    private TaskList unfilteredUIList = new TaskList(0);
+    private TaskList filteredUIList = new TaskList(1);
 
     public Controller() {}
 
@@ -57,7 +57,7 @@ public class Controller implements Initializable {
     }
 
     public TaskList getUIList() {
-        throw new RuntimeException("not implemented yet.");
+        return filteredUIList;
     }
 
     public void updateTaskList(int ID, String title, String description, String comment, String subTaskListIDs) {
@@ -81,7 +81,11 @@ public class Controller implements Initializable {
     }
 
     public void logout() {
-        throw new RuntimeException("not implemented yet.");
+        Write.writeAllAccountsToFile();
+        AccountContext.CURRENT_ACCOUNT = NullAccount.instance();
+        /**
+         * Need to make this take the user back to the home screen as well
+         */
     }
 
     /**
@@ -104,8 +108,8 @@ public class Controller implements Initializable {
         Write.writeAccountData(accountToSave);
     }
 
-    public Boolean readData() {
-        throw new RuntimeException("not implemented yet.");
+    public void readData() {
+        ((AccountListState)AccountListState.instance()).setAccounts(Read.readAllUserData());
     }
 
 
@@ -121,6 +125,8 @@ public class Controller implements Initializable {
         Integer i = userID;
         String stringID = i.toString();
 
+        // I'd recommend handling this similarly to the TaskList's search(), as far as cycling through things.
+        // Note: The iterators only cycle through Tasks, can't use them.
 
         Account account = ((AccountContext)AccountContext.instance()).getCurrentAccount();
 
@@ -147,16 +153,29 @@ public class Controller implements Initializable {
             currentAccount = iter.next();
             if(currentAccount.getID() == target) break;
         }
-        currentAccount.setPassword(password);
+        if (currentAccount != null) currentAccount.setPassword(password);
 
     }
 
     public void searchTasks(String searchTerm) {
-        throw new RuntimeException("not implemented yet.");
+        Account user = ((AccountContext)(AccountContext.instance())).getCurrentAccount();
+        if (user instanceof UserAccount) {
+            unfilteredUIList = ((UserAccount) user).getTaskLists().search(searchTerm);
+        }
+        else unfilteredUIList = new TaskList(0);
     }
 
     public void filterTasks(List<String> filters) {
-        throw new RuntimeException("not implemented yet.");
+        Account user = ((AccountContext)(AccountContext.instance())).getCurrentAccount();
+        if (user instanceof UserAccount) {
+            /*
+            UNCOMMENT THIS ONCE FILTER() HAS BEEN ADDED TO TASKLIST CLASS (and remove the exception below).
+            Check out TaskList's search for inspiration. You can actually (as a bare minimum) just search for the filter, depending on how much we have implemented.
+            unfilteredUIList = ((UserAccount) user).getTaskLists().filter(filters);
+             */
+        }
+        else unfilteredUIList = new TaskList(0);
+        throw new RuntimeException("TaskList.filter() not implemented yet.");
     }
 
     /**
@@ -166,14 +185,18 @@ public class Controller implements Initializable {
      * @author Grant Baird
      */
     public void close() {
-        instance().saveData();
         instance().logout();
         System.exit(0);
     }
 
 
-    public void createTaskList(String name, String comment) {throw new RuntimeException("not implemented yet.");}
-    public UserAccount getCurrentUser() {throw new RuntimeException("not implemented yet."); }
+    public void createTaskList(String name, String comment) {
+        throw new RuntimeException("not implemented yet.");
+    }
+
+    public Account getCurrentUser() {
+        return ((AccountContext)(AccountContext.instance())).getCurrentAccount();
+    }
 
     /**
      * Creates new section
@@ -196,8 +219,7 @@ public class Controller implements Initializable {
      * @author Grant Baird
      */
     public void rescheduleTask(int taskID, Calendar newDueDate) {
-        getCurrentUser().getTask(taskID).setDueDate(newDueDate);
-
+        ((UserAccount)(getCurrentUser())).getTask(taskID).setDueDate(newDueDate);
     }
 
     public void showTasks(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
@@ -221,7 +243,7 @@ public class Controller implements Initializable {
      * @author Grant Baird
      */
     public Task createTask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks, TaskList desiredTaskList, Section desiredTaskSection) {
-        UserAccount account = ((AccountContext)AccountContext.instance()).getCurrentUserAccount();
+        UserAccount account = (UserAccount)((AccountContext)AccountContext.instance()).getCurrentAccount();
         Task newTask = new Task();
         //Task newTask = new Task(title, description, labels, dueDate, dateCompleted, subtasks, parentTaskID)
         if(title != null && description != null && labels != null && dueDate != null && dateCompleted != null && subtasks != null) {
@@ -244,7 +266,7 @@ public class Controller implements Initializable {
             account.getTaskLists().getSections().get(desiredTaskSection.getID()).addTask(newTask);
         }
         else if (desiredTaskList == null && desiredTaskSection != null) {
-            account.getTaskLists().getSections().;
+            //account.getTaskLists().getSections().;
         }
 
 

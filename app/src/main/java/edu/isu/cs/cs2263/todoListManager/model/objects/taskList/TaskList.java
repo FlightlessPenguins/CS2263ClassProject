@@ -43,6 +43,10 @@ TaskList implements Searchable, Serializable {
 
     public TaskList() { this(null); }
 
+    public TaskList(int id) {
+        this(id, null, null, null, null, null, false);
+    }
+
     /**
      * Creates a TaskList.
      *

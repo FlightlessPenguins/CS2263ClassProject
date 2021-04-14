@@ -143,11 +143,5 @@ public class AccountContext implements Context {
         return Helper.INSTANCE;
     }
 
-    /**
-     * Use to get Current User Account when a userAccount is needed, not an Account. May need to be deleted. IDK
-     *
-     * @author Grant Baird
-     */
-    public UserAccount getCurrentUserAccount() { return (UserAccount) currentAccount; }
 
 }

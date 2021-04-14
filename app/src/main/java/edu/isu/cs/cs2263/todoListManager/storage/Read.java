@@ -62,7 +62,7 @@ public class Read {
      */
     private static int readNextID(String path) {
         String output = readSingleLineFile("app/counters/" + path + ".txt");
-        if (output == null) output = "0";
+        if (output == null) output = "5"; // saving the first 5 indexes for reserved indexes
         Write.incrementCounter("counters/" + path + ".txt", Integer.parseInt(output));
         if (App.LOGGING_ENABLED) System.out.println("Read next available ID for " + path + ": " + output + ".");
         return Integer.parseInt(output);
