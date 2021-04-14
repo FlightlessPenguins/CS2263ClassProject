@@ -130,6 +130,7 @@ public class Section implements Searchable, Serializable {
         return getDefaultSection();
     }
 
+
     /**
      * Adds the given task to this section.
      *
@@ -159,6 +160,12 @@ public class Section implements Searchable, Serializable {
     }
 
     public Section update(int id, String title, String description, String taskIDs){
+        return this;
+    }
+
+    public Section updateBasicInfo(String title, String description){
+        this.title = title;
+        this.description = description;
         return this;
     }
 
