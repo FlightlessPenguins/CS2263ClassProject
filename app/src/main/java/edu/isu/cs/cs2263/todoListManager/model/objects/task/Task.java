@@ -52,7 +52,9 @@ public class Task implements Searchable, Serializable {
         this.labels = labels;
         this.dueDate = dueDate;
         this.dateCompleted = dateCompleted;
-        this.subtasks = subtasks;
+        for (Task subtask : subtasks) {
+            addSubTask(subtask);
+        }
     }
 
     /**
@@ -183,7 +185,7 @@ public class Task implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Task setParentTask(Task parentTask) {
-        if (parentTask != null) this.parentTaskID = parentTask.getID();
+        if (parentTask != null) parentTask.addSubTask(this);
         else this.parentTaskID = HAS_NO_PARENT_TASK;
         return this;
     }

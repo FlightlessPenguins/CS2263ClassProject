@@ -4,8 +4,10 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.objects.taskList;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
@@ -427,6 +429,34 @@ TaskList implements Searchable, Serializable {
     public boolean equals(Object o) {
         if (o instanceof TaskList && ((TaskList)o).getID() >= 0 && this.id == ((TaskList)o).getID()) return true;
         return false;
+    }
+
+    public TaskList findTaskList(int tasklistID) {
+        if (this.id == tasklistID) return this;
+        for (TaskList taskList : subTaskLists) {
+            return taskList.findTaskList(tasklistID);
+        }
+        return null;
+    }
+
+    public Section findSection(int sectionID) {
+        for (TaskList taskList : subTaskLists) {
+            for (Section section : taskList.getSections()) {
+                if (section.getID() == sectionID) return section;
+            }
+        }
+        return null;
+    }
+
+    public Task findTask(int taskID) {
+        for (TaskList taskList : subTaskLists) {
+            for (Section section : taskList.getSections()) {
+                for (Task task : section.getTasks()) {
+                    if (task.getID() == taskID) return task;
+                }
+            }
+        }
+        return null;
     }
 
 }

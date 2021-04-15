@@ -6,12 +6,14 @@ package edu.isu.cs.cs2263.todoListManager.controller.command;
 
 import edu.isu.cs.cs2263.todoListManager.view.Event;
 
+import java.util.Hashtable;
+
 public class CreateCommand implements Command {
 
     Event event;
-    String[] necessaryClassFields;
+    Hashtable<String, Object> necessaryClassFields;
 
-    public CreateCommand(Event event, String[] necessaryClassFields) {
+    public CreateCommand(Event event, Hashtable<String, Object> necessaryClassFields) {
         this.event = event;
         this.necessaryClassFields = necessaryClassFields;
     }

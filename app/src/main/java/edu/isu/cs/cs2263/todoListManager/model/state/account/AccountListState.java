@@ -37,6 +37,13 @@ public class AccountListState implements State, Serializable {
 
     //Methods
 
+    public Account getAccount(int accountID) {
+        for (Account account : accounts) {
+            if (account.getID() == accountID) return account;
+        }
+        return null;
+    }
+
     // Just because I'm unsure whether the getters/setters needs to be strictly named for gson to read objects in from files.
     /**
      * If current user is an admin, returns a list of all accounts. Otherwise, returns an empty list of accounts.

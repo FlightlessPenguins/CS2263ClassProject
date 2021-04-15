@@ -10,15 +10,15 @@ public class ErrorState implements State{
     Object[] missingFields;
     String finalMessage;
 
-    ErrorState(String message) {
+    public ErrorState(String message) {
         this(message, null, null);
     }
 
-    ErrorState(String message, Object[] missingFields) {
+    public ErrorState(String message, Object[] missingFields) {
         this(message, missingFields, null);
     }
 
-    ErrorState(String message, Object[] missingFields, String finalMessage) {
+    public ErrorState(String message, Object[] missingFields, String finalMessage) {
         this.message = message;
         this.missingFields = missingFields;
         this.finalMessage = finalMessage;

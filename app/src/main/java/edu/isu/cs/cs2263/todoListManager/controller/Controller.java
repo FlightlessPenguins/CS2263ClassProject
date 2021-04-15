@@ -13,6 +13,7 @@ import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 import edu.isu.cs.cs2263.todoListManager.storage.Write;
+import edu.isu.cs.cs2263.todoListManager.view.Event;
 import edu.isu.cs.cs2263.todoListManager.view.View;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,11 +23,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Controller implements Initializable {
 
@@ -332,6 +329,83 @@ public class Controller implements Initializable {
         Stage stage = (Stage) loginRegisterBtn.getScene().getWindow();
         stage.close();
         View.instance().register();
+    }
+
+    public void handle(Event event, Hashtable<String, Object> args) {
+        switch(event) {
+            case CreateTaskList:
+
+                break;
+            case UpdateTaskList:
+
+                break;
+            case ViewTaskList:
+
+                break;
+            case RescheduleTaskList:
+
+                break;
+            case ArchiveTaskList:
+
+                break;
+            case SortTasks:
+
+                break;
+            case FilterTasks:
+
+                break;
+            case SearchTasks:
+
+                break;
+            case CreateSection:
+
+                break;
+            case UpdateSection:
+
+                break;
+            case ViewSection:
+
+                break;
+            case CreateTask:
+
+                break;
+            case UpdateTask:
+
+                break;
+            case ViewTask:
+
+                break;
+            case Register:
+
+                break;
+            case UpdateUser:
+
+                break;
+            case ViewUser:
+
+                break;
+            case ViewListOfAllUsers:
+
+                break;
+            case Login:
+
+                break;
+            case Logout:
+
+                break;
+            case Cancel:
+
+                break;
+            case CloseApp:
+
+                break;
+            case OpenApp:
+
+                break;
+            default:
+                // do nothing
+                break;
+        }
     }
 
 
