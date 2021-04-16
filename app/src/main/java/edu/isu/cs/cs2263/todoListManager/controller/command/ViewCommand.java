@@ -54,7 +54,6 @@ public class ViewCommand implements Command {
                     break;
             }
         }
-        throw new RuntimeException("not implemented yet.");
     }
 
     private void sortTasks(SortOrder order) {

@@ -68,7 +68,6 @@ public class UpdateCommand implements Command {
                     break;
             }
         }
-        throw new RuntimeException("not implemented yet.");
     }
 
     private void updateAccount(int id, String email, String password, String firstName, String lastName, String biography) {

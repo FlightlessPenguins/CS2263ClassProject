@@ -349,7 +349,7 @@ public class Controller implements Initializable {
         View.instance().register();
     }
 
-    public void handle(Event event, Hashtable<String, Object> args) {
+    public void handle(Event event) {
         Command c = new SystemCommand(Event.OpenApp);
         switch(event) {
             case CreateTaskList:
