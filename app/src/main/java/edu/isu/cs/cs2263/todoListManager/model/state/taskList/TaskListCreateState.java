@@ -4,9 +4,20 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.state.taskList;
 
+import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 
 public class TaskListCreateState implements State {
+
+    private TaskList state = null;
+
+    public void setState(TaskList taskListState) {
+        state = taskListState;
+    }
+
+    public TaskList getState() {
+        return state;
+    }
 
     /**
      * Performs all necessary tasks before changing state.

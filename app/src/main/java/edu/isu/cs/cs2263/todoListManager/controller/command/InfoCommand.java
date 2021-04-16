@@ -21,16 +21,11 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class InfoCommand implements Command {
-    /*
-        If reading directly from the form's fields, replace all "necessaryClassFields.get("id")" with whatever to read from form.
-     */
 
     Event event;
-    Hashtable<String, Object> necessaryClassFields;
 
-    public InfoCommand(Event event, Hashtable<String, Object> necessaryClassFields) {
+    public InfoCommand(Event event) {
         this.event = event;
-        this.necessaryClassFields = necessaryClassFields;
     }
 
     /**
@@ -40,23 +35,10 @@ public class InfoCommand implements Command {
      */
     @Override
     public void execute() {
-        if (necessaryClassFields != null && !necessaryClassFields.isEmpty() && event != null) {
-            /*
-                Ensuring the ID is in Integer format
-             */
-            Integer id = null;
-            if (necessaryClassFields.get("id") instanceof String) {
-                String temp = (String)necessaryClassFields.remove("id");
-                id = Integer.parseInt(temp);
-            }
-            else if (necessaryClassFields.get("id") instanceof Integer) {
-                id = (Integer)necessaryClassFields.get("id");
-            }
-            else return;
+        if (event != null) {
+            /*int id = ITEMID;
 
-            /*
-                Ensuring the user is logged into a UserAccount if they're viewing a to do list
-             */
+            //Ensuring the user is logged into a UserAccount if they're viewing a to do list
             Account account = AccountContext.CURRENT_ACCOUNT;
             if (account == null) {
                 State ErrorState = new ErrorState("Unable to locate account.");
@@ -65,13 +47,11 @@ public class InfoCommand implements Command {
             UserAccount user = null;
             if (account instanceof UserAccount) user = (UserAccount)account;
             else if (event != Event.ViewUser) {
-                State ErrorState = new ErrorState("Account cannot have a todo list.");
+                State ErrorState = new ErrorState("Account cannot have a to do list.");
                 return;
             }
 
-            /*
-                handle the event
-             */
+            //handle the event
             switch (event) {
                 case ViewUser:
                     ((AccountInfoState)(AccountInfoState.instance())).setState((((AccountListState)AccountListState.instance())).getAccount(id));
@@ -88,7 +68,7 @@ public class InfoCommand implements Command {
                 default:
                     // do nothing
                     break;
-            }
+            }*/
         }
     }
 

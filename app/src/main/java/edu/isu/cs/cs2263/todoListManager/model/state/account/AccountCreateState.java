@@ -4,11 +4,22 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.state.account;
 
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import jdk.jshell.spi.ExecutionControl;
 
 public class AccountCreateState implements State {
+
+    private Account state;
+
+    public void setState(Account state) {
+        this.state = state;
+    }
+
+    public Account getState() {
+        return state;
+    }
 
     /**
      * Performs all necessary tasks before changing state.

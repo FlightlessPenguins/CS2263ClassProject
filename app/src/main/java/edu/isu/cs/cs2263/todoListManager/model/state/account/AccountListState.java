@@ -7,6 +7,7 @@ package edu.isu.cs.cs2263.todoListManager.model.state.account;
 import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.AccountIterator;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.AdminAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
@@ -20,6 +21,7 @@ import java.util.List;
 public class AccountListState implements State, Serializable {
     //Instance Variables
     private List<Account> accounts = new ArrayList();
+    private List<Account> state = accounts;
 
     //Constructor
     private AccountListState() {}
@@ -32,7 +34,7 @@ public class AccountListState implements State, Serializable {
      * @author Brandon Watkins
      */
     public AccountListState(List<Account> accounts) {
-        this.accounts = accounts;
+        setAccounts(accounts);
     }
 
     //Methods
@@ -42,6 +44,16 @@ public class AccountListState implements State, Serializable {
             if (account.getID() == accountID) return account;
         }
         return null;
+    }
+
+    public List<Account> getState() {
+        return state;
+    }
+
+    public AccountListState setState(List<Account> accounts) {
+        this.accounts = accounts;
+        this.state = accounts;
+        return this;
     }
 
     // Just because I'm unsure whether the getters/setters needs to be strictly named for gson to read objects in from files.
@@ -66,19 +78,8 @@ public class AccountListState implements State, Serializable {
      */
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
+        this.state = accounts;
     }
-
-    /**
-     * If current user is an admin, returns a list of all accounts. Otherwise, returns an empty list of accounts.
-     *
-     * @return (List<Account>) If user is an admin, returns a list of all accounts. Else returns an empty one.
-     *
-     * @author Brandon Watkins
-     */
-    /*public List<Account> getUsers() {
-        if (((AccountContext)(AccountContext.instance())).getCurrentAccount() instanceof AdminAccount) return accounts;
-        return new ArrayList<Account>();
-    }*/
 
     /**
      * Gets a list of all accounts.
@@ -92,16 +93,8 @@ public class AccountListState implements State, Serializable {
         return accounts;
     }
 
-    public void addUser() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("addUser not implemented yet.");
-    }
-
-    public UserAccount removeUser(int userID) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("removeUser not implemented yet.");
-    }
-
-    public static Iterator<UserAccount> iterator() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("iterator not implemented yet.");
+    public static Iterator<Account> iterator() {
+        return new AccountIterator();
     }
 
     /**
@@ -117,6 +110,13 @@ public class AccountListState implements State, Serializable {
 
     public void addAccount(Account account) {
         accounts.add(account);
+        state = accounts;
+    }
+
+    public Account removeAccount(Account account) {
+        accounts.remove(account);
+        state = accounts;
+        return account;
     }
 
     /**
