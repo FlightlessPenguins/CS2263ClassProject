@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class Task implements Searchable, Serializable {
+public class Task implements Searchable, Serializable, Comparable<Task> {
 
     private static final int HAS_NO_PARENT_TASK = -1;
     private static final int NO_PARENT_SECTION = -2;
@@ -32,6 +32,60 @@ public class Task implements Searchable, Serializable {
     private int parentTaskID = HAS_NO_PARENT_TASK;
     private int parentSectionID = NO_PARENT_SECTION;
 
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public Calendar getDateCompleted() {
+        return dateCompleted;
+    }
+
+    public Task setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public Task setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public Task setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public Task setLabels(List<String> labels) {
+        this.labels = labels;
+        return this;
+    }
+
+    public Task setDateCompleted(Calendar dateCompleted) {
+        this.dateCompleted = dateCompleted;
+        return this;
+    }
+
+    public Task addLabel(String label) {
+        labels.add(label);
+        return this;
+    }
+
+    public String removeLabel(String label) {
+        labels.remove(label);
+        return label;
+    }
 
     /**
      * Creates a Task.
@@ -312,6 +366,11 @@ public class Task implements Searchable, Serializable {
         return false;
     }
 
+    @Override
+    public int compareTo(Task task) {
+        return this.getTitle().compareTo(task.getTitle());
+    }
+
     /**
      * Sets the Task's parent Section.
      *
@@ -325,4 +384,9 @@ public class Task implements Searchable, Serializable {
         else this.parentSectionID = parentSection.getID();
         return this;
     }
+
+    public Boolean isComplete() {
+        return dateCompleted != null;
+    }
+
 }

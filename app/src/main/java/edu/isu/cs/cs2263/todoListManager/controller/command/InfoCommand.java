@@ -36,7 +36,7 @@ public class InfoCommand implements Command {
     @Override
     public void execute() {
         if (event != null) {
-            /*int id = ITEMID;
+            //int id = ITEMID;
 
             //Ensuring the user is logged into a UserAccount if they're viewing a to do list
             Account account = AccountContext.CURRENT_ACCOUNT;
@@ -54,21 +54,21 @@ public class InfoCommand implements Command {
             //handle the event
             switch (event) {
                 case ViewUser:
-                    ((AccountInfoState)(AccountInfoState.instance())).setState((((AccountListState)AccountListState.instance())).getAccount(id));
+                    //((AccountInfoState)(AccountInfoState.instance())).setState((((AccountListState)AccountListState.instance())).getAccount(id));
                     break;
                 case ViewTaskList:
-                    ((TaskListInfoState)TaskListInfoState.instance()).setState(user.getTaskLists().findTaskList(id));
+                    //((TaskListInfoState)TaskListInfoState.instance()).setState(user.getTaskLists().findTaskList(id));
                     break;
                 case ViewSection:
-                    ((SectionInfoState)SectionInfoState.instance()).setState(user.getTaskLists().findSection(id));
+                    //((SectionInfoState)SectionInfoState.instance()).setState(user.getTaskLists().findSection(id));
                     break;
                 case ViewTask:
-                    ((TaskInfoState)TaskInfoState.instance()).setState(user.getTaskLists().findTask(id));
+                    //((TaskInfoState)TaskInfoState.instance()).setState(user.getTaskLists().findTask(id));
                     break;
                 default:
                     // do nothing
                     break;
-            }*/
+            }
         }
     }
 

@@ -108,4 +108,8 @@ public class TaskListIterator implements Iterator<Task> {
         if (!hasNext()) throw new NoSuchElementException("No more elements");
         return tasks.get(counter++);
     }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
 }

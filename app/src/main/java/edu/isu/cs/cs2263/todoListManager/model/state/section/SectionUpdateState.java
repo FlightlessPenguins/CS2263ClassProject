@@ -1,8 +1,19 @@
 package edu.isu.cs.cs2263.todoListManager.model.state.section;
 
+import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 
 public class SectionUpdateState implements State {
+
+    Section state;
+
+    public void setState(Section state) {
+        this.state = state;
+    }
+
+    public Section getState() {
+        return state;
+    }
 
     /**
      * Performs all necessary tasks before changing state.
