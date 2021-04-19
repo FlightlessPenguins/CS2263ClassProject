@@ -1,15 +1,16 @@
 package edu.isu.cs.cs2263.todoListManager.controller;
 
+import edu.isu.cs.cs2263.todoListManager.controller.command.*;
 import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import edu.isu.cs.cs2263.todoListManager.model.context.TaskContext;
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.AccountIterator;
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.AdminAccount;
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.*;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
+import edu.isu.cs.cs2263.todoListManager.model.state.ErrorState;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountCreateState;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountInfoState;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 import edu.isu.cs.cs2263.todoListManager.storage.Write;
@@ -65,8 +66,22 @@ public class Controller implements Initializable {
         throw new RuntimeException("not implemented yet.");
     }
 
-    public UserAccount login(int ID, String password) {
-        throw new RuntimeException("not implemented yet.");
+    public static Account login(String email, String password) {
+        // Read in all accounts to AccountListState
+        AccountListState als = (AccountListState)AccountListState.instance();
+        als.setAccounts(Read.readAllUserData());
+        AccountContext.CURRENT_ACCOUNT = NullAccount.instance();
+
+        // Retrieve test user by username and password. Note this requires that you setAccounts(readAll), like above, first.
+        // You can use verifyCredentials instead, if the user is already stored as the current user.
+        for (Account account : als.getAccountsBackdoor()) {
+            if (account.getEmail().equals(email.trim()) && account.getPassword().equals(((AccountContext)AccountContext.instance()).generateHash(password.trim()))
+            ) {
+                ((AccountContext)AccountContext.instance()).setCurrentAccount(account);
+                break;
+            }
+        }
+        return AccountContext.CURRENT_ACCOUNT;
     }
 
     public void rescheduleList(String date) {
@@ -77,7 +92,7 @@ public class Controller implements Initializable {
         throw new RuntimeException("not implemented yet.");
     }
 
-    public void logout() {
+    public static void logout() {
         throw new RuntimeException("not implemented yet.");
     }
 
@@ -86,7 +101,7 @@ public class Controller implements Initializable {
      *
      * @author Brandon Watkins
      */
-    public void saveData() {
+    public static void saveData() {
         Write.writeAccountData(((AccountContext) AccountContext.instance()).getCurrentAccount());
     }
 
@@ -165,15 +180,17 @@ public class Controller implements Initializable {
      *
      * @author Grant Baird
      */
-    public void close() {
-        instance().saveData();
-        instance().logout();
+    public static void close() {
+        saveData();
+        logout();
         System.exit(0);
     }
 
-
     public void createTaskList(String name, String comment) {throw new RuntimeException("not implemented yet.");}
-    public UserAccount getCurrentUser() {throw new RuntimeException("not implemented yet."); }
+
+    public Account getCurrentUser() {
+        return AccountContext.CURRENT_ACCOUNT;
+    }
 
     /**
      * Creates new section and adds it to specific list
@@ -232,7 +249,6 @@ public class Controller implements Initializable {
         //Update the title and description and save operations
         currentSection.setTitle(title);
         currentSection.setDescription(desc);
-
         saveData();
 
     }
@@ -241,10 +257,11 @@ public class Controller implements Initializable {
      * reschedule task based on ID
      *
      * @author Grant Baird
+     * @author Brandon Watkins
      */
     public void rescheduleTask(int taskID, Calendar newDueDate) {
-        getCurrentUser().getTask(taskID).setDueDate(newDueDate);
-
+        Account account = getCurrentUser();
+        if (account instanceof UserAccount) ((UserAccount) getCurrentUser()).getTask(taskID).setDueDate(newDueDate);
     }
 
     public void showTasks(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
@@ -295,30 +312,24 @@ public class Controller implements Initializable {
     }
 
 
-    /**Creates a subtask and adds it to target taskList
+    /**Creates a subtask and adds it to target taskList //WIP
      *
-     * @param title (String) title of the task
-     * @param description (String) task's description
-     * @param labels (List<String>) list of task's labels
-     * @param dueDate (Calendar) due date of the task
-     * @param dateCompleted (Calendar) date the task was completed
-     * @param parentTaskID (int) ID of the task that the subtask will be added to
+     * @param title
+     * @param description
+     * @param labels
+     * @param dueDate
+     * @param dateCompleted
+     * @param parentTaskID
      * @author Liam Andrus
      */
     public void createSubtask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, int parentTaskID) {
         //Get current user account
         UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
 
-        //Get parent task
-        Task parent = account.getTaskLists().findTask(parentTaskID);
-
-        Task newSubTask = new Task(-13, title, description, labels, dueDate, dateCompleted, null);
-        parent.addSubTask(newSubTask);
-
-        saveData();
+        Task newSubTask = new Task(title, description);
+        newSubTask.setDueDate(dueDate);
     }
 
-    public void registerNew() {throw new RuntimeException("not implemented yet.");}
     public void changeUserInfo() {throw new RuntimeException("not implemented yet.");}
     public void displayLogo() {throw new RuntimeException("not implemented yet.");}
 
@@ -338,81 +349,83 @@ public class Controller implements Initializable {
         View.instance().register();
     }
 
-    public void handle(Event event, Hashtable<String, Object> args) {
+    public void handle(Event event) {
+        Command c = new SystemCommand(Event.OpenApp);
         switch(event) {
             case CreateTaskList:
-
+                c = new CreateCommand(Event.CreateTask);
                 break;
             case UpdateTaskList:
-
+                c = new UpdateCommand(Event.UpdateTaskList);
                 break;
             case ViewTaskList:
-
+                c = new InfoCommand(Event.ViewTaskList);
                 break;
             case RescheduleTaskList:
-
+                c = new UpdateCommand(Event.UpdateTaskList);
                 break;
             case ArchiveTaskList:
-
+                c = new UpdateCommand(Event.UpdateTaskList);
                 break;
             case SortTasks:
-
+                c = new ViewCommand(Event.SortTasks);
                 break;
             case FilterTasks:
-
+                c = new ViewCommand(Event.FilterTasks);
                 break;
             case SearchTasks:
-
+                c = new ViewCommand(Event.SearchTasks);
                 break;
             case CreateSection:
-
+                c = new CreateCommand(Event.CreateSection);
                 break;
             case UpdateSection:
-
+                c = new UpdateCommand(Event.UpdateSection);
                 break;
             case ViewSection:
-
+                c = new InfoCommand(Event.ViewSection);
                 break;
             case CreateTask:
-
+                c = new CreateCommand(Event.CreateTask);
                 break;
             case UpdateTask:
-
+                c = new UpdateCommand(Event.UpdateTask);
                 break;
             case ViewTask:
-
+                c = new InfoCommand(Event.ViewTask);
                 break;
             case Register:
-
+                c = new CreateCommand(Event.Register);
                 break;
             case UpdateUser:
-
+                c = new UpdateCommand(Event.UpdateUser);
                 break;
             case ViewUser:
-
+                c = new InfoCommand(Event.ViewUser);
                 break;
             case ViewListOfAllUsers:
-
+                c = new ListCommand(Event.ViewListOfAllUsers);
                 break;
             case Login:
-
+                c = new SystemCommand(Event.Login);
                 break;
             case Logout:
-
+                c = new SystemCommand(Event.Logout);
                 break;
             case Cancel:
-
+                c = new SystemCommand(Event.Cancel);
                 break;
             case CloseApp:
-
+                c = new SystemCommand(Event.CloseApp);
                 break;
             case OpenApp:
-
+                c = new SystemCommand(Event.OpenApp);
                 break;
             default:
                 // do nothing
                 break;
         }
+        c.execute();
     }
 
 
