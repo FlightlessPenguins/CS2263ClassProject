@@ -22,6 +22,7 @@ public class ErrorState implements State{
         this.message = message;
         this.missingFields = missingFields;
         this.finalMessage = finalMessage;
+        run();
     }
 
     @Override

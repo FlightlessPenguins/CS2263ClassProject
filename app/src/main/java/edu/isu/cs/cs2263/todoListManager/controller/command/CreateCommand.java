@@ -86,7 +86,7 @@ public class CreateCommand implements Command {
                 password != null && password.length() > 1 &&
                 firstName != null && firstName.length() > 0 &&
                 lastName != null && lastName.length() > 0) {
-            user = new UserAccount(biography, null, email, password, firstName, lastName);
+            user = new UserAccount(biography != null ? biography : null, null, email, password, firstName, lastName);
             Write.writeAccountData(user);
             ((AccountListState) AccountListState.instance()).addAccount(user);
             AccountContext.CURRENT_ACCOUNT = user;
