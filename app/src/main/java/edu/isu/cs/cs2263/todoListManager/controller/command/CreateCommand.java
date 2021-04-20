@@ -65,12 +65,12 @@ public class CreateCommand implements Command {
             Scene scene;
             switch (event) {
                 case Register:
-                    if (Controller.instance().registerPasswordTxt.getText().equals(Controller.instance().registerPasswordConfirmTxt.getText())) {
-                        if (Controller.instance().registerEmailTxt.getText() == null || Controller.instance().registerEmailTxt.getText().length() < 1 ||
-                                Controller.instance().registerPasswordTxt.getText() == null || Controller.instance().registerPasswordTxt.getText().length() < 1 ||
-                                Controller.instance().registerFirstNameTxt.getText() == null || Controller.instance().registerFirstNameTxt.getText().length() < 1 ||
-                                Controller.instance().registerLastNameTxt.getText() == null || Controller.instance().registerLastNameTxt.getText().length() < 1 ||
-                                Controller.instance().registerBiographyTxt.getText() == null || Controller.instance().registerBiographyTxt.getText().length() < 1) {
+                    if (Controller.instance().registerPasswordTxt == null || Controller.instance().registerPasswordTxt.getText().equals(Controller.instance().registerPasswordConfirmTxt.getText())) {
+                        if (Controller.instance().registerEmailTxt == null || Controller.instance().registerEmailTxt.getText() == null || Controller.instance().registerEmailTxt.getText().length() < 1 ||
+                                Controller.instance().registerPasswordTxt == null || Controller.instance().registerPasswordTxt.getText() == null || Controller.instance().registerPasswordTxt.getText().length() < 1 ||
+                                Controller.instance().registerFirstNameTxt == null || Controller.instance().registerFirstNameTxt.getText() == null || Controller.instance().registerFirstNameTxt.getText().length() < 1 ||
+                                Controller.instance().registerLastNameTxt == null || Controller.instance().registerLastNameTxt.getText() == null || Controller.instance().registerLastNameTxt.getText().length() < 1 ||
+                                Controller.instance().registerBiographyTxt == null || Controller.instance().registerBiographyTxt.getText() == null || Controller.instance().registerBiographyTxt.getText().length() < 1) {
                             ErrorState error = new ErrorState("Missing required field(s).", null, "Enter email, password and name.");
                         }
                         else {
