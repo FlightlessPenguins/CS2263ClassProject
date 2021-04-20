@@ -357,13 +357,38 @@ public class Controller implements Initializable {
     public TextArea registerBiographyTxt;
     public Button registerBtn;
 
-    public Button closeNotImplemented;
 
     @FXML
-    private void testAction(ActionEvent event) throws IOException {
-        Stage stage = (Stage) loginRegisterBtn.getScene().getWindow();
-        stage.close();
+    private Button btnLoginRegister;
+    @FXML
+    private Button btnRegisterUser;
+    @FXML
+    private Button btnCancel;
+    @FXML
+    private Button btnLoginUser;
+
+    @FXML
+    private void openRegisterUser(ActionEvent event) {
+        /*Stage stage = (Stage) btnLoginRegister.getScene().getWindow();
+        stage.close();*/
         View.instance().register();
+    }
+    @FXML
+    private void registerNewAccount() {
+        View.instance().errorMsg("Not yet implemented: User create method must be finished.");
+
+    }
+
+    @FXML
+    private void cancelStage(ActionEvent event) {
+        Stage stage = (Stage) btnCancel.getScene().getWindow();
+        stage.close();
+    }
+    @FXML
+    private void loginUser() {
+        View.instance().errorMsg("This hasn't been completed. For testing purposes, we are logging in the test user.");
+        //Complete a test login here
+
     }
 
     public void handle(Event event) {

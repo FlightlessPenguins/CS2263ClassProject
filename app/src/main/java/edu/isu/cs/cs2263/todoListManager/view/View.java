@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -21,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class View extends Application {
+
+    int splashDelay = 5;
 
     @FXML
     TextField loginEmailTxt;
@@ -58,82 +61,107 @@ public class View extends Application {
      *
      * @author Alex Losser
      */
-    public void getSplash() throws IOException {
+    public void getSplash() {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(new File("app/src/main/resources/fxml/splash.fxml").toURI().toURL());
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
+        try {
+            loader.setLocation(new File("app/src/main/resources/fxml/splash.fxml").toURI().toURL());
+            Parent root = loader.load();
 
-        Stage stage = new Stage();
-        stage.setScene(scene);
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
 
-        stage.show();
+            stage.show();
+            PauseTransition delay = new PauseTransition(Duration.seconds(splashDelay));
+            delay.setOnFinished(value -> {
+                stage.close();
+                try {
+                    System.out.println("Test to see if this works");
+                    login();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            });
+            delay.play();
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(5));
-        delay.setOnFinished(value -> {
-            stage.close();
-            try {
-                login();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        delay.play();
-
-
+        } catch(IOException e) {
+            System.out.println(e);
+        }
     }
 
     /**
      * Shows login screen
      *
-     * @return This class's login Scene
-     *
      * @author Alex Losser
      */
-    public void login() throws IOException {
+    public void login() {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(new File("app/src/main/resources/fxml/login.fxml").toURI().toURL());
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
+        try {
+            loader.setLocation(new File("app/src/main/resources/fxml/login.fxml").toURI().toURL());
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
 
-        Stage stage = new Stage();
-        stage.setTitle("Login");
-        stage.setScene(scene);
+            Stage stage = new Stage();
+            stage.setTitle("Login");
+            stage.setScene(scene);
 
-        stage.show();
+            stage.show();
+        } catch(IOException e) {
+            System.out.println(e);
+        }
     }
 
     /**
      * Shows register screen
      *
-     * @return This class's register Scene
+     * @author Alex Losser
+     */
+    public void register() {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(new File("app/src/main/resources/fxml/register.fxml").toURI().toURL());
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            Stage stage = new Stage();
+            stage.setTitle("Register");
+            stage.setScene(scene);
+
+            stage.show();
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
+    /**
+     * Shows an error popup with custom message
+     *
+     * @param msg Message to be displayed on the popup
      *
      * @author Alex Losser
      */
-    public void register() throws IOException {
+    public void errorMsg(String msg) {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(new File("app/src/main/resources/fxml/register.fxml").toURI().toURL());
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
+        try {
+            loader.setLocation(new File("app/src/main/resources/fxml/error.fxml").toURI().toURL());
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
 
-        Stage stage = new Stage();
-        stage.setTitle("Register");
-        stage.setScene(scene);
+            //Set error message
+            try {
+                Text errorLabel = (Text) scene.lookup("#errorMsgLoad");
+                errorLabel.setText(msg);
+            } catch(Exception e) {
+                System.out.println(e);
+            }
 
-        stage.show();
-    }
+            Stage stage = new Stage();
+            stage.setTitle("Error!");
+            stage.setScene(scene);
 
-    public void notImplemented() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(new File("app/src/main/resources/fxml/register.fxml").toURI().toURL());
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-
-        Stage stage = new Stage();
-        stage.setTitle("Register");
-        stage.setScene(scene);
-
-        stage.show();
+            stage.show();
+        } catch(IOException e) {
+            System.out.println(e);
+        }
     }
 
 }
