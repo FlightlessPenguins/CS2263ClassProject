@@ -19,8 +19,8 @@ FXML Login page
          </image>
       </ImageView>
       <Label layoutX="138.0" layoutY="166.0" text="Email" />
-      <PasswordField layoutX="141.0" layoutY="230.0" prefHeight="25.0" prefWidth="202.0" />
-      <TextField layoutX="141.0" layoutY="183.0" prefHeight="25.0" prefWidth="202.0" />
+      <PasswordField fx:id="loginPasswordTxt" layoutX="141.0" layoutY="230.0" prefHeight="25.0" prefWidth="202.0" />
+      <TextField fx:id="loginEmailTxt" layoutX="141.0" layoutY="183.0" prefHeight="25.0" prefWidth="202.0" />
       <Label layoutX="141.0" layoutY="213.0" text="Password" />
       <Button layoutX="424.0" layoutY="260.0" mnemonicParsing="false" text="Login" />
       <Button fx:id="loginRegisterBtn" layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#testAction" text="Register" />

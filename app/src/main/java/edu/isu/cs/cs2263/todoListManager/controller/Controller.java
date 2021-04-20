@@ -16,10 +16,16 @@ import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 import edu.isu.cs.cs2263.todoListManager.storage.Write;
 import edu.isu.cs.cs2263.todoListManager.view.Event;
 import edu.isu.cs.cs2263.todoListManager.view.View;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -339,7 +345,18 @@ public class Controller implements Initializable {
     }
 
     @FXML
+    public TextField loginEmailTxt;
+    public PasswordField loginPasswordTxt;
     public Button loginRegisterBtn;
+
+    public TextField registerEmailTxt;
+    public PasswordField registerPasswordTxt;
+    public PasswordField registerPasswordConfirmTxt;
+    public TextField registerFirstNameTxt;
+    public TextField registerLastNameTxt;
+    public TextArea registerBiographyTxt;
+    public Button registerBtn;
+
     public Button closeNotImplemented;
 
     @FXML

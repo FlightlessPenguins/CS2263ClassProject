@@ -4,6 +4,7 @@
  */
 package edu.isu.cs.cs2263.todoListManager.controller.command;
 
+import edu.isu.cs.cs2263.todoListManager.controller.Controller;
 import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.NullAccount;
@@ -13,6 +14,7 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.ErrorState;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountCreateState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountInfoState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
@@ -24,6 +26,10 @@ import edu.isu.cs.cs2263.todoListManager.model.state.taskList.TaskListCreateStat
 import edu.isu.cs.cs2263.todoListManager.model.state.taskList.TaskListInfoState;
 import edu.isu.cs.cs2263.todoListManager.storage.Write;
 import edu.isu.cs.cs2263.todoListManager.view.Event;
+import edu.isu.cs.cs2263.todoListManager.view.View;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,13 +58,32 @@ public class CreateCommand implements Command {
              */
             Account account = AccountContext.CURRENT_ACCOUNT;
             if (account != null && !(account instanceof NullAccount)) {
-                State ErrorState = new ErrorState("You must log out first.");
+                ErrorState error = new ErrorState("You must log out first.");
                 return;
             }
-
+            Stage stage;
+            Scene scene;
             switch (event) {
                 case Register:
-                    //register(EMAIL, PASSWORD, FIRSTNAME, LASTNAME, BIOGRAPHY);
+                    if (Controller.instance().registerPasswordTxt.getText().equals(Controller.instance().registerPasswordConfirmTxt.getText())) {
+                        if (Controller.instance().registerEmailTxt.getText() == null || Controller.instance().registerEmailTxt.getText().length() < 1 ||
+                                Controller.instance().registerPasswordTxt.getText() == null || Controller.instance().registerPasswordTxt.getText().length() < 1 ||
+                                Controller.instance().registerFirstNameTxt.getText() == null || Controller.instance().registerFirstNameTxt.getText().length() < 1 ||
+                                Controller.instance().registerLastNameTxt.getText() == null || Controller.instance().registerLastNameTxt.getText().length() < 1 ||
+                                Controller.instance().registerBiographyTxt.getText() == null || Controller.instance().registerBiographyTxt.getText().length() < 1) {
+                            ErrorState error = new ErrorState("Missing required field(s).", null, "Enter email, password and name.");
+                        }
+                        else {
+                            register(Controller.instance().registerEmailTxt.getText(),
+                                    Controller.instance().registerPasswordTxt.getText(),
+                                    Controller.instance().registerFirstNameTxt.getText(),
+                                    Controller.instance().registerLastNameTxt.getText(),
+                                    Controller.instance().registerBiographyTxt.getText());
+                        }
+                    }
+                    else {
+                        ErrorState error = new ErrorState("Passwords must match.");
+                    }
                     break;
                 case CreateTaskList:
                     //createTaskList(TITLE, DESCRIPTION, COMMENT);
@@ -92,6 +117,7 @@ public class CreateCommand implements Command {
             AccountContext.CURRENT_ACCOUNT = user;
             ((AccountInfoState) AccountInfoState.instance()).setState(user);
             ((AccountCreateState) AccountCreateState.instance()).setState(user);
+            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Profile);
         }
         else {
             State ErrorState = new ErrorState("Missing required fields");
