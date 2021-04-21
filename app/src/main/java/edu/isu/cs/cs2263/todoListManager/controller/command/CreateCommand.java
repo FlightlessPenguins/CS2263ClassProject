@@ -56,6 +56,7 @@ public class CreateCommand implements Command {
             Account account = AccountContext.CURRENT_ACCOUNT;
             if (account != null && !(account instanceof NullAccount)) {
                 ErrorState error = new ErrorState("You must log out first.");
+                ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Profile);
                 return;
             }
             switch (event) {
@@ -112,13 +113,21 @@ public class CreateCommand implements Command {
                 password != null && password.length() > 3 &&
                 firstName != null && firstName.length() > 0 &&
                 lastName != null && lastName.length() > 0) {
+            List<Account> acts = ((AccountListState) AccountListState.instance()).getAccountsBackdoor();
+            for (Account act : ((AccountListState) AccountListState.instance()).getAccountsBackdoor()) {
+                if (act.getEmail().trim().toLowerCase().equals(email.trim().toLowerCase())) {
+                    ErrorState error = new ErrorState("Email address is already in use.");
+                    return;
+                }
+            }
             user = new UserAccount(biography != null ? biography : null, null, email, password, firstName, lastName);
             Write.writeAccountData(user);
             ((AccountListState) AccountListState.instance()).addAccount(user);
             AccountContext.CURRENT_ACCOUNT = user;
             ((AccountInfoState) AccountInfoState.instance()).setState(user);
             ((AccountCreateState) AccountCreateState.instance()).setState(user);
-            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Profile);
+            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Home);
+            //Controller.instance().cancelStage(null);
         }
         else {
             State ErrorState = new ErrorState("Missing required fields", (new String[]{
@@ -158,6 +167,7 @@ public class CreateCommand implements Command {
             user2.getTaskLists().addSubTaskList(tasklist);
             ((TaskListInfoState) TaskListInfoState.instance()).setState(tasklist);
             ((TaskListCreateState) TaskListCreateState.instance()).setState(tasklist);
+            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
         }
     }
 
@@ -175,6 +185,7 @@ public class CreateCommand implements Command {
             user3.getTaskLists().addSection(section);
             ((SectionInfoState) SectionInfoState.instance()).setState(section);
             ((SectionCreateState) SectionCreateState.instance()).setState(section);
+            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
         }
     }
 
@@ -199,6 +210,7 @@ public class CreateCommand implements Command {
                 user4.getTaskLists().addTask(task);
                 ((TaskInfoState) TaskInfoState.instance()).setState(task);
                 ((TaskCreateState) TaskCreateState.instance()).setState(task);
+                ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
             } catch (Exception ex) {
                 ((TaskInfoState) TaskInfoState.instance()).setState(null);
                 ((TaskCreateState) TaskCreateState.instance()).setState(null);
@@ -223,6 +235,7 @@ public class CreateCommand implements Command {
             user4.getTaskLists().addTask(task);
             ((TaskInfoState) TaskInfoState.instance()).setState(task);
             ((TaskCreateState) TaskCreateState.instance()).setState(task);
+            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
         }
     }
 

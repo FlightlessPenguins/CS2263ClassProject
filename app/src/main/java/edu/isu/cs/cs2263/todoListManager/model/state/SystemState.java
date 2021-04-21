@@ -5,10 +5,23 @@ import edu.isu.cs.cs2263.todoListManager.model.state.taskList.TaskListUpdateStat
 public class SystemState implements State {
 
     public enum SystemStateEnum {
-        Login, Register, Profile, Home
+        LoginForm,
+        Register,
+        RegisterForm,
+        Profile,
+        ProfileForm,
+        AccountList,
+        Home,
+        TaskList,
+        TaskListForm,
+        Section,
+        SectionForm,
+        Task,
+        TaskForm
+
     }
 
-    private SystemStateEnum state = SystemStateEnum.Login;
+    private SystemStateEnum state = SystemStateEnum.LoginForm;
 
     public SystemState setState(SystemStateEnum state) {
         this.state = state;

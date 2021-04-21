@@ -4,6 +4,8 @@
  */
 package edu.isu.cs.cs2263.todoListManager.view;
 
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -23,7 +25,7 @@ import java.io.IOException;
 
 public class View extends Application {
 
-    int splashDelay = 5;
+    private static final int splashDelay = 5;
 
     @FXML
     TextField loginEmailTxt;
@@ -32,6 +34,7 @@ public class View extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         getSplash();
+        ((AccountListState) AccountListState.instance()).setAccounts(Read.readAllUserData());
     }
 
     /**

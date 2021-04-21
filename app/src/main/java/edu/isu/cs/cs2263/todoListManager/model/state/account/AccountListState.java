@@ -11,6 +11,8 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.account.AccountIterator;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.AdminAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
+import edu.isu.cs.cs2263.todoListManager.storage.Write;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.io.Serializable;
@@ -47,7 +49,7 @@ public class AccountListState implements State, Serializable {
     }
 
     public List<Account> getState() {
-        return state;
+        return getAccounts();
     }
 
     public AccountListState setState(List<Account> accounts) {
@@ -65,7 +67,7 @@ public class AccountListState implements State, Serializable {
      * @author Brandon Watkins
      */
     public List<Account> getAccounts() {
-        if (((AccountContext)(AccountContext.instance())).getCurrentAccount() instanceof AdminAccount) return accounts;
+        if (((AccountContext)(AccountContext.instance())).getCurrentAccount() instanceof AdminAccount) return getAccountsBackdoor();
         return new ArrayList<Account>();
     }
 
@@ -90,6 +92,7 @@ public class AccountListState implements State, Serializable {
      * @author Brandon Watkins
      */
     public List<Account> getAccountsBackdoor() {
+        if (accounts == null || accounts.size() < 1) accounts = Read.readAllUserData();
         return accounts;
     }
 
@@ -111,6 +114,7 @@ public class AccountListState implements State, Serializable {
     public void addAccount(Account account) {
         accounts.add(account);
         state = accounts;
+        Write.writeAccountData(account);
     }
 
     public Account removeAccount(Account account) {

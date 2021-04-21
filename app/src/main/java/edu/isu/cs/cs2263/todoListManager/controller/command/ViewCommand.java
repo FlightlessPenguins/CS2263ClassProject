@@ -10,6 +10,7 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskListIterator;
+import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountCreateState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountInfoState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountUpdateState;
@@ -38,7 +39,7 @@ public class ViewCommand implements Command {
         if (event != null) {
             switch (event) {
                 case SortTasks:
-                    sortTasks(null/*SORTORDER*/);
+                    sortTasks(args.get("sortOrder"));
                     break;
                 case SearchTasks:
                     searchTasks(args.get("searchTerm"));
@@ -67,20 +68,21 @@ public class ViewCommand implements Command {
      *
      * @author Brandon Watkins
      */
-    private void sortTasks(SortOrder order) {
+    private void sortTasks(String order) {
         if (AccountContext.CURRENT_ACCOUNT instanceof UserAccount) {
             UserAccount user = (UserAccount) AccountContext.CURRENT_ACCOUNT;
             TaskList tl = ((TaskListInfoState) AccountInfoState.instance()).getState();
             if (tl == null) tl = user.getTaskLists();
             TaskListIterator iterator = (TaskListIterator) tl.iterator();
             List<Task> tasks = iterator.getTasks();
-            Collections.sort(tasks, order == null ? null : order.getOrder() == Order.Ascending ? null : Collections.reverseOrder());
+            Collections.sort(tasks, order == null ? null : order.equals("ascending") ? null : Collections.reverseOrder());
             TaskList tl2 = new TaskList(0);
             for (int i = 0; i < tasks.size(); i++) {
                 tl2.addTask(tasks.get(i));
             }
-            ((TaskListInfoState) AccountInfoState.instance()).setState(tl2);
+            ((TaskListInfoState) TaskListInfoState.instance()).setState(tl2);
         }
+        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
     }
 
     /**
@@ -93,8 +95,9 @@ public class ViewCommand implements Command {
         Account user = AccountContext.CURRENT_ACCOUNT;
         if (user instanceof UserAccount) {
             TaskList tl = null;
-            if (((TaskListInfoState) AccountInfoState.instance()).getState() != null) tl = ((TaskListInfoState) AccountInfoState.instance()).getState().search(searchTerm);
-            ((TaskListInfoState) AccountInfoState.instance()).setState(tl);
+            if (((TaskListInfoState) TaskListInfoState.instance()).getState() != null) tl = ((TaskListInfoState) AccountInfoState.instance()).getState().search(searchTerm);
+            ((TaskListInfoState) TaskListInfoState.instance()).setState(tl);
+            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
         }
     }
 
@@ -108,13 +111,14 @@ public class ViewCommand implements Command {
         Account user = AccountContext.CURRENT_ACCOUNT;
         if (user instanceof UserAccount) {
             TaskList tl = null;
-            if (((TaskListInfoState) AccountInfoState.instance()).getState() != null) tl = ((TaskListInfoState) AccountInfoState.instance()).getState();
-            ((TaskListInfoState) AccountInfoState.instance()).setState(tl);
+            if (((TaskListInfoState) TaskListInfoState.instance()).getState() != null) tl = ((TaskListInfoState) AccountInfoState.instance()).getState();
+            ((TaskListInfoState) TaskListInfoState.instance()).setState(tl);
             for (String s : filters) {
-                tl = ((TaskListInfoState) AccountInfoState.instance()).getState().search(s);
-                ((TaskListInfoState) AccountInfoState.instance()).setState(tl);
+                tl = ((TaskListInfoState) TaskListInfoState.instance()).getState().search(s);
+                ((TaskListInfoState) TaskListInfoState.instance()).setState(tl);
             }
         }
+        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
     }
 
 }

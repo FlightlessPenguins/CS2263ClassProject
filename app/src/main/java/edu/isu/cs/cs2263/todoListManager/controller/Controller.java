@@ -9,6 +9,7 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.ErrorState;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountCreateState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountInfoState;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
@@ -32,6 +33,30 @@ import java.util.*;
 public class Controller implements Initializable {
 
     @FXML
+    private Button btnCancel;
+    @FXML
+    public Button btnRegisterUser;
+    @FXML
+    public Button btnLoginRegister;
+    @FXML
+    public Button btnLoginUser;
+
+    @FXML
+    public CheckBox cbIsListArchived;
+    @FXML
+    private CheckBox cbSortDirection;
+
+    @FXML
+    private Label lblTitle;
+    @FXML
+    private Label lblSortBy;
+    @FXML
+    private Label lblEmail;
+
+    @FXML
+    public TextArea txtBiography;
+
+    @FXML
     public TextField txtEmail;
     @FXML
     public TextField txtFirstName;
@@ -49,26 +74,14 @@ public class Controller implements Initializable {
     public TextField txtSearch;
     @FXML
     public TextField txtLabels;
-
     @FXML
-    public TextArea txtBiography;
+    private TextField txtFilters;
 
     @FXML
     public PasswordField txtPassword;
     @FXML
     public PasswordField txtPasswordConfirm;
 
-    @FXML
-    public CheckBox cbIsListArchived;
-
-    @FXML
-    private Button btnCancel;
-    @FXML
-    public Button btnRegisterUser;
-    @FXML
-    public Button btnLoginRegister;
-    @FXML
-    public Button btnLoginUser;
 
     public Controller() {}
 
@@ -86,6 +99,14 @@ public class Controller implements Initializable {
         else return new ArrayList<Account>();
     }
 
+    /**
+     *
+     * @param email
+     * @param password
+     * @return
+     *
+     * @author Brandon Watkins
+     */
     public static Account login(String email, String password) {
         AccountListState als = (AccountListState)AccountListState.instance();
         als.setAccounts(Read.readAllUserData());
@@ -98,10 +119,6 @@ public class Controller implements Initializable {
             }
         }
         return AccountContext.CURRENT_ACCOUNT;
-    }
-
-    public static void logout() {
-        throw new RuntimeException("not implemented yet.");
     }
 
     /**
@@ -118,10 +135,12 @@ public class Controller implements Initializable {
      * saves data, logs user out, shuts down system.
      *
      * @author Grant Baird
+     * @author Brandon Watkins
      */
     public static void close() {
         saveData();
-        logout();
+        SystemCommand sc = new SystemCommand(Event.Logout);
+        sc.execute(null);
         System.exit(0);
     }
 
@@ -148,7 +167,7 @@ public class Controller implements Initializable {
 
     @FXML
     private void cancelStage(ActionEvent event) {
-        Stage stage = (Stage) btnCancel.getScene().getWindow();
+        Stage stage = (Stage) this.btnCancel.getScene().getWindow();
         stage.close();
     }
 
@@ -225,11 +244,12 @@ public class Controller implements Initializable {
                 break;
             */
 
-            case "btnLoginRegister":
-                // do nothing
-                break;
             case "btnCancel":
-                // do nothing
+                handle(Event.Cancel);
+                break;
+            case "btnLoginRegister":
+                ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.RegisterForm);
+                // do nothing. Event.Register is for when they've submitted their registration info
                 break;
             default:
                 // do nothing
@@ -246,38 +266,39 @@ public class Controller implements Initializable {
                 args.put("title", txtTitle.getText());
                 args.put("description", txtDescription.getText());
                 args.put("comment", txtComment.getText());
-                //args.put("parentTaskListID", PARENT_TASK_ID???);
+                args.put("parentTaskListID", txtTitle.getParent().getId());
                 break;
             case UpdateTaskList:
                 c = new UpdateCommand(event);
-                //args.put("id", TASKLIST_ID);
+                args.put("id", txtTitle.getParent().getId());
                 args.put("title", txtTitle.getText());
                 args.put("description", txtDescription.getText());
                 args.put("comment", txtComment.getText());
                 args.put("isListArchived", cbIsListArchived.isSelected() ? "true" : "false");
-                //args.put("parentTaskListID", PARENT_TASKLIST_ID???);
+                //args.put("parentTaskListID", txtTitle.getParent().getParent().getId());
                 break;
             case ViewTaskList:
                 c = new InfoCommand(event);
-                //args.put("id", TASKLIST_ID);
+                args.put("id", lblTitle.getParent().getId());
                 break;
             case RescheduleTaskList:
                 c = new UpdateCommand(event);
                 args.put("dueDate", txtDueDate.getText());
-                //args.put("id", TASKLIST_ID);
+                args.put("id", lblTitle.getParent().getId());
                 break;
             case ArchiveTaskList:
                 c = new UpdateCommand(event);
                 args.put("isListArchived", "true");
+                args.put("id", lblTitle.getParent().getId());
                 break;
             case SortTasks:
                 c = new ViewCommand(event);
-                //args.put("category", SORT_BY);
-                //args.put("order", SORT_DIRECTION);
+                args.put("sortCategory", lblSortBy.getText());
+                args.put("sortOrder", cbSortDirection.isSelected() ? "ascending" : "descending");
                 break;
             case FilterTasks:
                 c = new ViewCommand(event);
-                //args.put("filters", CSV_FILTERS);
+                args.put("filters", txtFilters.getText());
                 break;
             case SearchTasks:
                 c = new ViewCommand(event);
@@ -287,18 +308,18 @@ public class Controller implements Initializable {
                 c = new CreateCommand(event);
                 args.put("title", txtTitle.getText());
                 args.put("description", txtDescription.getText());
-                //args.put("defaultSection", IS_DEFAULT???);
-                //args.put("parentTaskListID", PARENT_TASKLIST_ID);
+                args.put("defaultSection", "false");
+                args.put("parentTaskListID", txtTitle.getParent().getId());
                 break;
             case UpdateSection:
                 c = new UpdateCommand(event);
-                //args.put("id", SECTION_ID);
+                args.put("id", txtTitle.getParent().getId());
                 args.put("title", txtTitle.getText());
                 args.put("description", txtDescription.getText());
                 break;
             case ViewSection:
                 c = new InfoCommand(event);
-                //args.put("id", SECTION_ID);
+                args.put("id", lblTitle.getParent().getId());
                 break;
             case CreateTask:
                 c = new CreateCommand(event);
@@ -307,11 +328,11 @@ public class Controller implements Initializable {
                 args.put("labels", txtLabels.getText());
                 args.put("dueDate", txtDueDate.getText());
                 //args.put("parentTaskID", PARENT_TASK_ID);
-                //args.put("parentSectionID", PARENT_SECTION_ID);
+                //args.put("parentSectionID", lblTitle.getParent().getId());//would only work if creating from a section's view
                 break;
             case UpdateTask:
                 c = new UpdateCommand(event);
-                //args.put("id", TASK_ID);
+                args.put("id", txtTitle.getParent().getId());
                 args.put("title", txtTitle.getText());
                 args.put("description", txtDescription.getText());
                 args.put("labels", txtLabels.getText());
@@ -321,7 +342,7 @@ public class Controller implements Initializable {
                 break;
             case ViewTask:
                 c = new InfoCommand(event);
-                //args.put("taskID", TASK_ID);
+                args.put("taskID", lblTitle.getParent().getId());
                 break;
             case Register:
                 c = new CreateCommand(event);
@@ -334,7 +355,7 @@ public class Controller implements Initializable {
                 break;
             case UpdateUser:
                 c = new UpdateCommand(event);
-                //args.put("id", ACCOUNT_ID);
+                args.put("id", lblEmail.getParent().getId());
                 args.put("email", txtEmail.getText());
                 args.put("password", txtPassword.getText());
                 args.put("confirmPassword", txtPasswordConfirm.getText());
@@ -354,18 +375,6 @@ public class Controller implements Initializable {
                 args.put("email", txtEmail.getText());
                 args.put("password", txtPassword.getText());
                 break;
-            case Logout:
-                c = new SystemCommand(event);
-                break;/*
-            case Cancel:
-                c = new SystemCommand(event);
-                break;
-            case CloseApp:
-                c = new SystemCommand(event);
-                break;
-            case OpenApp:
-                c = new SystemCommand(event);
-                break;*/
             default:
                 c = new SystemCommand(event);
                 break;
@@ -414,6 +423,10 @@ public class Controller implements Initializable {
     }
 
     public TaskList getUIList() {
+        throw new RuntimeException("not implemented yet.");
+    }
+
+    public static void logout() {
         throw new RuntimeException("not implemented yet.");
     }
 

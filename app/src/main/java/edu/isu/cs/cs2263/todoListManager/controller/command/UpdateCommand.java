@@ -12,6 +12,7 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.ErrorState;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountCreateState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountInfoState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
@@ -51,6 +52,7 @@ public class UpdateCommand implements Command {
             int id = Integer.parseInt(idString);
             if (id < 0) {
                 ErrorState error = new ErrorState("No results found for given item.");
+                ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Home);
             }
             else {
                 switch (event) {
@@ -113,7 +115,8 @@ public class UpdateCommand implements Command {
         if (!(biography == null || biography.length() < 1) && user instanceof UserAccount) ((UserAccount) user).setBiography(biography);
         Write.writeAccountData(user);
         ((AccountInfoState) AccountInfoState.instance()).setState(user);
-        ((AccountUpdateState) AccountCreateState.instance()).setState(user);
+        ((AccountUpdateState) AccountUpdateState.instance()).setState(user);
+        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Profile);
     }
 
     /**
@@ -150,6 +153,7 @@ public class UpdateCommand implements Command {
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
         ((TaskListUpdateState) TaskListUpdateState.instance()).setState(tl);
         ((TaskListInfoState) TaskListInfoState.instance()).setState(tl);
+        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
     }
 
     /**
@@ -168,6 +172,7 @@ public class UpdateCommand implements Command {
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
         ((SectionUpdateState) SectionUpdateState.instance()).setState(s);
         ((SectionInfoState) SectionInfoState.instance()).setState(s);
+        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Section);
     }
 
     /**
@@ -209,6 +214,7 @@ public class UpdateCommand implements Command {
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
         ((TaskInfoState) TaskInfoState.instance()).setState(t);
         ((TaskUpdateState) TaskUpdateState.instance()).setState(t);
+        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Task);
     }
 
     /**
@@ -234,6 +240,7 @@ public class UpdateCommand implements Command {
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
         ((TaskInfoState) TaskInfoState.instance()).setState(t);
         ((TaskUpdateState) TaskUpdateState.instance()).setState(t);
+        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Task);
     }
 
 }

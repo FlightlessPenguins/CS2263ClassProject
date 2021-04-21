@@ -204,7 +204,7 @@ public class Read {
         List<Account> accounts = new ArrayList();
         //String path = Paths.get("").toAbsolutePath().normalize().toString();
         File directory = new File(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/");
-        //if (App.LOGGING_ENABLED) System.out.println("Reading all user data from: " + directory.getAbsolutePath() + ".");
+        if (App.LOGGING_ENABLED) System.out.println("Reading all user data from: " + directory.getAbsolutePath() + ".");
         //String dir = directory.getAbsolutePath();
         File[] files = directory.listFiles();
         if (files != null) {

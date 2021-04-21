@@ -30,12 +30,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 }
 
-/* Before:
-application {
-    // Define the main class for the application.
-    mainClass = 'edu.isu.cs.cs2263.todoListManager.App'
-}
-After: */
 application {
     // Define the main class for the application.
     mainClass = 'edu.isu.cs.cs2263.todoListManager.App'

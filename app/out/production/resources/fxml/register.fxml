@@ -7,22 +7,21 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="339.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.isu.cs.cs2263.todoListManager.controller.Controller">
    <children>
       <Label layoutX="14.0" layoutY="15.0" text="First Name:" />
       <Label layoutX="14.0" layoutY="57.0" text="Last Name:" />
-      <TextField fx:id="registerFirstNameTxt" layoutX="14.0" layoutY="32.0" prefHeight="25.0" prefWidth="189.0" />
-      <TextField fx:id="registerLastNameTxt" layoutX="14.0" layoutY="74.0" prefHeight="25.0" prefWidth="189.0" />
+      <TextField fx:id="txtFirstName" layoutX="14.0" layoutY="32.0" prefHeight="25.0" prefWidth="189.0" />
+      <TextField fx:id="txtLastName" layoutX="14.0" layoutY="74.0" prefHeight="25.0" prefWidth="189.0" />
       <Label layoutX="15.0" layoutY="99.0" text="Email:" />
-      <TextField fx:id="registerEmailTxt" layoutX="14.0" layoutY="116.0" prefHeight="25.0" prefWidth="189.0" />
+      <TextField fx:id="txtEmail" layoutX="14.0" layoutY="116.0" prefHeight="25.0" prefWidth="189.0" />
       <Label layoutX="15.0" layoutY="141.0" text="Password:" />
-      <PasswordField fx:id="registerPasswordTxt" layoutX="14.0" layoutY="159.0" prefHeight="25.0" prefWidth="189.0" />
+      <PasswordField fx:id="txtPassword" layoutX="14.0" layoutY="159.0" prefHeight="25.0" prefWidth="189.0" />
       <Label layoutX="15.0" layoutY="184.0" text="Confirm Password:" />
-      <PasswordField fx:id="registerPasswordConfirmTxt" layoutX="14.0" layoutY="201.0" prefHeight="25.0" prefWidth="189.0" />
+      <PasswordField fx:id="txtPasswordConfirm" layoutX="14.0" layoutY="201.0" prefHeight="25.0" prefWidth="189.0" />
       <Label layoutX="14.0" layoutY="235.0" text="Bio:" />
-      <TextArea fx:id="registerBiographyTxt" layoutX="12.0" layoutY="258.0" prefHeight="94.0" prefWidth="315.0" />
-      <Button fx:id="registerBtn" layoutX="240.0" layoutY="361.0" mnemonicParsing="false" text="Register User" />
-      <Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Cancel" />
+      <TextArea fx:id="txtBiography" layoutX="12.0" layoutY="258.0" prefHeight="94.0" prefWidth="315.0" />
+      <Button fx:id="btnRegisterUser" layoutX="240.0" layoutY="361.0" mnemonicParsing="false" onAction="#handle" text="Register User" />
+      <Button fx:id="btnCancel" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#cancelStage" text="Cancel" />
    </children>
 </AnchorPane>
