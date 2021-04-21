@@ -24,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -81,6 +82,27 @@ public class Controller implements Initializable {
     public PasswordField txtPassword;
     @FXML
     public PasswordField txtPasswordConfirm;
+
+    @FXML
+    public Button createListBtn;
+    @FXML
+    public Button createSectionBtn;
+    @FXML
+    public Button createTaskBtn;
+    @FXML
+    public Button logoutBtn;
+    @FXML
+    public Button editAccountBtn;
+    @FXML
+    public Button editListBtn;
+    @FXML
+    public Button editSectionBtn;
+    @FXML
+    public Button homeRefreshListBtn;
+    @FXML
+    public Accordion homeTaskListAccordion;
+    @FXML
+    public ScrollPane homeAllTaskScrollPane;
 
 
     public Controller() {}
@@ -175,6 +197,58 @@ public class Controller implements Initializable {
     private void loginUser() {
         View.instance().errorMsg("This hasn't been completed. For testing purposes, we are logging in the test user.");
         //Complete a test login here
+    }
+
+    @FXML
+    private void btnCreateList(ActionEvent event) throws IOException {
+        View.instance().createList();
+
+    }
+
+    @FXML
+    private void populateTaskListAccordion(ActionEvent event) throws IOException {
+
+
+
+        UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
+        Iterator<TaskList> iter =  account.getTaskLists().getSubTaskLists().iterator();
+        Accordion taskListAccordion = new Accordion();
+        TaskList currentList;
+        Section currentSection;
+        Task currentTask;
+        Task currentSubTask;
+        while(iter.hasNext()) {
+            currentList = iter.next();
+            Accordion SectionAccordion = new Accordion();
+            TitledPane taskListPane = new TitledPane(currentList.getTitle(), SectionAccordion);
+            Iterator<Section> iter2 = currentList.getSections().iterator();
+            while (iter2.hasNext()) {
+                currentSection = iter2.next();
+                VBox taskVBox = new VBox();
+                TitledPane taskSectionPane = new TitledPane(currentSection.getTitle(), taskVBox);
+                Iterator<Task> iter3 = currentSection.getTasks().iterator();
+                while (iter3.hasNext()) {
+                    currentTask = iter3.next();
+                    TextArea taskArea = new TextArea(currentTask.getTitle());
+                    taskVBox.getChildren().add(taskArea);
+                    Iterator<Task> iter4 = currentTask.getSubtasks().iterator();
+                    while (iter4.hasNext()) {
+                        currentSubTask = iter4.next();
+                        TextArea subtaskArea = new TextArea(currentSubTask.getTitle());
+                        taskVBox.getChildren().add(subtaskArea);
+                    }
+
+
+
+                }
+                taskSectionPane.setContent(taskVBox);
+                SectionAccordion.getPanes().add(taskSectionPane);
+            }
+            taskListPane.setContent(SectionAccordion);
+            taskListAccordion.getPanes().add(taskListPane);
+        }
+        homeAllTaskScrollPane.setContent(null);
+        homeAllTaskScrollPane.setContent(taskListAccordion);
     }
 
     public void handle(ActionEvent event) {

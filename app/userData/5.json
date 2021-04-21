@@ -1,0 +1,168 @@
+{
+  "biography": "I was here.",
+  "taskLists": {
+    "id": 6,
+    "subTaskLists": [
+      {
+        "id": 9,
+        "title": "TaskList 2",
+        "description": "Second tasklist",
+        "comment": "When the default tasklist just isn\u0027t good enough.",
+        "subTaskLists": [
+          {
+            "id": 10,
+            "title": "Sub-TaskList",
+            "description": "Sub-tasklist.",
+            "comment": "Some comment.",
+            "subTaskLists": [
+              {
+                "id": 11,
+                "title": "Sub-Sub-TaskList",
+                "description": "Sub-sub-tasklist.",
+                "comment": "Yeah, I went there.",
+                "sections": [
+                  {
+                    "id": 12,
+                    "tasks": [],
+                    "defaultSection": true,
+                    "parentTaskListID": -1
+                  },
+                  {
+                    "id": 13,
+                    "title": "Section 2",
+                    "description": "Additional section.",
+                    "tasks": [],
+                    "defaultSection": false,
+                    "parentTaskListID": 11
+                  }
+                ],
+                "isListArchived": false,
+                "parentTaskListID": 10
+              }
+            ],
+            "sections": [
+              {
+                "id": 10,
+                "tasks": [],
+                "defaultSection": true,
+                "parentTaskListID": -1
+              }
+            ],
+            "isListArchived": false,
+            "parentTaskListID": 9
+          }
+        ],
+        "sections": [
+          {
+            "id": 9,
+            "tasks": [
+              {
+                "id": 7,
+                "title": "Task 3",
+                "description": "task 3 description",
+                "parentTaskID": -1,
+                "parentSectionID": 9
+              },
+              {
+                "id": 8,
+                "title": "Task 4",
+                "description": "task 4 description",
+                "parentTaskID": -1,
+                "parentSectionID": 9
+              }
+            ],
+            "defaultSection": true,
+            "parentTaskListID": -1
+          },
+          {
+            "id": 11,
+            "title": "Section 1",
+            "description": "Additional section.",
+            "tasks": [
+              {
+                "id": 9,
+                "title": "Task 5",
+                "description": "task 5 description",
+                "dueDate": {
+                  "year": 2021,
+                  "month": 4,
+                  "dayOfMonth": 5,
+                  "hourOfDay": 17,
+                  "minute": 24,
+                  "second": 33
+                },
+                "subtasks": [
+                  {
+                    "id": 11,
+                    "title": "Task 7",
+                    "description": "task 7 description",
+                    "parentTaskID": -1,
+                    "parentSectionID": -2
+                  }
+                ],
+                "parentTaskID": -1,
+                "parentSectionID": 11
+              },
+              {
+                "id": 10,
+                "title": "Task 6",
+                "description": "task 6 description",
+                "dueDate": {
+                  "year": 2021,
+                  "month": 4,
+                  "dayOfMonth": 5,
+                  "hourOfDay": 17,
+                  "minute": 24,
+                  "second": 33
+                },
+                "parentTaskID": -1,
+                "parentSectionID": 11
+              }
+            ],
+            "defaultSection": false,
+            "parentTaskListID": 9
+          }
+        ],
+        "isListArchived": false,
+        "parentTaskListID": 6
+      }
+    ],
+    "sections": [
+      {
+        "id": 6,
+        "tasks": [
+          {
+            "id": 5,
+            "title": "Task 1",
+            "description": "task 1 description",
+            "parentTaskID": -1,
+            "parentSectionID": 6
+          },
+          {
+            "id": 6,
+            "title": "Task 2",
+            "description": "task 2 description",
+            "parentTaskID": -1,
+            "parentSectionID": 6
+          },
+          {
+            "id": 12,
+            "title": "Task 8",
+            "description": "task 8 description",
+            "parentTaskID": -1,
+            "parentSectionID": 6
+          }
+        ],
+        "defaultSection": true,
+        "parentTaskListID": -1
+      }
+    ],
+    "isListArchived": false,
+    "parentTaskListID": -1
+  },
+  "id": 5,
+  "email": "test@gmail.com",
+  "password": "b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86",
+  "firstName": "Brandon",
+  "lastName": "Watkins"
+}

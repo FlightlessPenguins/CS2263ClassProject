@@ -167,4 +167,25 @@ public class View extends Application {
         }
     }
 
+    public void homeScreen() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(new File("app/src/main/resources/fxml/homeScreen.fxml").toURI().toURL());
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+
+        Stage stage = new Stage();
+        stage.setTitle("Home Screen");
+        stage.setScene(scene);
+
+        stage.show();
+
+
+    }
+
+    public void createList() {
+        throw new RuntimeException("not implemented yet.");
+    }
+
+
+
 }
