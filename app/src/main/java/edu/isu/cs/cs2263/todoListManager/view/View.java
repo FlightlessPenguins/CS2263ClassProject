@@ -167,17 +167,25 @@ public class View extends Application {
         }
     }
 
-    public void homeScreen() throws IOException {
+    public void homeScreen() {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(new File("app/src/main/resources/fxml/homeScreen.fxml").toURI().toURL());
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
+        try {
+            loader.setLocation(new File("app/src/main/resources/fxml/homeScreen.fxml").toURI().toURL());
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
 
-        Stage stage = new Stage();
-        stage.setTitle("Home Screen");
-        stage.setScene(scene);
+            Stage stage = new Stage();
+            stage.setTitle("Home Screen");
+            stage.setScene(scene);
 
-        stage.show();
+            stage.show();
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+
+
+
+
 
 
     }
