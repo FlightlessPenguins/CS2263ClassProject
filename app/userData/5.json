@@ -88,8 +88,8 @@
                   "month": 4,
                   "dayOfMonth": 5,
                   "hourOfDay": 17,
-                  "minute": 24,
-                  "second": 33
+                  "minute": 30,
+                  "second": 10
                 },
                 "subtasks": [
                   {
@@ -112,8 +112,8 @@
                   "month": 4,
                   "dayOfMonth": 5,
                   "hourOfDay": 17,
-                  "minute": 24,
-                  "second": 33
+                  "minute": 30,
+                  "second": 10
                 },
                 "parentTaskID": -1,
                 "parentSectionID": 11
