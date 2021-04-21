@@ -22,10 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -34,17 +31,46 @@ import java.util.*;
 
 public class Controller implements Initializable {
 
-    private List<String> filters;
+    @FXML
+    public TextField txtEmail;
+    @FXML
+    public TextField txtFirstName;
+    @FXML
+    public TextField txtLastName;
+    @FXML
+    public TextField txtTitle;
+    @FXML
+    public TextField txtDescription;
+    @FXML
+    public TextField txtComment;
+    @FXML
+    public TextField txtDueDate;
+    @FXML
+    public TextField txtSearch;
+    @FXML
+    public TextField txtLabels;
+
+    @FXML
+    public TextArea txtBiography;
+
+    @FXML
+    public PasswordField txtPassword;
+    @FXML
+    public PasswordField txtPasswordConfirm;
+
+    @FXML
+    public CheckBox cbIsListArchived;
+
+    @FXML
+    private Button btnCancel;
+    @FXML
+    public Button btnRegisterUser;
+    @FXML
+    public Button btnLoginRegister;
+    @FXML
+    public Button btnLoginUser;
 
     public Controller() {}
-
-    public List<String> getFilters() {
-        return filters;
-    }
-
-    public void setFilters(List<String> filters) {
-        this.filters = filters;
-    }
 
     /**
      * Gets a list of all accounts, if current user is an admin.
@@ -60,26 +86,10 @@ public class Controller implements Initializable {
         else return new ArrayList<Account>();
     }
 
-    public TaskList getUIList() {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    public void updateTaskList(int ID, String title, String description, String comment, String subTaskListIDs) {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    public void updateSection(int ID, String title, String description, String taskIDs) {
-        throw new RuntimeException("not implemented yet.");
-    }
-
     public static Account login(String email, String password) {
-        // Read in all accounts to AccountListState
         AccountListState als = (AccountListState)AccountListState.instance();
         als.setAccounts(Read.readAllUserData());
         AccountContext.CURRENT_ACCOUNT = NullAccount.instance();
-
-        // Retrieve test user by username and password. Note this requires that you setAccounts(readAll), like above, first.
-        // You can use verifyCredentials instead, if the user is already stored as the current user.
         for (Account account : als.getAccountsBackdoor()) {
             if (account.getEmail().equals(email.trim()) && account.getPassword().equals(((AccountContext)AccountContext.instance()).generateHash(password.trim()))
             ) {
@@ -88,14 +98,6 @@ public class Controller implements Initializable {
             }
         }
         return AccountContext.CURRENT_ACCOUNT;
-    }
-
-    public void rescheduleList(String date) {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    public void sortTasks(String category, String direction) {
-        throw new RuntimeException("not implemented yet.");
     }
 
     public static void logout() {
@@ -112,6 +114,326 @@ public class Controller implements Initializable {
     }
 
     /**
+     * called by UI.
+     * saves data, logs user out, shuts down system.
+     *
+     * @author Grant Baird
+     */
+    public static void close() {
+        saveData();
+        logout();
+        System.exit(0);
+    }
+
+    public Account getCurrentUser() {
+        return AccountContext.CURRENT_ACCOUNT;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    @FXML
+    private void openRegisterUser(ActionEvent event) {
+        /*Stage stage = (Stage) btnLoginRegister.getScene().getWindow();
+        stage.close();*/
+        View.instance().register();
+    }
+    @FXML
+    private void registerNewAccount() {
+        View.instance().errorMsg("Not yet implemented: User create method must be finished.");
+
+    }
+
+    @FXML
+    private void cancelStage(ActionEvent event) {
+        Stage stage = (Stage) btnCancel.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void loginUser() {
+        View.instance().errorMsg("This hasn't been completed. For testing purposes, we are logging in the test user.");
+        //Complete a test login here
+    }
+
+    public void handle(ActionEvent event) {
+        switch (((Node)event.getTarget()).getId()) {
+            case "btnRegisterUser":
+                handle(Event.Register);
+                break;
+            case "btnLoginUser":
+                handle(Event.Login);
+                break;
+            /*
+            case CREATE_TASK:
+                handle(Event.CreateTask);
+                break;
+            case CREATE_TASKLIST:
+                handle(Event.CreateTaskList);
+                break;
+            case CREATE_SECTION:
+                handle(Event.CreateSection);
+                break;
+            case UPDATE_TASK:
+                handle(Event.UpdateTask);
+                break;
+            case UPDATE_TASKLIST:
+                handle(Event.UpdateTaskList);
+                break;
+            case UPDATE_SECTION:
+                handle(Event.UpdateSection);
+                break;
+            case UPDATE_USER:
+                handle(Event.UpdateUser);
+                break;
+            case VIEW_USER:
+                handle(Event.ViewUser);
+                break;
+            case VIEW_TASK:
+                handle(Event.ViewTask);
+                break;
+            case VIEW_TASKLIST:
+                handle(Event.ViewTaskList);
+                break;
+            case VIEW_SECTION:
+                handle(Event.ViewSection);
+                break;
+            case RESCHEDULE_TASKLIST:
+                handle(Event.RescheduleTaskList);
+            case ARCHIVE_TASKLIST:
+                handle(Event.ArchiveTaskList);
+                break;
+            case SORT_TASKS:
+                handle(Event.SortTasks);
+                break;
+            case FILTER_TASKS:
+                handle(Event.FilterTasks);
+                break;
+            case SEARCH_TASKS:
+                handle(Event.SearchTasks);
+                break;
+            case VIEW_LIST_OF_ALL_USERS:
+                handle(Event.ViewListOfAllUsers);
+                break;
+            case LOGOUT:
+                handle(Event.Logout);
+                break;
+            case CLOSE_APP:
+                handle(Event.CloseApp);
+                break;
+            */
+
+            case "btnLoginRegister":
+                // do nothing
+                break;
+            case "btnCancel":
+                // do nothing
+                break;
+            default:
+                // do nothing
+                break;
+        }
+    }
+
+    public void handle(Event event) {
+        Command c = new SystemCommand(Event.OpenApp);
+        Dictionary<String,String> args = new Hashtable<>();
+        switch(event) {
+            case CreateTaskList:
+                c = new CreateCommand(event);
+                args.put("title", txtTitle.getText());
+                args.put("description", txtDescription.getText());
+                args.put("comment", txtComment.getText());
+                //args.put("parentTaskListID", PARENT_TASK_ID???);
+                break;
+            case UpdateTaskList:
+                c = new UpdateCommand(event);
+                //args.put("id", TASKLIST_ID);
+                args.put("title", txtTitle.getText());
+                args.put("description", txtDescription.getText());
+                args.put("comment", txtComment.getText());
+                args.put("isListArchived", cbIsListArchived.isSelected() ? "true" : "false");
+                //args.put("parentTaskListID", PARENT_TASKLIST_ID???);
+                break;
+            case ViewTaskList:
+                c = new InfoCommand(event);
+                //args.put("id", TASKLIST_ID);
+                break;
+            case RescheduleTaskList:
+                c = new UpdateCommand(event);
+                args.put("dueDate", txtDueDate.getText());
+                //args.put("id", TASKLIST_ID);
+                break;
+            case ArchiveTaskList:
+                c = new UpdateCommand(event);
+                args.put("isListArchived", "true");
+                break;
+            case SortTasks:
+                c = new ViewCommand(event);
+                //args.put("category", SORT_BY);
+                //args.put("order", SORT_DIRECTION);
+                break;
+            case FilterTasks:
+                c = new ViewCommand(event);
+                //args.put("filters", CSV_FILTERS);
+                break;
+            case SearchTasks:
+                c = new ViewCommand(event);
+                args.put("searchTerm", txtSearch.getText());
+                break;
+            case CreateSection:
+                c = new CreateCommand(event);
+                args.put("title", txtTitle.getText());
+                args.put("description", txtDescription.getText());
+                //args.put("defaultSection", IS_DEFAULT???);
+                //args.put("parentTaskListID", PARENT_TASKLIST_ID);
+                break;
+            case UpdateSection:
+                c = new UpdateCommand(event);
+                //args.put("id", SECTION_ID);
+                args.put("title", txtTitle.getText());
+                args.put("description", txtDescription.getText());
+                break;
+            case ViewSection:
+                c = new InfoCommand(event);
+                //args.put("id", SECTION_ID);
+                break;
+            case CreateTask:
+                c = new CreateCommand(event);
+                args.put("title", txtTitle.getText());
+                args.put("description", txtDescription.getText());
+                args.put("labels", txtLabels.getText());
+                args.put("dueDate", txtDueDate.getText());
+                //args.put("parentTaskID", PARENT_TASK_ID);
+                //args.put("parentSectionID", PARENT_SECTION_ID);
+                break;
+            case UpdateTask:
+                c = new UpdateCommand(event);
+                //args.put("id", TASK_ID);
+                args.put("title", txtTitle.getText());
+                args.put("description", txtDescription.getText());
+                args.put("labels", txtLabels.getText());
+                args.put("dueDate", txtDueDate.getText());
+                //args.put("parentTaskID", PARENT_TASK_ID);
+                //args.put("parentSectionID", PARENT_SECTION_ID);
+                break;
+            case ViewTask:
+                c = new InfoCommand(event);
+                //args.put("taskID", TASK_ID);
+                break;
+            case Register:
+                c = new CreateCommand(event);
+                args.put("email", txtEmail.getText());
+                args.put("password", txtPassword.getText());
+                args.put("confirmPassword", txtPasswordConfirm.getText());
+                args.put("firstName", txtFirstName.getText());
+                args.put("lastName", txtLastName.getText());
+                args.put("biography", txtBiography.getText());
+                break;
+            case UpdateUser:
+                c = new UpdateCommand(event);
+                //args.put("id", ACCOUNT_ID);
+                args.put("email", txtEmail.getText());
+                args.put("password", txtPassword.getText());
+                args.put("confirmPassword", txtPasswordConfirm.getText());
+                args.put("firstName", txtFirstName.getText());
+                args.put("lastName", txtLastName.getText());
+                args.put("biography", txtBiography.getText());
+                break;
+            case ViewUser:
+                c = new InfoCommand(event);
+                args.put("email", txtEmail.getText());
+                break;
+            case ViewListOfAllUsers:
+                c = new ListCommand(event);
+                break;
+            case Login:
+                c = new SystemCommand(event);
+                args.put("email", txtEmail.getText());
+                args.put("password", txtPassword.getText());
+                break;
+            case Logout:
+                c = new SystemCommand(event);
+                break;/*
+            case Cancel:
+                c = new SystemCommand(event);
+                break;
+            case CloseApp:
+                c = new SystemCommand(event);
+                break;
+            case OpenApp:
+                c = new SystemCommand(event);
+                break;*/
+            default:
+                c = new SystemCommand(event);
+                break;
+        }
+        c.execute(args);
+    }
+
+    /**
+     * Helper class for singleton implementation
+     *
+     * @author Brandon Watkins
+     */
+    private static final class Helper {
+        private static final Controller INSTANCE = new Controller();
+    }
+
+    /**
+     * Gets this singleton's instance.
+     *
+     * @return This singleton's instance (concrete Context).
+     *
+     * @author Brandon Watkins
+     */
+    public static Controller instance() {
+        return Helper.INSTANCE;
+    }
+
+
+
+
+
+
+    /* ***********************************************************************************************
+     ********************************** Old methods, kept for reminders ******************************
+     ************************************************************************************************/
+
+
+    private List<String> filters;
+
+    public List<String> getFilters() {
+        return filters;
+    }
+
+    public void setFilters(List<String> filters) {
+        this.filters = filters;
+    }
+
+    public TaskList getUIList() {
+        throw new RuntimeException("not implemented yet.");
+    }
+
+    public void updateTaskList(int ID, String title, String description, String comment, String subTaskListIDs) {
+        throw new RuntimeException("not implemented yet.");
+    }
+
+    public void updateSection(int ID, String title, String description, String taskIDs) {
+        throw new RuntimeException("not implemented yet.");
+    }
+
+    public void rescheduleList(String date) {
+        throw new RuntimeException("not implemented yet.");
+    }
+
+    public void sortTasks(String category, String direction) {
+        throw new RuntimeException("not implemented yet.");
+    }
+
+    /**
      * Saves the specified user's data to file.
      *
      * @param accountToSave (Account) The account to save to file.
@@ -125,7 +447,6 @@ public class Controller implements Initializable {
     public Boolean readData() {
         throw new RuntimeException("not implemented yet.");
     }
-
 
     /** Retrieves the specific TaskList and archives it
      *
@@ -180,23 +501,11 @@ public class Controller implements Initializable {
         throw new RuntimeException("not implemented yet.");
     }
 
-    /**
-     * called by UI.
-     * saves data, logs user out, shuts down system.
-     *
-     * @author Grant Baird
-     */
-    public static void close() {
-        saveData();
-        logout();
-        System.exit(0);
-    }
-
     public void createTaskList(String name, String comment) {throw new RuntimeException("not implemented yet.");}
 
-    public Account getCurrentUser() {
-        return AccountContext.CURRENT_ACCOUNT;
-    }
+    public void changeUserInfo() {throw new RuntimeException("not implemented yet.");}
+
+    public void displayLogo() {throw new RuntimeException("not implemented yet.");}
 
     /**
      * Creates new section and adds it to specific list
@@ -271,11 +580,12 @@ public class Controller implements Initializable {
     }
 
     public void showTasks(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
+
     public void showTaskListInfo(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
+
     public void ShowTaskInfo(int taskID) {throw new RuntimeException("not implemented yet.");}
+
     public void editTask(int taskID) {throw new RuntimeException("not implemented yet.");}
-
-
 
     /**
      * creates a task.
@@ -317,7 +627,6 @@ public class Controller implements Initializable {
         return newTask;
     }
 
-
     /**Creates a subtask and adds it to target taskList //WIP
      *
      * @param title
@@ -336,158 +645,7 @@ public class Controller implements Initializable {
         newSubTask.setDueDate(dueDate);
     }
 
-    public void changeUserInfo() {throw new RuntimeException("not implemented yet.");}
-    public void displayLogo() {throw new RuntimeException("not implemented yet.");}
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
-    @FXML
-    public TextField loginEmailTxt;
-    public PasswordField loginPasswordTxt;
-    public Button loginRegisterBtn;
-
-    public TextField registerEmailTxt;
-    public PasswordField registerPasswordTxt;
-    public PasswordField registerPasswordConfirmTxt;
-    public TextField registerFirstNameTxt;
-    public TextField registerLastNameTxt;
-    public TextArea registerBiographyTxt;
-    public Button registerBtn;
 
 
-    @FXML
-    private Button btnLoginRegister;
-    @FXML
-    private Button btnRegisterUser;
-    @FXML
-    private Button btnCancel;
-    @FXML
-    private Button btnLoginUser;
 
-    @FXML
-    private void openRegisterUser(ActionEvent event) {
-        /*Stage stage = (Stage) btnLoginRegister.getScene().getWindow();
-        stage.close();*/
-        View.instance().register();
-    }
-    @FXML
-    private void registerNewAccount() {
-        View.instance().errorMsg("Not yet implemented: User create method must be finished.");
-
-    }
-
-    @FXML
-    private void cancelStage(ActionEvent event) {
-        Stage stage = (Stage) btnCancel.getScene().getWindow();
-        stage.close();
-    }
-    @FXML
-    private void loginUser() {
-        View.instance().errorMsg("This hasn't been completed. For testing purposes, we are logging in the test user.");
-        //Complete a test login here
-
-    }
-
-    public void handle(Event event) {
-        Command c = new SystemCommand(Event.OpenApp);
-        switch(event) {
-            case CreateTaskList:
-                c = new CreateCommand(Event.CreateTask);
-                break;
-            case UpdateTaskList:
-                c = new UpdateCommand(Event.UpdateTaskList);
-                break;
-            case ViewTaskList:
-                c = new InfoCommand(Event.ViewTaskList);
-                break;
-            case RescheduleTaskList:
-                c = new UpdateCommand(Event.UpdateTaskList);
-                break;
-            case ArchiveTaskList:
-                c = new UpdateCommand(Event.UpdateTaskList);
-                break;
-            case SortTasks:
-                c = new ViewCommand(Event.SortTasks);
-                break;
-            case FilterTasks:
-                c = new ViewCommand(Event.FilterTasks);
-                break;
-            case SearchTasks:
-                c = new ViewCommand(Event.SearchTasks);
-                break;
-            case CreateSection:
-                c = new CreateCommand(Event.CreateSection);
-                break;
-            case UpdateSection:
-                c = new UpdateCommand(Event.UpdateSection);
-                break;
-            case ViewSection:
-                c = new InfoCommand(Event.ViewSection);
-                break;
-            case CreateTask:
-                c = new CreateCommand(Event.CreateTask);
-                break;
-            case UpdateTask:
-                c = new UpdateCommand(Event.UpdateTask);
-                break;
-            case ViewTask:
-                c = new InfoCommand(Event.ViewTask);
-                break;
-            case Register:
-                c = new CreateCommand(Event.Register);
-                break;
-            case UpdateUser:
-                c = new UpdateCommand(Event.UpdateUser);
-                break;
-            case ViewUser:
-                c = new InfoCommand(Event.ViewUser);
-                break;
-            case ViewListOfAllUsers:
-                c = new ListCommand(Event.ViewListOfAllUsers);
-                break;
-            case Login:
-                c = new SystemCommand(Event.Login);
-                break;
-            case Logout:
-                c = new SystemCommand(Event.Logout);
-                break;
-            case Cancel:
-                c = new SystemCommand(Event.Cancel);
-                break;
-            case CloseApp:
-                c = new SystemCommand(Event.CloseApp);
-                break;
-            case OpenApp:
-                c = new SystemCommand(Event.OpenApp);
-                break;
-            default:
-                // do nothing
-                break;
-        }
-        c.execute();
-    }
-
-
-    /**
-     * Helper class for singleton implementation
-     *
-     * @author Brandon Watkins
-     */
-    private static final class Helper {
-        private static final Controller INSTANCE = new Controller();
-    }
-
-    /**
-     * Gets this singleton's instance.
-     *
-     * @return This singleton's instance (concrete Context).
-     *
-     * @author Brandon Watkins
-     */
-    public static Controller instance() {
-        return Helper.INSTANCE;
-    }
 }

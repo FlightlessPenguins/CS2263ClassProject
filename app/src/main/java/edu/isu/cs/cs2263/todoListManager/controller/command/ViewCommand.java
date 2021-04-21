@@ -18,10 +18,7 @@ import edu.isu.cs.cs2263.todoListManager.sort.Order;
 import edu.isu.cs.cs2263.todoListManager.sort.SortOrder;
 import edu.isu.cs.cs2263.todoListManager.view.Event;
 
-import java.util.Collections;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ViewCommand implements Command {
 
@@ -37,17 +34,25 @@ public class ViewCommand implements Command {
      * @author Brandon Watkins
      */
     @Override
-    public void execute() {
+    public void execute(Dictionary<String,String> args) {
         if (event != null) {
             switch (event) {
                 case SortTasks:
-                    //sortTasks(SORTORDER);
+                    sortTasks(null/*SORTORDER*/);
                     break;
                 case SearchTasks:
-                    //searchTasks(SEARCHTERM);
+                    searchTasks(args.get("searchTerm"));
                     break;
                 case FilterTasks:
-                    //filterTasks(FILTERS);
+                    List<String> filters = null;
+                    if (args.get("filters") != null && args.get("filters") != "") {
+                        String[] f = args.get("filters").split(",");
+                        for (int i = 0; i < f.length; i++) {
+                            f[i] = f[i].trim();
+                        }
+                        filters = Arrays.asList(f.clone());
+                    }
+                    filterTasks(filters);
                     break;
                 default:
                     // do nothing
@@ -56,6 +61,12 @@ public class ViewCommand implements Command {
         }
     }
 
+    /**
+     *
+     * @param order
+     *
+     * @author Brandon Watkins
+     */
     private void sortTasks(SortOrder order) {
         if (AccountContext.CURRENT_ACCOUNT instanceof UserAccount) {
             UserAccount user = (UserAccount) AccountContext.CURRENT_ACCOUNT;
@@ -63,7 +74,7 @@ public class ViewCommand implements Command {
             if (tl == null) tl = user.getTaskLists();
             TaskListIterator iterator = (TaskListIterator) tl.iterator();
             List<Task> tasks = iterator.getTasks();
-            Collections.sort(tasks, order.getOrder() == Order.Ascending ? null : Collections.reverseOrder());
+            Collections.sort(tasks, order == null ? null : order.getOrder() == Order.Ascending ? null : Collections.reverseOrder());
             TaskList tl2 = new TaskList(0);
             for (int i = 0; i < tasks.size(); i++) {
                 tl2.addTask(tasks.get(i));
@@ -72,6 +83,12 @@ public class ViewCommand implements Command {
         }
     }
 
+    /**
+     *
+     * @param searchTerm
+     *
+     * @author Brandon Watkins
+     */
     private void searchTasks(String searchTerm) {
         Account user = AccountContext.CURRENT_ACCOUNT;
         if (user instanceof UserAccount) {
@@ -81,6 +98,12 @@ public class ViewCommand implements Command {
         }
     }
 
+    /**
+     *
+     * @param filters
+     *
+     * @author Brandon Watkins
+     */
     private void filterTasks(List<String> filters) {
         Account user = AccountContext.CURRENT_ACCOUNT;
         if (user instanceof UserAccount) {

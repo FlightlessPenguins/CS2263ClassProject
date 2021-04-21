@@ -14,6 +14,7 @@ import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import edu.isu.cs.cs2263.todoListManager.view.Event;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 public class ListCommand implements Command {
@@ -30,7 +31,7 @@ public class ListCommand implements Command {
      * @author Brandon Watkins
      */
     @Override
-    public void execute() {
+    public void execute(Dictionary<String,String> args) {
         if (event != null) {
             /*
                 Ensuring the user is logged into an AdminAccount if they're viewing a user list

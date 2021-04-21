@@ -106,8 +106,10 @@ public class Task implements Searchable, Serializable, Comparable<Task> {
         this.labels = labels;
         this.dueDate = dueDate;
         this.dateCompleted = dateCompleted;
-        for (Task subtask : subtasks) {
-            addSubTask(subtask);
+        if (subtasks != null) {
+            for (Task subtask : subtasks) {
+                addSubTask(subtask);
+            }
         }
     }
 
@@ -198,8 +200,8 @@ public class Task implements Searchable, Serializable, Comparable<Task> {
      */
     public Task addSubTask(Task subtask) {
         if (canAddSubtask()) {
-            if (this.subtasks == null) this.subtasks = new ArrayList<Task>();
-            this.subtasks.add(subtask);
+            if (subtasks == null) subtasks = new ArrayList();
+            subtasks.add(subtask);
             subtask.setParentTask(this);
         }
         return this;
@@ -239,8 +241,7 @@ public class Task implements Searchable, Serializable, Comparable<Task> {
      * @author Brandon Watkins
      */
     public Task setParentTask(Task parentTask) {
-        if (parentTask != null) parentTask.addSubTask(this);
-        else this.parentTaskID = HAS_NO_PARENT_TASK;
+        if (parentTask == null) this.parentTaskID = HAS_NO_PARENT_TASK;
         return this;
     }
 

@@ -11,6 +11,7 @@ import edu.isu.cs.cs2263.todoListManager.model.state.ErrorState;
 import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
 import edu.isu.cs.cs2263.todoListManager.view.Event;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 public class SystemCommand implements Command {
@@ -27,7 +28,7 @@ public class SystemCommand implements Command {
      * @author Brandon Watkins
      */
     @Override
-    public void execute() {
+    public void execute(Dictionary<String,String> args) {
         if (event != null) {
             switch (event) {
                 case Cancel:
@@ -41,9 +42,9 @@ public class SystemCommand implements Command {
                     ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Login);
                     break;
                 case Login:
-                    if (!(Controller.instance().loginEmailTxt == null || Controller.instance().loginEmailTxt.getText() == null || Controller.instance().loginEmailTxt.getText().length() < 1 ||
-                            Controller.instance().loginPasswordTxt == null || Controller.instance().loginPasswordTxt.getText() == null || Controller.instance().loginPasswordTxt.getText().length() < 1)) {
-                        Account user = Controller.login(Controller.instance().loginEmailTxt.getText(), Controller.instance().loginPasswordTxt.getText());
+                    if (!(args.get("email") == null || args.get("email").length() < 1 ||
+                            args.get("password") == null || args.get("password").length() < 1)) {
+                        Account user = Controller.login(args.get("email"), args.get("password"));
                         if (!(user == null || user instanceof NullAccount)) ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Home);
                         else ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Login);
                     }

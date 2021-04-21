@@ -32,10 +32,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
 
 public class CreateCommand implements Command {
 
@@ -51,7 +48,7 @@ public class CreateCommand implements Command {
      * @author Brandon Watkins
      */
     @Override
-    public void execute() {
+    public void execute(Dictionary<String,String> args) {
         if (event != null) {
             /*
                 Ensuring the user is not logged in
@@ -61,38 +58,31 @@ public class CreateCommand implements Command {
                 ErrorState error = new ErrorState("You must log out first.");
                 return;
             }
-            Stage stage;
-            Scene scene;
             switch (event) {
                 case Register:
-                    if (Controller.instance().registerPasswordTxt == null || Controller.instance().registerPasswordTxt.getText().equals(Controller.instance().registerPasswordConfirmTxt.getText())) {
-                        if (Controller.instance().registerEmailTxt == null || Controller.instance().registerEmailTxt.getText() == null || Controller.instance().registerEmailTxt.getText().length() < 1 ||
-                                Controller.instance().registerPasswordTxt == null || Controller.instance().registerPasswordTxt.getText() == null || Controller.instance().registerPasswordTxt.getText().length() < 1 ||
-                                Controller.instance().registerFirstNameTxt == null || Controller.instance().registerFirstNameTxt.getText() == null || Controller.instance().registerFirstNameTxt.getText().length() < 1 ||
-                                Controller.instance().registerLastNameTxt == null || Controller.instance().registerLastNameTxt.getText() == null || Controller.instance().registerLastNameTxt.getText().length() < 1 ||
-                                Controller.instance().registerBiographyTxt == null || Controller.instance().registerBiographyTxt.getText() == null || Controller.instance().registerBiographyTxt.getText().length() < 1) {
-                            ErrorState error = new ErrorState("Missing required field(s).", null, "Enter email, password and name.");
-                        }
-                        else {
-                            register(Controller.instance().registerEmailTxt.getText(),
-                                    Controller.instance().registerPasswordTxt.getText(),
-                                    Controller.instance().registerFirstNameTxt.getText(),
-                                    Controller.instance().registerLastNameTxt.getText(),
-                                    Controller.instance().registerBiographyTxt.getText());
-                        }
+                    if (args.get("password").equals(args.get("confirmPassword"))) {
+                        register(args.get("email"), args.get("password"), args.get("firstName"), args.get("lastName"), args.get("biography"));
                     }
                     else {
                         ErrorState error = new ErrorState("Passwords must match.");
                     }
                     break;
                 case CreateTaskList:
-                    //createTaskList(TITLE, DESCRIPTION, COMMENT);
+                    createTaskList(args.get("title"), args.get("description"), args.get("comment"));
                     break;
                 case CreateSection:
-                    //createSection(TITLE, DESCRIPTION);
+                    createSection(args.get("title"), args.get("description"));
                     break;
                 case CreateTask:
-                    //createTask(TITLE, DESCRIPTION, LABELS, DUEDATE);
+                    List<String> labels = null;
+                    if (args.get("labels") != null && args.get("labels") != "") {
+                        String[] l = args.get("labels").split(",");
+                        for (int i = 0; i < l.length; i++) {
+                            l[i] = l[i].trim();
+                        }
+                        labels = Arrays.asList(l.clone());
+                    }
+                    createTask(args.get("title"), args.get("description"), labels, args.get("dueDate"));
                     break;
                 default:
                     // do nothing
@@ -101,14 +91,25 @@ public class CreateCommand implements Command {
         }
     }
 
+    /**
+     * registers the user
+     *
+     * @param email
+     * @param password
+     * @param firstName
+     * @param lastName
+     * @param biography
+     *
+     * @author Brandon Watkins
+     */
     private void register(String email, String password, String firstName, String lastName, String biography) {
         if (emailAddressInUse(email)) {
             State ErrorState = new ErrorState("Email address is already in use.");
             return;
         }
         UserAccount user = null;
-        if (email != null && email.length() > 1 &&
-                password != null && password.length() > 1 &&
+        if (email != null && email.length() > 3 &&
+                password != null && password.length() > 3 &&
                 firstName != null && firstName.length() > 0 &&
                 lastName != null && lastName.length() > 0) {
             user = new UserAccount(biography != null ? biography : null, null, email, password, firstName, lastName);
@@ -120,10 +121,21 @@ public class CreateCommand implements Command {
             ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Profile);
         }
         else {
-            State ErrorState = new ErrorState("Missing required fields");
+            State ErrorState = new ErrorState("Missing required fields", (new String[]{
+                    firstName != null && firstName.length() > 0 ? null : "first name",
+                    lastName != null && lastName.length() > 0 ? null : "last name",
+                    email != null && email.length() > 3 ? null : "email",
+                    password != null && password.length() > 3 ? null : "password"}), null);
         }
     }
 
+    /**
+     *
+     * @param email
+     * @return
+     *
+     * @author Brandon Watkins
+     */
     private Boolean emailAddressInUse(String email) {
         for (Account account : ((AccountListState) AccountListState.instance()).getAccountsBackdoor()) {
             if (account.getEmail().equals(email)) return true;
@@ -131,6 +143,14 @@ public class CreateCommand implements Command {
         return false;
     }
 
+    /**
+     *
+     * @param title
+     * @param description
+     * @param comment
+     *
+     * @author Brandon Watkins
+     */
     private void createTaskList(String title, String description, String comment) {
         if (AccountContext.CURRENT_ACCOUNT instanceof UserAccount) {
             TaskList tasklist = new TaskList(title, description, comment);
@@ -141,6 +161,13 @@ public class CreateCommand implements Command {
         }
     }
 
+    /**
+     *
+     * @param title
+     * @param description
+     *
+     * @author Brandon Watkins
+     */
     private void createSection(String title, String description) {
         if (AccountContext.CURRENT_ACCOUNT instanceof UserAccount) {
             Section section = new Section(title, description, null, false);
@@ -151,6 +178,15 @@ public class CreateCommand implements Command {
         }
     }
 
+    /**
+     *
+     * @param title
+     * @param description
+     * @param labels
+     * @param dueDate
+     *
+     * @author Brandon Watkins
+     */
     private void createTask(String title, String description, List<String> labels, String dueDate) {
         if (AccountContext.CURRENT_ACCOUNT instanceof UserAccount) {
             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -171,6 +207,15 @@ public class CreateCommand implements Command {
         }
     }
 
+    /**
+     *
+     * @param title
+     * @param description
+     * @param labels
+     * @param dueDate
+     *
+     * @author Brandon Watkins
+     */
     private void createTask(String title, String description, List<String> labels, Calendar dueDate) {
         if (AccountContext.CURRENT_ACCOUNT instanceof UserAccount) {
             Task task = new Task(title, description, labels, dueDate, null, null);

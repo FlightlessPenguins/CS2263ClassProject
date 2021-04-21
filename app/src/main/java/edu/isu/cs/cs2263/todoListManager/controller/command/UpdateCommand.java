@@ -29,10 +29,7 @@ import edu.isu.cs.cs2263.todoListManager.storage.Write;
 import edu.isu.cs.cs2263.todoListManager.view.Event;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
 
 public class UpdateCommand implements Command {
 
@@ -48,28 +45,60 @@ public class UpdateCommand implements Command {
      * @author Brandon Watkins
      */
     @Override
-    public void execute() {
+    public void execute(Dictionary<String,String> args) {
         if (event != null) {
-            switch (event) {
-                case UpdateUser:
-                    //updateAccount(ACCOUNTID, EMAIL, PASSWORD, FIRSTNAME, LASTNAME, BIOGRAPHY);
-                    break;
-                case UpdateTaskList:
-                    //updateTaskList(TASKLISTID, TITLE, DESCRIPTION, COMMENT, ISARCHIVED);
-                    break;
-                case UpdateSection:
-                    //updateSection(SECTIONID, TITLE, DESCRIPTION);
-                    break;
-                case UpdateTask:
-                    //updateTask(TASKID, TITLE, DESCRIPTION, LABELS, DUEDATE, DATECOMPLETED);
-                    break;
-                default:
-                    // do nothing
-                    break;
+            String idString = args.get("id");
+            int id = Integer.parseInt(idString);
+            if (id < 0) {
+                ErrorState error = new ErrorState("No results found for given item.");
+            }
+            else {
+                switch (event) {
+                    case UpdateUser:
+                        Account act = ((AccountListState) AccountListState.instance()).getAccount(id);
+                        updateAccount(id,
+                                args.get("email") != null && args.get("email").length() > 1 ? args.get("email") : act.getEmail(),
+                                args.get("password") != null && args.get("password").length() > 1 ? args.get("password") : act.getPassword(),
+                                args.get("firstName") != null && args.get("firstName").length() > 1 ? args.get("firstName") : act.getFirstName(),
+                                args.get("lastName") != null && args.get("lastName").length() > 1 ? args.get("lastName") : act.getLastName(),
+                                args.get("biography"));
+                        break;
+                    case UpdateTaskList:
+                        updateTaskList(id, args.get("title"), args.get("description"), args.get("comment"), args.get("email") == "true" ? true : false);
+                        break;
+                    case UpdateSection:
+                        updateSection(id, args.get("title"), args.get("description"));
+                        break;
+                    case UpdateTask:
+                        List<String> labels = null;
+                        if (args.get("labels") != null && args.get("labels") != "") {
+                            String[] l = args.get("labels").split(",");
+                            for (int i = 0; i < l.length; i++) {
+                                l[i] = l[i].trim();
+                            }
+                            labels = Arrays.asList(l.clone());
+                        }
+                        updateTask(id, args.get("title"), args.get("description"), labels, args.get("dueDate"), args.get("dateCompleted"));
+                        break;
+                    default:
+                        // do nothing
+                        break;
+                }
             }
         }
     }
 
+    /**
+     *
+     * @param id
+     * @param email
+     * @param password
+     * @param firstName
+     * @param lastName
+     * @param biography
+     *
+     * @author Brandon Watkins
+     */
     private void updateAccount(int id, String email, String password, String firstName, String lastName, String biography) {
         Account user = (((AccountListState)AccountListState.instance())).getAccount(id);
         if (user == null ) return;
@@ -87,6 +116,13 @@ public class UpdateCommand implements Command {
         ((AccountUpdateState) AccountCreateState.instance()).setState(user);
     }
 
+    /**
+     *
+     * @param email
+     * @return
+     *
+     * @author Brandon Watkins
+     */
     private Boolean emailAddressInUse(String email) {
         for (Account account : ((AccountListState) AccountListState.instance()).getAccountsBackdoor()) {
             if (account.getEmail().equals(email)) return true;
@@ -94,6 +130,16 @@ public class UpdateCommand implements Command {
         return false;
     }
 
+    /**
+     *
+     * @param id
+     * @param title
+     * @param description
+     * @param comment
+     * @param isArchived
+     *
+     * @author Brandon Watkins
+     */
     private void updateTaskList(int id, String title, String description, String comment, boolean isArchived) {
         TaskList tl = AccountContext.CURRENT_ACCOUNT instanceof UserAccount ? ((UserAccount) AccountContext.CURRENT_ACCOUNT).getTaskLists().findTaskList(id) : null;
         if (tl == null) return;
@@ -106,6 +152,14 @@ public class UpdateCommand implements Command {
         ((TaskListInfoState) TaskListInfoState.instance()).setState(tl);
     }
 
+    /**
+     *
+     * @param id
+     * @param title
+     * @param description
+     *
+     * @author Brandon Watkins
+     */
     private void updateSection(int id, String title, String description) {
         Section s = AccountContext.CURRENT_ACCOUNT instanceof UserAccount ? ((UserAccount) AccountContext.CURRENT_ACCOUNT).getTaskLists().findSection(id) : null;
         if (s == null) return;
@@ -116,6 +170,17 @@ public class UpdateCommand implements Command {
         ((SectionInfoState) SectionInfoState.instance()).setState(s);
     }
 
+    /**
+     *
+     * @param id
+     * @param title
+     * @param description
+     * @param labels
+     * @param dueDate
+     * @param completionDate
+     *
+     * @author Brandon Watkins
+     */
     private void updateTask(int id, String title, String description, List<String> labels, String dueDate, String completionDate) {
         Task t = AccountContext.CURRENT_ACCOUNT instanceof UserAccount ? ((UserAccount) AccountContext.CURRENT_ACCOUNT).getTaskLists().findTask(id) : null;
         if (t == null) return;
@@ -146,6 +211,17 @@ public class UpdateCommand implements Command {
         ((TaskUpdateState) TaskUpdateState.instance()).setState(t);
     }
 
+    /**
+     *
+     * @param id
+     * @param title
+     * @param description
+     * @param labels
+     * @param dueDate
+     * @param completionDate
+     *
+     * @author Brandon Watkins
+     */
     private void updateTask(int id, String title, String description, List<String> labels, Calendar dueDate, Calendar completionDate) {
         Task t = AccountContext.CURRENT_ACCOUNT instanceof UserAccount ? ((UserAccount) AccountContext.CURRENT_ACCOUNT).getTaskLists().findTask(id) : null;
         if (t == null) return;

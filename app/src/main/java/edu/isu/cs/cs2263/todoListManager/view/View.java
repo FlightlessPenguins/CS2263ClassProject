@@ -139,7 +139,7 @@ public class View extends Application {
      *
      * @author Alex Losser
      */
-    public void errorMsg(String msg) {
+    public static void errorMsg(String msg) {
         FXMLLoader loader = new FXMLLoader();
         try {
             loader.setLocation(new File("app/src/main/resources/fxml/error.fxml").toURI().toURL());

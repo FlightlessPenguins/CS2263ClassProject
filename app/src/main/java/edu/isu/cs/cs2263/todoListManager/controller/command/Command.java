@@ -4,6 +4,8 @@
  */
 package edu.isu.cs.cs2263.todoListManager.controller.command;
 
+import java.util.Dictionary;
+
 public interface Command {
 
     /**
@@ -11,6 +13,6 @@ public interface Command {
      *
      * @author Brandon Watkins
      */
-    public void execute();
+    public void execute(Dictionary<String,String> args);
 
 }

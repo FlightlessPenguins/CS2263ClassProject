@@ -17,6 +17,7 @@ import edu.isu.cs.cs2263.todoListManager.model.state.task.TaskInfoState;
 import edu.isu.cs.cs2263.todoListManager.model.state.taskList.TaskListInfoState;
 import edu.isu.cs.cs2263.todoListManager.view.Event;
 
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -34,10 +35,8 @@ public class InfoCommand implements Command {
      * @author Brandon Watkins
      */
     @Override
-    public void execute() {
+    public void execute(Dictionary<String,String> args) {
         if (event != null) {
-            //int id = ITEMID;
-
             //Ensuring the user is logged into a UserAccount if they're viewing a to do list
             Account account = AccountContext.CURRENT_ACCOUNT;
             if (account == null) {
@@ -51,19 +50,22 @@ public class InfoCommand implements Command {
                 return;
             }
 
+            String idString = args.get("id");
+            int id = Integer.parseInt(idString);
+
             //handle the event
             switch (event) {
                 case ViewUser:
-                    //((AccountInfoState)(AccountInfoState.instance())).setState((((AccountListState)AccountListState.instance())).getAccount(id));
+                    ((AccountInfoState)(AccountInfoState.instance())).setState((((AccountListState)AccountListState.instance())).getAccount(id));
                     break;
                 case ViewTaskList:
-                    //((TaskListInfoState)TaskListInfoState.instance()).setState(user.getTaskLists().findTaskList(id));
+                    ((TaskListInfoState)TaskListInfoState.instance()).setState(user.getTaskLists().findTaskList(id));
                     break;
                 case ViewSection:
-                    //((SectionInfoState)SectionInfoState.instance()).setState(user.getTaskLists().findSection(id));
+                    ((SectionInfoState)SectionInfoState.instance()).setState(user.getTaskLists().findSection(id));
                     break;
                 case ViewTask:
-                    //((TaskInfoState)TaskInfoState.instance()).setState(user.getTaskLists().findTask(id));
+                    ((TaskInfoState)TaskInfoState.instance()).setState(user.getTaskLists().findTask(id));
                     break;
                 default:
                     // do nothing
