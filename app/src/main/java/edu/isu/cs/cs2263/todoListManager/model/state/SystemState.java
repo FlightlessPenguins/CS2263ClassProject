@@ -6,7 +6,7 @@ public class SystemState implements State {
 
     public enum SystemStateEnum {
         LoginForm,
-        Register,
+        //Register,
         RegisterForm,
         Profile,
         ProfileForm,

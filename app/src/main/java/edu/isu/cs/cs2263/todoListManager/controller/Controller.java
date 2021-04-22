@@ -207,9 +207,6 @@ public class Controller implements Initializable {
 
     @FXML
     private void populateTaskListAccordion(ActionEvent event) throws IOException {
-
-
-
         UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
         Iterator<TaskList> iter =  account.getTaskLists().getSubTaskLists().iterator();
         Accordion taskListAccordion = new Accordion();
@@ -332,6 +329,8 @@ public class Controller implements Initializable {
     }
 
     public void handle(Event event) {
+        // All code that's been commented out MUST BE FIXED, the commands depend on them.
+        // I'm hoping that we can store the actual objects in the view, so that we can access things like ID, subtasks, parent, etc.
         Command c = new SystemCommand(Event.OpenApp);
         Dictionary<String,String> args = new Hashtable<>();
         switch(event) {
@@ -340,11 +339,11 @@ public class Controller implements Initializable {
                 args.put("title", txtTitle.getText());
                 args.put("description", txtDescription.getText());
                 args.put("comment", txtComment.getText());
-                args.put("parentTaskListID", txtTitle.getParent().getId());
+                //args.put("parentTaskListID", txtTitle.getParent().getId());
                 break;
             case UpdateTaskList:
                 c = new UpdateCommand(event);
-                args.put("id", txtTitle.getParent().getId());
+                //args.put("id", txtTitle.getParent().getId());
                 args.put("title", txtTitle.getText());
                 args.put("description", txtDescription.getText());
                 args.put("comment", txtComment.getText());
@@ -353,17 +352,17 @@ public class Controller implements Initializable {
                 break;
             case ViewTaskList:
                 c = new InfoCommand(event);
-                args.put("id", lblTitle.getParent().getId());
+                //args.put("id", lblTitle.getParent().getId());
                 break;
             case RescheduleTaskList:
                 c = new UpdateCommand(event);
                 args.put("dueDate", txtDueDate.getText());
-                args.put("id", lblTitle.getParent().getId());
+                //args.put("id", lblTitle.getParent().getId());
                 break;
             case ArchiveTaskList:
                 c = new UpdateCommand(event);
                 args.put("isListArchived", "true");
-                args.put("id", lblTitle.getParent().getId());
+                //args.put("id", lblTitle.getParent().getId());
                 break;
             case SortTasks:
                 c = new ViewCommand(event);
@@ -383,17 +382,17 @@ public class Controller implements Initializable {
                 args.put("title", txtTitle.getText());
                 args.put("description", txtDescription.getText());
                 args.put("defaultSection", "false");
-                args.put("parentTaskListID", txtTitle.getParent().getId());
+                //args.put("parentTaskListID", txtTitle.getParent().getId());
                 break;
             case UpdateSection:
                 c = new UpdateCommand(event);
-                args.put("id", txtTitle.getParent().getId());
+                //args.put("id", txtTitle.getParent().getId());
                 args.put("title", txtTitle.getText());
                 args.put("description", txtDescription.getText());
                 break;
             case ViewSection:
                 c = new InfoCommand(event);
-                args.put("id", lblTitle.getParent().getId());
+                //args.put("id", lblTitle.getParent().getId());
                 break;
             case CreateTask:
                 c = new CreateCommand(event);
@@ -406,7 +405,7 @@ public class Controller implements Initializable {
                 break;
             case UpdateTask:
                 c = new UpdateCommand(event);
-                args.put("id", txtTitle.getParent().getId());
+                //args.put("id", txtTitle.getParent().getId());
                 args.put("title", txtTitle.getText());
                 args.put("description", txtDescription.getText());
                 args.put("labels", txtLabels.getText());
@@ -416,7 +415,7 @@ public class Controller implements Initializable {
                 break;
             case ViewTask:
                 c = new InfoCommand(event);
-                args.put("taskID", lblTitle.getParent().getId());
+                //args.put("taskID", lblTitle.getParent().getId());
                 break;
             case Register:
                 c = new CreateCommand(event);
@@ -429,7 +428,7 @@ public class Controller implements Initializable {
                 break;
             case UpdateUser:
                 c = new UpdateCommand(event);
-                args.put("id", lblEmail.getParent().getId());
+                //args.put("id", lblEmail.getParent().getId());
                 args.put("email", txtEmail.getText());
                 args.put("password", txtPassword.getText());
                 args.put("confirmPassword", txtPasswordConfirm.getText());
@@ -454,6 +453,7 @@ public class Controller implements Initializable {
                 break;
         }
         c.execute(args);
+        // if we are using multiple windows - if event == cancel, close window here.
     }
 
     /**
