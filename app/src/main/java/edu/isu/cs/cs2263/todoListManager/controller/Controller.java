@@ -34,16 +34,35 @@ import java.util.*;
 public class Controller implements Initializable {
 
     @FXML
-    private Button btnCancel;
-    @FXML
-    public Button btnRegisterUser;
-    @FXML
-    public Button btnLoginRegister;
-    @FXML
-    public Button btnLoginUser;
+    private Accordion accHomeTaskList;
 
     @FXML
-    public CheckBox cbIsListArchived;
+    private Button btnCancel;
+    @FXML
+    private Button btnRegisterUser;
+    @FXML
+    private Button btnLoginRegister;
+    @FXML
+    private Button btnLoginUser;
+    @FXML
+    private Button btnCreateList;
+    @FXML
+    private Button btnCreateSection;
+    @FXML
+    private Button btnCreateTask;
+    @FXML
+    private Button btnLogout;
+    @FXML
+    private Button btnEditAccount;
+    @FXML
+    private Button btnEditList;
+    @FXML
+    private Button btnEditSection;
+    @FXML
+    private Button btnHomeRefreshList;
+
+    @FXML
+    private CheckBox cbIsListArchived;
     @FXML
     private CheckBox cbSortDirection;
 
@@ -55,54 +74,36 @@ public class Controller implements Initializable {
     private Label lblEmail;
 
     @FXML
-    public TextArea txtBiography;
+    private ScrollPane spHomeAllTask;
 
     @FXML
-    public TextField txtEmail;
+    private TextArea txtBiography;
+
     @FXML
-    public TextField txtFirstName;
+    private TextField txtEmail;
     @FXML
-    public TextField txtLastName;
+    private TextField txtFirstName;
     @FXML
-    public TextField txtTitle;
+    private TextField txtLastName;
     @FXML
-    public TextField txtDescription;
+    private TextField txtTitle;
     @FXML
-    public TextField txtComment;
+    private TextField txtDescription;
     @FXML
-    public TextField txtDueDate;
+    private TextField txtComment;
     @FXML
-    public TextField txtSearch;
+    private TextField txtDueDate;
     @FXML
-    public TextField txtLabels;
+    private TextField txtSearch;
+    @FXML
+    private TextField txtLabels;
     @FXML
     private TextField txtFilters;
 
     @FXML
-    public PasswordField txtPassword;
+    private PasswordField txtPassword;
     @FXML
-    public PasswordField txtPasswordConfirm;
-
-    @FXML
-    public Button createListBtn;
-    @FXML
-    public Button createSectionBtn;
-    @FXML
-    public Button createTaskBtn;
-    @FXML
-    public Button logoutBtn;
-    @FXML
-    public Button editAccountBtn;
-    @FXML
-    public Button editListBtn;
-    @FXML
-    public Button editSectionBtn;
-    @FXML
-    public Button homeRefreshListBtn;
-    @FXML
-    public Accordion homeTaskListAccordion;
-    @FXML
-    public ScrollPane homeAllTaskScrollPane;
+    private PasswordField txtPasswordConfirm;
 
 
     public Controller() {}
@@ -244,8 +245,8 @@ public class Controller implements Initializable {
             taskListPane.setContent(SectionAccordion);
             taskListAccordion.getPanes().add(taskListPane);
         }
-        homeAllTaskScrollPane.setContent(null);
-        homeAllTaskScrollPane.setContent(taskListAccordion);
+        spHomeAllTask.setContent(null);
+        spHomeAllTask.setContent(taskListAccordion);
     }
 
     public void handle(ActionEvent event) {

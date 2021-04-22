@@ -16,28 +16,28 @@
     <children>
         <ToolBar prefHeight="40.0" prefWidth="700.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
-                <Button fx:id="createListBtn" mnemonicParsing="false" onAction="#btnCreateList" text="Create List" />
-                <Button fx:id="createSectionBtn" mnemonicParsing="false" text="Create Section" />
-                <Button fx:id="createTaskBtn" mnemonicParsing="false" text="Create Task" />
+                <Button fx:id="btnCreateList" mnemonicParsing="false" onAction="#btnCreateList" text="Create List" />
+                <Button fx:id="btnCreateSection" mnemonicParsing="false" text="Create Section" />
+                <Button fx:id="btnCreateTask" mnemonicParsing="false" text="Create Task" />
                 <Separator prefHeight="30.0" prefWidth="210.0" />
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="User 001">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Text>
-                <Button fx:id="logoutBtn" mnemonicParsing="false" text="Logout" />
-                <Button fx:id="editAccountBtn" mnemonicParsing="false" text="Edit Account" />
+                <Button fx:id="btnLogout" mnemonicParsing="false" text="Logout" />
+                <Button fx:id="btnEditAccount" mnemonicParsing="false" text="Edit Account" />
             </items>
         </ToolBar>
-        <TextField layoutX="436.0" layoutY="47.0" prefHeight="26.0" prefWidth="256.0" promptText="Search Lists, Tasks, Sections, etc." />
+        <TextField fx:id="txtSearch" layoutX="436.0" layoutY="47.0" prefHeight="26.0" prefWidth="256.0" promptText="Search Lists, Tasks, Sections, etc." />
         <Text layoutX="14.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="All Tasks:">
             <font>
                 <Font size="14.0" />
             </font>
         </Text>
-        <ScrollPane fx:id="homeAllTaskScrollPane" layoutX="14.0" layoutY="90.0" prefHeight="332.0" prefWidth="679.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0">
+        <ScrollPane fx:id="spHomeAllTask" layoutX="14.0" layoutY="90.0" prefHeight="332.0" prefWidth="679.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="90.0">
             <content>
-                <Accordion fx:id="homeTaskListAccordion" prefHeight="349.0" prefWidth="653.0">
+                <Accordion fx:id="accHomeTaskList" prefHeight="349.0" prefWidth="653.0">
                     <panes>
                         <TitledPane animated="false" text="List">
                             <content>
@@ -129,6 +129,6 @@
                     </panes>
                 </Accordion>
             </content></ScrollPane>
-        <Button fx:id="homeRefreshListBtn" layoutX="90.0" layoutY="60.0" mnemonicParsing="false" onAction="#populateTaskListAccordion" text="Refresh List" />
+        <Button fx:id="btnHomeRefreshList" layoutX="90.0" layoutY="60.0" mnemonicParsing="false" onAction="#populateTaskListAccordion" text="Refresh List" />
     </children>
 </AnchorPane>
