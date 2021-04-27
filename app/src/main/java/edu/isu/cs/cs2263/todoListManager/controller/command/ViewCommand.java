@@ -82,7 +82,7 @@ public class ViewCommand implements Command {
             }
             ((TaskListInfoState) TaskListInfoState.instance()).setState(tl2);
         }
-        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
+        ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
     }
 
     /**
@@ -97,7 +97,7 @@ public class ViewCommand implements Command {
             TaskList tl = null;
             if (((TaskListInfoState) TaskListInfoState.instance()).getState() != null) tl = ((TaskListInfoState) AccountInfoState.instance()).getState().search(searchTerm);
             ((TaskListInfoState) TaskListInfoState.instance()).setState(tl);
-            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
+            ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
         }
     }
 
@@ -118,7 +118,7 @@ public class ViewCommand implements Command {
                 ((TaskListInfoState) TaskListInfoState.instance()).setState(tl);
             }
         }
-        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
+        ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
     }
 
 }

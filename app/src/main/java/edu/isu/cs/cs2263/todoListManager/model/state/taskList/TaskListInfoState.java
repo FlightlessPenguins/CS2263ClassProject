@@ -4,6 +4,8 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.state.taskList;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 
@@ -16,6 +18,10 @@ public class TaskListInfoState implements State {
     }
 
     public TaskList getState() {
+        if (state == null) {
+            if (((AccountContext) AccountContext.instance()).getCurrentAccount() instanceof UserAccount)
+                state = ((UserAccount) ((AccountContext) AccountContext.instance()).getCurrentAccount()).getTaskLists();
+        }
         return state;
     }
 

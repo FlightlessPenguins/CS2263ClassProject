@@ -1,5 +1,7 @@
 package edu.isu.cs.cs2263.todoListManager.model.state.section;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 
@@ -12,6 +14,8 @@ public class SectionUpdateState implements State {
     }
 
     public Section getState() {
+        if (state == null && ((AccountContext) AccountContext.instance()).getCurrentAccount() instanceof UserAccount)
+            state = ((UserAccount) ((AccountContext) AccountContext.instance()).getCurrentAccount()).getTaskLists().getSections().get(0);
         return state;
     }
 

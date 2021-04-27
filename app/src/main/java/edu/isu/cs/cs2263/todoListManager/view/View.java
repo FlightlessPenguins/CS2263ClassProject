@@ -4,7 +4,11 @@
  */
 package edu.isu.cs.cs2263.todoListManager.view;
 
+import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountLoginState;
+import edu.isu.cs.cs2263.todoListManager.observer.Observable;
+import edu.isu.cs.cs2263.todoListManager.observer.Observer;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
@@ -23,7 +27,7 @@ import javafx.util.Duration;
 import java.io.File;
 import java.io.IOException;
 
-public class View extends Application {
+public class View extends Application implements Observer {
 
     private static final int splashDelay = 5;
 
@@ -35,6 +39,61 @@ public class View extends Application {
     public void start(Stage primaryStage) throws Exception {
         getSplash();
         ((AccountListState) AccountListState.instance()).setAccounts(Read.readAllUserData());
+        ((SystemState) SystemState.instance()).addObserver(this);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        // For each state, do whatever it needs to do to update the view accordingly.
+        String name = arg.getClass().getSimpleName();
+        Class clas = arg.getClass();
+        switch (arg.getClass().getSimpleName()) {
+            case "AccountCreateState":
+                register();
+                break;
+            case "AccountInfoState":
+                //profile();
+                break;
+            case "AccountListState":
+                //accountList();
+                break;
+            case "AccountLoginState":
+                login();
+                break;
+            case "AccountUpdateState":
+                //updateAccount();
+                break;
+            case "SectionCreateState":
+                //createSection();
+                break;
+            case "SectionInfoState":
+                //section();
+                break;
+            case "SectionUpdateState":
+                //updateSection();
+                break;
+            case "TaskCreateState":
+                //createTask();
+                break;
+            case "TaskInfoState":
+                //task();
+                break;
+            case "TaskUpdateState":
+                //updateTask();
+                break;
+            case "TaskListCreateState":
+                //createTaskList();
+                break;
+            case "TaskListInfoState":
+                //taskList();
+                break;
+            case "TaskListUpdateState":
+                //updateTaskList();
+                break;
+            default:
+
+                break;
+        }
     }
 
     /**
@@ -79,8 +138,7 @@ public class View extends Application {
             delay.setOnFinished(value -> {
                 stage.close();
                 try {
-                    System.out.println("Test to see if this works");
-                    login();
+                    ((SystemState) SystemState.instance()).setState(AccountLoginState.instance());
                 } catch (Exception e) {
                     System.out.println(e);
                 }

@@ -12,6 +12,7 @@ import edu.isu.cs.cs2263.todoListManager.model.state.ErrorState;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountLoginState;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import edu.isu.cs.cs2263.todoListManager.view.Event;
 
@@ -40,7 +41,7 @@ public class ListCommand implements Command {
             Account account = AccountContext.CURRENT_ACCOUNT;
             if (account == null) {
                 State ErrorState = new ErrorState("You don't appear to be logged in.");
-                ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.LoginForm);
+                ((SystemState) SystemState.instance()).setState(AccountLoginState.instance());
                 return;
             }
             if (!(account instanceof AdminAccount) && event == Event.ViewListOfAllUsers) {
@@ -51,7 +52,7 @@ public class ListCommand implements Command {
             switch (event) {
                 case ViewListOfAllUsers:
                     ((AccountListState) AccountListState.instance()).setState(Read.readAllUserData());
-                    ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.AccountList);
+                    ((SystemState) SystemState.instance()).setState(AccountListState.instance());
                     break;
                 default:
                     // do nothing

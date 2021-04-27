@@ -320,7 +320,7 @@ public class Controller implements Initializable {
                 handle(Event.Cancel);
                 break;
             case "btnLoginRegister":
-                ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.RegisterForm);
+                ((SystemState) SystemState.instance()).setState(AccountCreateState.instance());
                 // do nothing. Event.Register is for when they've submitted their registration info
                 break;
             default:

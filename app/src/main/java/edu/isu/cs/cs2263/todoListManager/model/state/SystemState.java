@@ -1,10 +1,14 @@
 package edu.isu.cs.cs2263.todoListManager.model.state;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountLoginState;
 import edu.isu.cs.cs2263.todoListManager.model.state.taskList.TaskListUpdateState;
+import edu.isu.cs.cs2263.todoListManager.observer.Observable;
 
-public class SystemState implements State {
+public class SystemState extends Observable implements State {
 
-    public enum SystemStateEnum {
+    /*public enum SystemStateEnum {
         LoginForm,
         //Register,
         RegisterForm,
@@ -29,6 +33,28 @@ public class SystemState implements State {
     }
 
     public SystemStateEnum getState() {
+        return state;
+    }*/
+
+    private State state = AccountLoginState.instance();
+    private State previousState = null;
+
+    public State setState(State state) {
+        previousState = this.state;
+        this.state = state;
+        setChanged();
+        notifyObservers(this.state);
+        return this;
+    }
+
+    public State getState() {
+        if (state == null) state = AccountLoginState.instance();
+        return state;
+    }
+
+    public State getPreviousState() {
+        state = previousState;
+        previousState = null;
         return state;
     }
 

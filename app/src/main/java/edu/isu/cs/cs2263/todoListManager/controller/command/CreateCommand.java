@@ -56,7 +56,7 @@ public class CreateCommand implements Command {
             Account account = AccountContext.CURRENT_ACCOUNT;
             if (account != null && !(account instanceof NullAccount)) {
                 ErrorState error = new ErrorState("You must log out first.");
-                ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Profile);
+                ((SystemState) SystemState.instance()).setState(AccountInfoState.instance());
                 return;
             }
             switch (event) {
@@ -126,7 +126,7 @@ public class CreateCommand implements Command {
             AccountContext.CURRENT_ACCOUNT = user;
             ((AccountInfoState) AccountInfoState.instance()).setState(user);
             ((AccountCreateState) AccountCreateState.instance()).setState(user);
-            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Home);
+            ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
             //Controller.instance().cancelStage(null);
         }
         else {
@@ -167,7 +167,7 @@ public class CreateCommand implements Command {
             user2.getTaskLists().addSubTaskList(tasklist);
             ((TaskListInfoState) TaskListInfoState.instance()).setState(tasklist);
             ((TaskListCreateState) TaskListCreateState.instance()).setState(tasklist);
-            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
+            ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
         }
     }
 
@@ -185,7 +185,7 @@ public class CreateCommand implements Command {
             user3.getTaskLists().addSection(section);
             ((SectionInfoState) SectionInfoState.instance()).setState(section);
             ((SectionCreateState) SectionCreateState.instance()).setState(section);
-            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
+            ((SystemState) SystemState.instance()).setState(SectionInfoState.instance());
         }
     }
 
@@ -205,12 +205,7 @@ public class CreateCommand implements Command {
                 Date date = sdf.parse(dueDate);
                 Calendar cal = Calendar.getInstance();
                 cal.getInstance().setTime(date);
-                Task task = new Task(title, description, labels, cal, null, null);
-                UserAccount user4 = (UserAccount)AccountContext.CURRENT_ACCOUNT;
-                user4.getTaskLists().addTask(task);
-                ((TaskInfoState) TaskInfoState.instance()).setState(task);
-                ((TaskCreateState) TaskCreateState.instance()).setState(task);
-                ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
+                createTask(title, description, labels, cal);
             } catch (Exception ex) {
                 ((TaskInfoState) TaskInfoState.instance()).setState(null);
                 ((TaskCreateState) TaskCreateState.instance()).setState(null);
@@ -235,7 +230,7 @@ public class CreateCommand implements Command {
             user4.getTaskLists().addTask(task);
             ((TaskInfoState) TaskInfoState.instance()).setState(task);
             ((TaskCreateState) TaskCreateState.instance()).setState(task);
-            ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
+            ((SystemState) SystemState.instance()).setState(TaskInfoState.instance());
         }
     }
 

@@ -4,6 +4,8 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.state.task;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 
@@ -16,6 +18,7 @@ public class TaskUpdateState implements State {
     }
 
     public Task getState() {
+        if (state == null) state = ((TaskInfoState) TaskInfoState.instance()).getState();
         return state;
     }
 

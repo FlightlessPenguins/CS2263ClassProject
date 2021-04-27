@@ -11,6 +11,7 @@ import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.ErrorState;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountCreateState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountInfoState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 import edu.isu.cs.cs2263.todoListManager.model.state.section.SectionInfoState;
@@ -42,7 +43,7 @@ public class InfoCommand implements Command {
             Account account = AccountContext.CURRENT_ACCOUNT;
             if (account == null) {
                 State ErrorState = new ErrorState("Unable to locate account.");
-                ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.LoginForm);
+                ((SystemState) SystemState.instance()).setState(AccountCreateState.instance());
                 return;
             }
             UserAccount user = null;
@@ -59,19 +60,19 @@ public class InfoCommand implements Command {
             switch (event) {
                 case ViewUser:
                     ((AccountInfoState)(AccountInfoState.instance())).setState((((AccountListState)AccountListState.instance())).getAccount(id));
-                    ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Profile);
+                    ((SystemState) SystemState.instance()).setState(AccountInfoState.instance());
                     break;
                 case ViewTaskList:
                     ((TaskListInfoState)TaskListInfoState.instance()).setState(user.getTaskLists().findTaskList(id));
-                    ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
+                    ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
                     break;
                 case ViewSection:
                     ((SectionInfoState)SectionInfoState.instance()).setState(user.getTaskLists().findSection(id));
-                    ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Section);
+                    ((SystemState) SystemState.instance()).setState(SectionInfoState.instance());
                     break;
                 case ViewTask:
                     ((TaskInfoState)TaskInfoState.instance()).setState(user.getTaskLists().findTask(id));
-                    ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Task);
+                    ((SystemState) SystemState.instance()).setState(TaskInfoState.instance());
                     break;
                 default:
                     // do nothing

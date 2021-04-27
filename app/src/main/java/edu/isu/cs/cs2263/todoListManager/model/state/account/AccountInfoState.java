@@ -4,19 +4,21 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.state.account;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 
 public class AccountInfoState implements State {
 
-    private Account state;
+    private Account state = ((AccountContext) AccountContext.instance()).getCurrentAccount();
 
     public void setState(Account state) {
         this.state = state;
     }
 
     public Account getState() {
+        if (state == null) state = ((AccountContext) AccountContext.instance()).getCurrentAccount();
         return state;
     }
 

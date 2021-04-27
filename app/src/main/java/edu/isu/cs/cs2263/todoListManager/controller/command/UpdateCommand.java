@@ -52,7 +52,7 @@ public class UpdateCommand implements Command {
             int id = Integer.parseInt(idString);
             if (id < 0) {
                 ErrorState error = new ErrorState("No results found for given item.");
-                ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Home);
+                ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
             }
             else {
                 switch (event) {
@@ -116,7 +116,7 @@ public class UpdateCommand implements Command {
         Write.writeAccountData(user);
         ((AccountInfoState) AccountInfoState.instance()).setState(user);
         ((AccountUpdateState) AccountUpdateState.instance()).setState(user);
-        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Profile);
+        ((SystemState) SystemState.instance()).setState(AccountUpdateState.instance());
     }
 
     /**
@@ -153,7 +153,7 @@ public class UpdateCommand implements Command {
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
         ((TaskListUpdateState) TaskListUpdateState.instance()).setState(tl);
         ((TaskListInfoState) TaskListInfoState.instance()).setState(tl);
-        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.TaskList);
+        ((SystemState) SystemState.instance()).setState(TaskListUpdateState.instance());
     }
 
     /**
@@ -172,7 +172,7 @@ public class UpdateCommand implements Command {
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
         ((SectionUpdateState) SectionUpdateState.instance()).setState(s);
         ((SectionInfoState) SectionInfoState.instance()).setState(s);
-        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Section);
+        ((SystemState) SystemState.instance()).setState(SectionUpdateState.instance());
     }
 
     /**
@@ -214,7 +214,7 @@ public class UpdateCommand implements Command {
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
         ((TaskInfoState) TaskInfoState.instance()).setState(t);
         ((TaskUpdateState) TaskUpdateState.instance()).setState(t);
-        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Task);
+        ((SystemState) SystemState.instance()).setState(TaskUpdateState.instance());
     }
 
     /**
@@ -240,7 +240,7 @@ public class UpdateCommand implements Command {
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
         ((TaskInfoState) TaskInfoState.instance()).setState(t);
         ((TaskUpdateState) TaskUpdateState.instance()).setState(t);
-        ((SystemState) SystemState.instance()).setState(SystemState.SystemStateEnum.Task);
+        ((SystemState) SystemState.instance()).setState(TaskUpdateState.instance());
     }
 
 }
