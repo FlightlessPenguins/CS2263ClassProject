@@ -20,16 +20,6 @@ import java.util.List;
 
 public class AccountContext implements Context {
 
-    private State currentState;
-    private State[][] transitions;
-    private final List<State> states = new ArrayList<State>(
-        Arrays.asList(
-            AccountInfoState.instance(),
-            AccountUpdateState.instance(),
-            AccountCreateState.instance(),
-            AccountListState.instance()
-        )
-    );
     public static Account CURRENT_ACCOUNT = (Account) NullAccount.instance();
     private String INFO_FILEPATH = Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/" + Integer.toString(CURRENT_ACCOUNT.getID()) + ".json";
     private String PHOTO_FILEPATH = Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/photos/" + Integer.toString(CURRENT_ACCOUNT.getID()) + ".png";
@@ -78,18 +68,6 @@ public class AccountContext implements Context {
      */
     public String getPhotoFilepath() {
         return PHOTO_FILEPATH;
-    }
-
-    /**
-     * Changes the state from the current state to the state following the current state's transition.
-     *
-     * @param nextState The state that just finished its 'run()'.
-     *
-     * @author Brandon Watkins
-     */
-    @Override
-    public void changeState(State nextState) {
-        throw new RuntimeException("changeState not implemented yet.");
     }
 
     /**

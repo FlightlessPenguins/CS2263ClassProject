@@ -32,8 +32,34 @@ public class View extends Application implements Observer {
     private static final int splashDelay = 5;
 
     @FXML
+    public static Stage primaryStage;
+
+    @FXML
+    public static Stage secondaryStage;
+
+    @FXML
+    public static Stage errorStage;
+
+    @FXML
     TextField loginEmailTxt;
     Button loginRegisterBtn;
+
+    @FXML
+    public static void positionSecondaryStage() {
+        double xCurrentSize = primaryStage.getWidth();
+        double yCurrentSize = primaryStage.getHeight();
+        double xCurrentPos = primaryStage.getX();
+        double yCurrentPos = primaryStage.getY();
+
+        double xNewSize = secondaryStage.getWidth();
+        double yNewSize = secondaryStage.getHeight();
+
+        double x = xCurrentPos + (xCurrentSize / 2) - (xNewSize / 2);
+        double y = yCurrentPos + (yCurrentSize / 2) - (yNewSize / 2);
+
+        secondaryStage.setX(x);
+        secondaryStage.setY(y);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -165,6 +191,8 @@ public class View extends Application implements Observer {
             stage.setScene(scene);
 
             stage.show();
+
+            primaryStage = stage;
         } catch(IOException e) {
             System.out.println(e);
         }
@@ -182,11 +210,17 @@ public class View extends Application implements Observer {
             Parent root = loader.load();
             Scene scene = new Scene(root);
 
-            Stage stage = new Stage();
-            stage.setTitle("Register");
-            stage.setScene(scene);
+            //Stage stage = new Stage();
+            //stage.setTitle("Register");
+            //stage.setScene(scene);
 
-            stage.show();
+            //stage.show();
+
+            secondaryStage = new Stage();
+            secondaryStage.setTitle("Register");
+            secondaryStage.setScene(scene);
+
+            secondaryStage.show();
         } catch(IOException e) {
             System.out.println(e);
         }
@@ -213,11 +247,26 @@ public class View extends Application implements Observer {
                 System.out.println(e);
             }
 
-            Stage stage = new Stage();
-            stage.setTitle("Error!");
-            stage.setScene(scene);
+            if (errorStage != null) {
+                errorStage.close();
+            }
+            Boolean showingSecondary = false;
+            if (secondaryStage.isShowing()) showingSecondary = true;
+            primaryStage.hide();
+            secondaryStage.hide();
 
-            stage.show();
+            errorStage = new Stage();
+            errorStage.setTitle("Error!");
+            errorStage.setScene(scene);
+
+            Boolean finalShowingSecondary = showingSecondary; // needed to be right before the lambda for it to work.
+            errorStage.setOnCloseRequest(e -> {
+                if (secondaryStage != null && finalShowingSecondary) secondaryStage.show();
+                else primaryStage.show();
+                errorStage.close();
+            });
+
+            errorStage.show();
         } catch(IOException e) {
             System.out.println(e);
         }
@@ -230,11 +279,16 @@ public class View extends Application implements Observer {
             Parent root = loader.load();
             Scene scene = new Scene(root);
 
-            Stage stage = new Stage();
-            stage.setTitle("Home Screen");
-            stage.setScene(scene);
+            //Stage stage = new Stage();
+            //stage.setTitle("Home Screen");
+            //stage.setScene(scene);
 
-            stage.show();
+            //stage.show();
+
+            primaryStage.setTitle("Home");
+            primaryStage.setScene(scene);
+
+            primaryStage.show();
         } catch(IOException e) {
             System.out.println(e);
         }

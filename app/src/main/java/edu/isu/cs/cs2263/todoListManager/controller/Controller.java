@@ -178,20 +178,33 @@ public class Controller implements Initializable {
 
     @FXML
     private void openRegisterUser(ActionEvent event) {
-        /*Stage stage = (Stage) btnLoginRegister.getScene().getWindow();
-        stage.close();*/
+        //Stage stage = (Stage) btnLoginRegister.getScene().getWindow();
+        //stage.hide();
+        View.primaryStage.hide();
         View.instance().register();
     }
     @FXML
     private void registerNewAccount() {
         View.instance().errorMsg("Not yet implemented: User create method must be finished.");
-
+        // close register window and open primary window, after user creates an account (successfully)
+        if (AccountContext.CURRENT_ACCOUNT != null &&
+                (AccountContext.CURRENT_ACCOUNT instanceof UserAccount || AccountContext.CURRENT_ACCOUNT instanceof AdminAccount)
+        ) {
+            View.secondaryStage.close();
+            View.primaryStage.show();
+        }
     }
 
     @FXML
     private void cancelStage(ActionEvent event) {
-        Stage stage = (Stage) this.btnCancel.getScene().getWindow();
-        stage.close();
+        View.secondaryStage.close();
+        View.primaryStage.show();
+    }
+
+    @FXML
+    private void cancelError(ActionEvent event) {
+        View.errorStage.close();
+        View.secondaryStage.show();
     }
 
     @FXML
@@ -484,7 +497,7 @@ public class Controller implements Initializable {
 
     /* ***********************************************************************************************
      ********************************** Old methods, kept for reminders ******************************
-     ************************************************************************************************/
+     *********************************************************************************************** */
 
 
     private List<String> filters;

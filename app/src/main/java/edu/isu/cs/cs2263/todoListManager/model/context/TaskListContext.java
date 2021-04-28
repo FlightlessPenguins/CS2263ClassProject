@@ -17,31 +17,6 @@ import java.util.List;
 
 public class TaskListContext implements Context {
 
-    private State currentState;
-    private State[][] transitions;
-    private TaskList currentTaskList = ((AccountContext)(AccountContext.instance())).getCurrentAccount() instanceof UserAccount ?
-            ((UserAccount)(((AccountContext)(AccountContext.instance())).getCurrentAccount())).getTaskLists() : new TaskList(0, null, null, null, null, null, false);
-
-    private final List<State> states = new ArrayList<State>(
-            Arrays.asList(
-                    TaskListUpdateState.instance(),
-                    TaskListInfoState.instance(),
-                    TaskListCreateState.instance()
-            )
-    );
-
-    /**
-     * Changes the state from the current state to the state following the current state's transition.
-     *
-     * @param nextState The state that just finished its 'run()'.
-     *
-     * @author Brandon Watkins
-     */
-    @Override
-    public void changeState(State nextState) {
-        throw new RuntimeException("not implemented yet.");
-    }
-
     /**
      * Converts a List of TaskLists to a single TaskList containing SubTaskLists
      *

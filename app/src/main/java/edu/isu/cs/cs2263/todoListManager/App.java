@@ -37,42 +37,4 @@ public class App {
         Application.launch(View.instance().getClass());
     }
 
-    /**
-     * Runs a bunch of tests and builds a test user for us to play with.
-     *
-     * @author Brandon Watkins
-     */
-    private static void runTests() {
-        FreshStart.run();// This will ERASE all user data, and generate a test user. Do NOT USE once we're done testing the app.
-
-        // Read in all accounts to AccountListState
-        AccountListState als = (AccountListState)AccountListState.instance();
-        als.setAccounts(Read.readAllUserData());
-
-        // Retrieve test user by username and password. Note this requires that you setAccounts(readAll), like above, first.
-        // You can use verifyCredentials instead, if the user is already stored as the current user.
-        for (Account account : als.getAccountsBackdoor()) {
-            if (account.getEmail().equals("test@gmail.com") && account.getPassword().equals(
-                    ((AccountContext)AccountContext.instance()).generateHash("password"))
-            ) {
-                ((AccountContext)AccountContext.instance()).setCurrentAccount(account);
-            }
-        }
-
-        // gets the newly set account
-        Account account = ((AccountContext)AccountContext.instance()).getCurrentAccount();
-        // or use
-        // AccountContext.CURRENT_ACCOUNT
-
-        // checking the password (password)
-        String actualPassword = account.getPassword();
-        String attemptedPassword = Hashing.sha512().hashString("password", StandardCharsets.UTF_8).toString();
-        // invalid password
-        Boolean verified = ((AccountContext)AccountContext.instance()).verifyCredentials("Password");
-        // valid password
-        Boolean verified2 = ((AccountContext)AccountContext.instance()).verifyCredentials("password");
-
-
-        int breakPoint = 2;
-    }
 }
