@@ -141,6 +141,7 @@ public class Controller implements Initializable {
                 break;
             }
         }
+        View.instance().homeScreen();
         return AccountContext.CURRENT_ACCOUNT;
     }
 
