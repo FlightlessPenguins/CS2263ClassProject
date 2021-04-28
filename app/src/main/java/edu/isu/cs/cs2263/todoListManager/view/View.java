@@ -45,8 +45,6 @@ public class View extends Application implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         // For each state, do whatever it needs to do to update the view accordingly.
-        String name = arg.getClass().getSimpleName();
-        Class clas = arg.getClass();
         switch (arg.getClass().getSimpleName()) {
             case "AccountCreateState":
                 register();
