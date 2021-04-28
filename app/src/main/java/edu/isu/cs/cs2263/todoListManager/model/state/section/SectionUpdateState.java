@@ -4,6 +4,9 @@ import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountLoginState;
+import edu.isu.cs.cs2263.todoListManager.model.state.taskList.TaskListInfoState;
 
 public class SectionUpdateState implements State {
 
@@ -24,10 +27,22 @@ public class SectionUpdateState implements State {
      * <p>Make sure to call the context's changeState(this) by the end of run().
      *
      * @author Brandon Watkins
+     * @param state
+     * @param args
      */
     @Override
-    public void run() {
-        throw new RuntimeException("not implemented yet.");
+    public void setNextState(State state, Object args) {
+        switch(state.getClass().getSimpleName()) {
+            case "AccountLoginState": // They logged out
+                ((SystemState) SystemState.instance()).setState(AccountLoginState.instance());
+                break;
+            case "TaskListInfoState": // They clicked on "Home"
+                ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
+                break;
+            case "SectionInfoState": // They successfully modified the section, taking them back to section view.
+                ((SystemState) SystemState.instance()).setState(SectionInfoState.instance());
+                break;
+        }
     }
 
     /**

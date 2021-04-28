@@ -55,9 +55,8 @@ public class CreateCommand implements Command {
              */
             Account account = AccountContext.CURRENT_ACCOUNT;
             if (account != null && !(account instanceof NullAccount)) {
-                ErrorState error = new ErrorState("You must log out first.");
-                ((SystemState) SystemState.instance()).setState(AccountInfoState.instance());
-                return;
+                ((AccountContext) AccountContext.instance()).setCurrentAccount(NullAccount.instance());
+                ErrorState error = new ErrorState("Current user logged out.");
             }
             switch (event) {
                 case Register:
@@ -125,9 +124,7 @@ public class CreateCommand implements Command {
             ((AccountListState) AccountListState.instance()).addAccount(user);
             AccountContext.CURRENT_ACCOUNT = user;
             ((AccountInfoState) AccountInfoState.instance()).setState(user);
-            ((AccountCreateState) AccountCreateState.instance()).setState(user);
-            ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
-            //Controller.instance().cancelStage(null);
+            SystemState.instance().setNextState(TaskListInfoState.instance(), null);
         }
         else {
             State ErrorState = new ErrorState("Missing required fields", (new String[]{
@@ -163,11 +160,10 @@ public class CreateCommand implements Command {
     private void createTaskList(String title, String description, String comment) {
         if (AccountContext.CURRENT_ACCOUNT instanceof UserAccount) {
             TaskList tasklist = new TaskList(title, description, comment);
-            UserAccount user2 = (UserAccount)AccountContext.CURRENT_ACCOUNT;
-            user2.getTaskLists().addSubTaskList(tasklist);
+            UserAccount user = (UserAccount)AccountContext.CURRENT_ACCOUNT;
+            user.getTaskLists().addSubTaskList(tasklist);
             ((TaskListInfoState) TaskListInfoState.instance()).setState(tasklist);
-            ((TaskListCreateState) TaskListCreateState.instance()).setState(tasklist);
-            ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
+            SystemState.instance().setNextState(TaskListInfoState.instance(), null);
         }
     }
 
@@ -184,8 +180,7 @@ public class CreateCommand implements Command {
             UserAccount user3 = (UserAccount)AccountContext.CURRENT_ACCOUNT;
             user3.getTaskLists().addSection(section);
             ((SectionInfoState) SectionInfoState.instance()).setState(section);
-            ((SectionCreateState) SectionCreateState.instance()).setState(section);
-            ((SystemState) SystemState.instance()).setState(SectionInfoState.instance());
+            SystemState.instance().setNextState(SectionInfoState.instance(), null);
         }
     }
 
@@ -229,8 +224,7 @@ public class CreateCommand implements Command {
             UserAccount user4 = (UserAccount)AccountContext.CURRENT_ACCOUNT;
             user4.getTaskLists().addTask(task);
             ((TaskInfoState) TaskInfoState.instance()).setState(task);
-            ((TaskCreateState) TaskCreateState.instance()).setState(task);
-            ((SystemState) SystemState.instance()).setState(TaskInfoState.instance());
+            SystemState.instance().setNextState(TaskInfoState.instance(), null);
         }
     }
 

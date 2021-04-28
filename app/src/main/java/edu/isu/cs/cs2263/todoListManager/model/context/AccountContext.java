@@ -129,7 +129,7 @@ public class AccountContext implements Context {
      * @author Brandon Watkins
      */
     private static final class Helper {
-        private static final AccountContext INSTANCE = new AccountContext();
+        public static final AccountContext INSTANCE = new AccountContext();
     }
 
     /**

@@ -1,46 +1,13 @@
 package edu.isu.cs.cs2263.todoListManager.model.state;
 
-import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountLoginState;
-import edu.isu.cs.cs2263.todoListManager.model.state.taskList.TaskListUpdateState;
 import edu.isu.cs.cs2263.todoListManager.observer.Observable;
 
 public class SystemState extends Observable implements State {
 
-    /*public enum SystemStateEnum {
-        LoginForm,
-        //Register,
-        RegisterForm,
-        Profile,
-        ProfileForm,
-        AccountList,
-        Home,
-        TaskList,
-        TaskListForm,
-        Section,
-        SectionForm,
-        Task,
-        TaskForm
-
-    }
-
-    private SystemStateEnum state = SystemStateEnum.LoginForm;
-
-    public SystemState setState(SystemStateEnum state) {
-        this.state = state;
-        return this;
-    }
-
-    public SystemStateEnum getState() {
-        return state;
-    }*/
-
     private State state = AccountLoginState.instance();
-    private State previousState = null;
 
     public State setState(State state) {
-        previousState = this.state;
         this.state = state;
         setChanged();
         notifyObservers(this.state);
@@ -52,15 +19,9 @@ public class SystemState extends Observable implements State {
         return state;
     }
 
-    public State getPreviousState() {
-        state = previousState;
-        previousState = null;
-        return state;
-    }
-
     @Override
-    public void run() {
-
+    public void setNextState(State state, Object args) {
+        state.setNextState(state, args);
     }
 
     /**

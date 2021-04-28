@@ -52,7 +52,7 @@ public class UpdateCommand implements Command {
             int id = Integer.parseInt(idString);
             if (id < 0) {
                 ErrorState error = new ErrorState("No results found for given item.");
-                ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
+                SystemState.instance().setNextState(TaskListInfoState.instance(), null);
             }
             else {
                 switch (event) {
@@ -115,8 +115,7 @@ public class UpdateCommand implements Command {
         if (!(biography == null || biography.length() < 1) && user instanceof UserAccount) ((UserAccount) user).setBiography(biography);
         Write.writeAccountData(user);
         ((AccountInfoState) AccountInfoState.instance()).setState(user);
-        ((AccountUpdateState) AccountUpdateState.instance()).setState(user);
-        ((SystemState) SystemState.instance()).setState(AccountUpdateState.instance());
+        SystemState.instance().setNextState(AccountInfoState.instance(), null);
     }
 
     /**
@@ -151,9 +150,8 @@ public class UpdateCommand implements Command {
         tl.setComment(comment);
         tl.setArchived(isArchived);
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
-        ((TaskListUpdateState) TaskListUpdateState.instance()).setState(tl);
         ((TaskListInfoState) TaskListInfoState.instance()).setState(tl);
-        ((SystemState) SystemState.instance()).setState(TaskListUpdateState.instance());
+        SystemState.instance().setNextState(TaskListInfoState.instance(), null);
     }
 
     /**
@@ -170,9 +168,8 @@ public class UpdateCommand implements Command {
         s.setTitle(title);
         s.setDescription(description);
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
-        ((SectionUpdateState) SectionUpdateState.instance()).setState(s);
         ((SectionInfoState) SectionInfoState.instance()).setState(s);
-        ((SystemState) SystemState.instance()).setState(SectionUpdateState.instance());
+        SystemState.instance().setNextState(SectionInfoState.instance(), null);
     }
 
     /**
@@ -213,8 +210,7 @@ public class UpdateCommand implements Command {
         }
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
         ((TaskInfoState) TaskInfoState.instance()).setState(t);
-        ((TaskUpdateState) TaskUpdateState.instance()).setState(t);
-        ((SystemState) SystemState.instance()).setState(TaskUpdateState.instance());
+        SystemState.instance().setNextState(TaskInfoState.instance(), null);
     }
 
     /**
@@ -239,8 +235,7 @@ public class UpdateCommand implements Command {
         t.setDateCompleted(completionDate);
         Write.writeAccountData(AccountContext.CURRENT_ACCOUNT);
         ((TaskInfoState) TaskInfoState.instance()).setState(t);
-        ((TaskUpdateState) TaskUpdateState.instance()).setState(t);
-        ((SystemState) SystemState.instance()).setState(TaskUpdateState.instance());
+        SystemState.instance().setNextState(TaskInfoState.instance(), null);
     }
 
 }

@@ -6,6 +6,8 @@ package edu.isu.cs.cs2263.todoListManager.model.state.taskList;
 
 import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
+import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountLoginState;
 
 public class TaskListCreateState implements State {
 
@@ -24,10 +26,19 @@ public class TaskListCreateState implements State {
      * <p>Make sure to call the context's changeState(this) by the end of run().
      *
      * @author Brandon Watkins
+     * @param state
+     * @param args
      */
     @Override
-    public void run() {
-        throw new RuntimeException("not implemented yet.");
+    public void setNextState(State state, Object args) {
+        switch(state.getClass().getSimpleName()) {
+            case "AccountLoginState": // They logged out
+                ((SystemState) SystemState.instance()).setState(AccountLoginState.instance());
+                break;
+            case "TaskListInfoState": // They clicked on "Home", or successfully created a tasklist.
+                ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
+                break;
+        }
     }
 
     /**

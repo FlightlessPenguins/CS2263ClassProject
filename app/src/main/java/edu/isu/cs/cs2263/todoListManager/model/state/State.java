@@ -11,7 +11,9 @@ public interface State {
      * <p>Make sure to call the context's changeState(nextState) by the end of run().
      *
      * @author Brandon Watkins
+     * @param state
+     * @param args
      */
-    public void run();
+    public void setNextState(State state, Object args);
 
 }

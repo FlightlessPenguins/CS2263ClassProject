@@ -39,7 +39,7 @@ public class ErrorState implements State{
     }
 
     @Override
-    public void run() {
+    public void setNextState(State state, Object args) {
         //View.errorMsg(message + (missingFields == null ? "" : missingFields) + (finalMessage == null ? "" : ("\r\n" + finalMessage)));
         /* create error window with format:
         <message> <missingFields (comma separated)>
