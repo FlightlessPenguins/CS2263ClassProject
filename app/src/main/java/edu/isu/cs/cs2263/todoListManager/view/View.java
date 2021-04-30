@@ -110,6 +110,7 @@ public class View extends Application implements Observer {
                 break;
             case "TaskListInfoState":
                 //taskList();
+                homeScreen();
                 break;
             case "TaskListUpdateState":
                 //updateTaskList();
@@ -251,9 +252,9 @@ public class View extends Application implements Observer {
                 errorStage.close();
             }
             Boolean showingSecondary = false;
-            if (secondaryStage.isShowing()) showingSecondary = true;
+            if (secondaryStage != null && secondaryStage.isShowing()) showingSecondary = true;
             primaryStage.hide();
-            secondaryStage.hide();
+            if (secondaryStage != null) secondaryStage.hide();
 
             errorStage = new Stage();
             errorStage.setTitle("Error!");

@@ -71,7 +71,10 @@ public class SystemCommand implements Command {
                             else {
                                 SystemState.instance().setNextState(TaskListInfoState.instance(), null);
                             }
-                        else SystemState.instance().setNextState(AccountLoginState.instance(), null);
+                        else {
+                            ErrorState error = new ErrorState("Invalid credentials.");
+                            SystemState.instance().setNextState(AccountLoginState.instance(), null);
+                        }
                     }
                     else {
                         ErrorState error = new ErrorState("Please enter an email and password.");

@@ -141,7 +141,6 @@ public class Controller implements Initializable {
                 break;
             }
         }
-        View.instance().homeScreen();
         return AccountContext.CURRENT_ACCOUNT;
     }
 
@@ -178,9 +177,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void openRegisterUser(ActionEvent event) {
-        //Stage stage = (Stage) btnLoginRegister.getScene().getWindow();
-        //stage.hide();
+    private void openRegisterUser() {
         View.primaryStage.hide();
         View.instance().register();
     }
@@ -206,12 +203,6 @@ public class Controller implements Initializable {
     private void cancelError(ActionEvent event) {
         View.errorStage.close();
         View.secondaryStage.show();
-    }
-
-    @FXML
-    private void loginUser() {
-        View.instance().errorMsg("This hasn't been completed. For testing purposes, we are logging in the test user.");
-        //Complete a test login here
     }
 
     @FXML
@@ -270,6 +261,10 @@ public class Controller implements Initializable {
                 break;
             case "btnLoginUser":
                 handle(Event.Login);
+                break;
+            case "btnLoginRegister":
+                ((SystemState) SystemState.instance()).setState(AccountCreateState.instance());
+                openRegisterUser();
                 break;
             /*
             case CREATE_TASK:
@@ -332,10 +327,6 @@ public class Controller implements Initializable {
 
             case "btnCancel":
                 handle(Event.Cancel);
-                break;
-            case "btnLoginRegister":
-                ((SystemState) SystemState.instance()).setState(AccountCreateState.instance());
-                // do nothing. Event.Register is for when they've submitted their registration info
                 break;
             default:
                 // do nothing
