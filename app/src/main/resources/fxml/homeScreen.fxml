@@ -17,8 +17,8 @@
         <ToolBar prefHeight="40.0" prefWidth="700.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
                 <Button fx:id="btnCreateList" mnemonicParsing="false" onAction="#btnCreateList" text="Create List" />
-                <Button fx:id="btnCreateSection" mnemonicParsing="false" text="Create Section" />
-                <Button fx:id="btnCreateTask" mnemonicParsing="false" text="Create Task" />
+                <Button fx:id="btnCreateSection" mnemonicParsing="false" onAction="#btnCreateSection" text="Create Section" />
+                <Button fx:id="btnCreateTask" mnemonicParsing="false" onAction="#btnCreateTask" text="Create Task" />
                 <Separator prefHeight="30.0" prefWidth="210.0" />
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="User 001">
                     <font>

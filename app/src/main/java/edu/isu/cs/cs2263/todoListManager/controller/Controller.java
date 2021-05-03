@@ -106,6 +106,15 @@ public class Controller implements Initializable {
     @FXML
     private PasswordField txtPasswordConfirm;
 
+    @FXML
+    private TextField txtCreateListTitle;
+    @FXML
+    private TextArea txtCreateListDesc;
+    @FXML
+    private TextArea txtCreateListCom;
+    @FXML
+    private Button btnFinishCreateList;
+
 
     public Controller() {}
 
@@ -211,6 +220,14 @@ public class Controller implements Initializable {
         View.instance().createList();
 
     }
+    @FXML
+    private void btnCreateSection(ActionEvent event) throws IOException {
+        View.instance().createSection();
+    }
+    @FXML
+    private void btnCreateTask(ActionEvent event) throws IOException {
+        View.instance().createTask();
+    }
 
     @FXML
     private void populateTaskListAccordion(ActionEvent event) throws IOException {
@@ -264,10 +281,11 @@ public class Controller implements Initializable {
                 ((SystemState) SystemState.instance()).setState(AccountCreateState.instance());
                 openRegisterUser();
                 break;
-            /*
-            case CREATE_TASK:
+
+            case "btnCreateTask":
                 handle(Event.CreateTask);
                 break;
+            /*
             case CREATE_TASKLIST:
                 handle(Event.CreateTaskList);
                 break;

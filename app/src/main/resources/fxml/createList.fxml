@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Created by Liam Andrus
+FXML Task Creation page
+-->
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="346.0" prefWidth="287.0" fx:controller="edu.isu.cs.cs2263.todoListManager.controller.Controller" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField fx:id="txtCreateListTitle" layoutX="24.0" layoutY="65.0" prefHeight="25.0" prefWidth="234.0" />
+      <Button fx:id="btnCancel" layoutX="10.0" layoutY="307.0" mnemonicParsing="false" text="Cancel" onAction="#cancelStage" />
+      <Button fx:id="btnFinishCreateList" layoutX="201.0" layoutY="307.0" mnemonicParsing="false" text="Create List" onAction="#handle" />
+      <Label layoutX="25.0" layoutY="45.0" text="Title" />
+      <Label layoutX="24.0" layoutY="90.0" text="Description" />
+      <Label layoutX="24.0" layoutY="200.0" prefHeight="17.0" prefWidth="61.0" text="Comment" />
+      <TextArea fx:id="txtCreateListDesc" layoutX="24.0" layoutY="107.0" prefHeight="93.0" prefWidth="234.0" wrapText="true" />
+      <TextArea fx:id="txtCreateListCom" layoutX="24.0" layoutY="217.0" prefHeight="77.0" prefWidth="234.0" wrapText="true" />
+      <Separator layoutY="38.0" prefHeight="7.0" prefWidth="287.0" />
+      <Label layoutX="22.0" layoutY="6.0" prefHeight="27.0" prefWidth="100.0" text="Create List">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
