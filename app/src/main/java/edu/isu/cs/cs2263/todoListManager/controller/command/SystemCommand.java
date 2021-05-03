@@ -69,6 +69,8 @@ public class SystemCommand implements Command {
                                 SystemState.instance().setNextState(AccountListState.instance(), null);
                             }
                             else {
+                                ((TaskListInfoState) TaskListInfoState.instance()).setState(
+                                        ((UserAccount) AccountContext.CURRENT_ACCOUNT).getTaskLists());
                                 SystemState.instance().setNextState(TaskListInfoState.instance(), null);
                             }
                         else {

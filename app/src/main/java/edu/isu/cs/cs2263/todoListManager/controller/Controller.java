@@ -12,6 +12,7 @@ import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountCreateState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountInfoState;
+import edu.isu.cs.cs2263.todoListManager.model.state.taskList.TaskListInfoState;
 import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 import edu.isu.cs.cs2263.todoListManager.storage.Write;
@@ -240,9 +241,6 @@ public class Controller implements Initializable {
                         TextArea subtaskArea = new TextArea(currentSubTask.getTitle());
                         taskVBox.getChildren().add(subtaskArea);
                     }
-
-
-
                 }
                 taskSectionPane.setContent(taskVBox);
                 SectionAccordion.getPanes().add(taskSectionPane);
@@ -324,7 +322,6 @@ public class Controller implements Initializable {
                 handle(Event.CloseApp);
                 break;
             */
-
             case "btnCancel":
                 handle(Event.Cancel);
                 break;
@@ -460,6 +457,17 @@ public class Controller implements Initializable {
         }
         c.execute(args);
         // if we are using multiple windows - if event == cancel, close window here.
+    }
+
+    /**
+     * Assigns the current user's tasklist to the TaskListInfoState
+     *
+     * @author Brandon Watkins
+     */
+    public void showAllTasks() {
+        Account user = AccountContext.CURRENT_ACCOUNT;
+        if (user == null || user instanceof NullAccount || user instanceof AdminAccount) return;
+        ((TaskListInfoState) TaskListInfoState.instance()).setState(((UserAccount) user).getTaskLists());
     }
 
     /**
