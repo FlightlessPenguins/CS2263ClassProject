@@ -300,11 +300,85 @@ public class View extends Application implements Observer {
 
 
     }
-
+    /**
+     * Shows list creation screen
+     *
+     * @author Liam Andrus
+     */
     public void createList() {
-        throw new RuntimeException("not implemented yet.");
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(new File("app/src/main/resources/fxml/createList.fxml").toURI().toURL());
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            //Stage stage = new Stage();
+            //stage.setTitle("Register");
+            //stage.setScene(scene);
+
+            //stage.show();
+
+            secondaryStage = new Stage();
+            secondaryStage.setTitle("Create List");
+            secondaryStage.setScene(scene);
+
+            secondaryStage.show();
+        } catch(IOException e) {
+            System.out.println(e);
+        }
     }
+    /**
+     * Shows section creation screen
+     *
+     * @author Liam Andrus
+     */
+    public void createSection() {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(new File("app/src/main/resources/fxml/createSection.fxml").toURI().toURL());
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
 
+            //Stage stage = new Stage();
+            //stage.setTitle("Register");
+            //stage.setScene(scene);
 
+            //stage.show();
 
+            secondaryStage = new Stage();
+            secondaryStage.setTitle("Create Section");
+            secondaryStage.setScene(scene);
+
+            secondaryStage.show();
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
+    /**
+     * Shows section creation screen
+     *
+     * @author Liam Andrus
+     */
+    public void createTask() {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(new File("app/src/main/resources/fxml/createTask.fxml").toURI().toURL());
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            //Stage stage = new Stage();
+            //stage.setTitle("Register");
+            //stage.setScene(scene);
+
+            //stage.show();
+
+            secondaryStage = new Stage();
+            secondaryStage.setTitle("Create Task");
+            secondaryStage.setScene(scene);
+
+            secondaryStage.show();
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
 }
