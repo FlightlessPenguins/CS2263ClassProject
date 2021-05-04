@@ -25,7 +25,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -74,9 +77,9 @@ public class Controller implements Initializable {
     @FXML
     private Label lblEmail;
 
-    @FXML
-    private ScrollPane spHomeAllTask;
 
+    public ScrollPane spHomeAllTask;
+    public AnchorPane apHomeAllTask;
     @FXML
     private TextArea txtBiography;
 
@@ -229,44 +232,79 @@ public class Controller implements Initializable {
         View.instance().createTask();
     }
 
-    @FXML
-    private void populateTaskListAccordion(ActionEvent event) throws IOException {
-        UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
-        Iterator<TaskList> iter =  account.getTaskLists().getSubTaskLists().iterator();
-        Accordion taskListAccordion = new Accordion();
+
+    public void populateTaskListAccordion() throws IOException {
+        UserAccount account = (UserAccount) AccountContext.CURRENT_ACCOUNT;
+        Iterator<TaskList> iter;
+        VBox DisplayVBox = new VBox();
         TaskList currentList;
         Section currentSection;
         Task currentTask;
         Task currentSubTask;
-        while(iter.hasNext()) {
-            currentList = iter.next();
-            Accordion SectionAccordion = new Accordion();
-            TitledPane taskListPane = new TitledPane(currentList.getTitle(), SectionAccordion);
-            Iterator<Section> iter2 = currentList.getSections().iterator();
-            while (iter2.hasNext()) {
-                currentSection = iter2.next();
-                VBox taskVBox = new VBox();
-                TitledPane taskSectionPane = new TitledPane(currentSection.getTitle(), taskVBox);
-                Iterator<Task> iter3 = currentSection.getTasks().iterator();
-                while (iter3.hasNext()) {
-                    currentTask = iter3.next();
-                    TextArea taskArea = new TextArea(currentTask.getTitle());
-                    taskVBox.getChildren().add(taskArea);
-                    Iterator<Task> iter4 = currentTask.getSubtasks().iterator();
-                    while (iter4.hasNext()) {
-                        currentSubTask = iter4.next();
-                        TextArea subtaskArea = new TextArea(currentSubTask.getTitle());
-                        taskVBox.getChildren().add(subtaskArea);
+        if(account.getTaskLists().getSubTaskLists() != null) {
+            iter =  account.getTaskLists().getSubTaskLists().iterator();
+
+
+            while(iter.hasNext()) {
+                currentList = iter.next();
+                HBox TaskListHBox = new HBox();
+                //TitledPane taskListPane = new TitledPane(currentList.getTitle(), SectionAccordion);
+                Text currentListText = new Text(currentList.getTitle());
+                TaskListHBox.getChildren().add(currentListText);
+                Iterator<Section> iter2;
+                DisplayVBox.getChildren().add(TaskListHBox);
+                if(currentList.getSections() != null) {
+                    iter2 = currentList.getSections().iterator();
+                    while (iter2.hasNext()) {
+                        currentSection = iter2.next();
+                        HBox SectionHBox = new HBox();
+                        //TitledPane taskSectionPane = new TitledPane(currentSection.getTitle(), taskVBox);
+                        Text currentSectionText = new Text(currentSection.getTitle());
+                        SectionHBox.getChildren().add(currentSectionText);
+                        Iterator<Task> iter3;
+                        DisplayVBox.getChildren().add(SectionHBox);
+                        if(currentSection.getTasks() != null) {
+                            iter3 = currentSection.getTasks().iterator();
+                            while (iter3.hasNext()) {
+                                currentTask = iter3.next();
+                                HBox TaskHBox = new HBox();
+                                Text currentTaskText = new Text(currentTask.getTitle());
+                                TaskHBox.getChildren().add(currentTaskText);
+                                Iterator<Task> iter4;
+                                DisplayVBox.getChildren().add(TaskHBox);
+                                if(currentTask.getSubtasks() != null) {
+                                    iter4 = currentTask.getSubtasks().iterator();
+                                    while (iter4.hasNext()) {
+                                        currentSubTask = iter4.next();
+                                        HBox subTaskHBox = new HBox();
+                                        Text currentSubTaskText = new Text(currentSubTask.getTitle());
+                                        subTaskHBox.getChildren().add(currentSubTaskText);
+                                        DisplayVBox.getChildren().add(subTaskHBox);
+                                    }
+                                }
+                                //DisplayVBox.getChildren().add(TaskHBox);
+                            }
+                        }
+
+
+                        //taskSectionPane.setContent(taskVBox);
+                        //SectionAccordion.getPanes().add(taskSectionPane);
+                        //DisplayVBox.getChildren().add(SectionHBox);
                     }
                 }
-                taskSectionPane.setContent(taskVBox);
-                SectionAccordion.getPanes().add(taskSectionPane);
+
+                //taskSectionPane.setContent(taskVBox);
+                //SectionAccordion.getPanes().add(taskSectionPane);
+
+
+                //DisplayVBox.getChildren().add(TaskListHBox);
             }
-            taskListPane.setContent(SectionAccordion);
-            taskListAccordion.getPanes().add(taskListPane);
         }
-        spHomeAllTask.setContent(null);
-        spHomeAllTask.setContent(taskListAccordion);
+
+
+        apHomeAllTask.getChildren().add(DisplayVBox);
+        //spHomeAllTask.setContent(DisplayVBox);
+
     }
 
     public void handle(ActionEvent event) {

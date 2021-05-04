@@ -4,6 +4,7 @@
  */
 package edu.isu.cs.cs2263.todoListManager.view;
 
+import edu.isu.cs.cs2263.todoListManager.controller.Controller;
 import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountLoginState;
@@ -287,9 +288,15 @@ public class View extends Application implements Observer {
             //stage.show();
 
             primaryStage.setTitle("Home");
+            Controller controllerRef = loader.getController();
+            controllerRef.populateTaskListAccordion();
             primaryStage.setScene(scene);
 
+            //Controller.instance().populateTaskListAccordion();
+
+
             primaryStage.show();
+
         } catch(IOException e) {
             System.out.println(e);
         }
