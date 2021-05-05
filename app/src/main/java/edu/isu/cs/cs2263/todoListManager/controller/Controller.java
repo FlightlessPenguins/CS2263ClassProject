@@ -41,6 +41,9 @@ public class Controller implements Initializable {
     private Accordion accHomeTaskList;
 
     @FXML
+    public AnchorPane apHomeAllTask;
+
+    @FXML
     private Button btnCancel;
     @FXML
     private Button btnRegisterUser;
@@ -54,6 +57,12 @@ public class Controller implements Initializable {
     private Button btnCreateSection;
     @FXML
     private Button btnCreateTask;
+    @FXML
+    private Button btnFinishCreateList;
+    @FXML
+    private Button btnFinishCreateSection;
+    @FXML
+    private Button btnFinishCreateTask;
     @FXML
     private Button btnLogout;
     @FXML
@@ -71,17 +80,31 @@ public class Controller implements Initializable {
     private CheckBox cbSortDirection;
 
     @FXML
+    private ChoiceBox cbPriority;
+    @FXML
+    private ChoiceBox cbTaskList;
+    @FXML
+    private ChoiceBox cbSection;
+
+    @FXML
+    private DatePicker dpDueDate;
+
+    @FXML
     private Label lblTitle;
     @FXML
     private Label lblSortBy;
     @FXML
     private Label lblEmail;
 
-
+    @FXML
     public ScrollPane spHomeAllTask;
-    public AnchorPane apHomeAllTask;
+
     @FXML
     private TextArea txtBiography;
+    @FXML
+    private TextArea txtDescription;
+    @FXML
+    private TextArea txtComment;
 
     @FXML
     private TextField txtEmail;
@@ -91,10 +114,6 @@ public class Controller implements Initializable {
     private TextField txtLastName;
     @FXML
     private TextField txtTitle;
-    @FXML
-    private TextField txtDescription;
-    @FXML
-    private TextField txtComment;
     @FXML
     private TextField txtDueDate;
     @FXML
@@ -108,15 +127,6 @@ public class Controller implements Initializable {
     private PasswordField txtPassword;
     @FXML
     private PasswordField txtPasswordConfirm;
-
-    @FXML
-    private TextField txtCreateListTitle;
-    @FXML
-    private TextArea txtCreateListDesc;
-    @FXML
-    private TextArea txtCreateListCom;
-    @FXML
-    private Button btnFinishCreateList;
 
 
     public Controller() {}
@@ -208,14 +218,14 @@ public class Controller implements Initializable {
 
     @FXML
     private void cancelStage(ActionEvent event) {
-        View.secondaryStage.close();
-        View.primaryStage.show();
+        if (View.secondaryStage != null) View.secondaryStage.close();
+        if (View.primaryStage != null) View.primaryStage.show();
     }
 
     @FXML
     private void cancelError(ActionEvent event) {
-        View.errorStage.close();
-        View.secondaryStage.show();
+        if (View.errorStage != null) View.errorStage.close();
+        if (View.secondaryStage != null) View.secondaryStage.show();
     }
 
     @FXML
@@ -319,17 +329,33 @@ public class Controller implements Initializable {
                 ((SystemState) SystemState.instance()).setState(AccountCreateState.instance());
                 openRegisterUser();
                 break;
-
             case "btnCreateTask":
+                try {
+                    btnCreateTask(event);
+                } catch (IOException ex) {
+                    handle(Event.ViewTaskList);
+                }
+            case "btnFinishCreateTask":
                 handle(Event.CreateTask);
                 break;
-            /*
-            case CREATE_TASKLIST:
+            case "btnCreateList":
+                try {
+                    btnCreateList(event);
+                } catch (IOException ex) {
+                    handle(Event.ViewTaskList);
+                }
+            case "btnFinishCreateList":
                 handle(Event.CreateTaskList);
                 break;
-            case CREATE_SECTION:
+            case "btnCreateSection":
+                try {
+                    btnCreateSection(event);
+                } catch (IOException ex) {
+                    handle(Event.ViewTaskList);
+                }
+            case "btnFinishCreateSection":
                 handle(Event.CreateSection);
-                break;
+                break;/*
             case UPDATE_TASK:
                 handle(Event.UpdateTask);
                 break;
@@ -339,7 +365,14 @@ public class Controller implements Initializable {
             case UPDATE_SECTION:
                 handle(Event.UpdateSection);
                 break;
-            case UPDATE_USER:
+            case "btnEditAccount":
+                try {
+                    btnEditAccount();// not added yet
+                } catch (IOException ex) {
+                    handle(Event.ViewTaskList);
+                }
+                break;
+            case "btnFinishEditAccount":
                 handle(Event.UpdateUser);
                 break;
             case VIEW_USER:
@@ -370,16 +403,17 @@ public class Controller implements Initializable {
                 break;
             case VIEW_LIST_OF_ALL_USERS:
                 handle(Event.ViewListOfAllUsers);
-                break;
-            case LOGOUT:
+                break;*/
+            case "btnLogout":
                 handle(Event.Logout);
-                break;
+                break;/*
             case CLOSE_APP:
                 handle(Event.CloseApp);
                 break;
             */
             case "btnCancel":
-                handle(Event.Cancel);
+                cancelStage(event);
+                //handle(Event.Cancel);
                 break;
             default:
                 // do nothing

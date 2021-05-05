@@ -237,6 +237,9 @@ public class View extends Application implements Observer {
     public static void errorMsg(String msg) {
         FXMLLoader loader = new FXMLLoader();
         try {
+            Boolean showingSecondary = false;
+            if (secondaryStage != null && secondaryStage.isShowing()) showingSecondary = true;
+
             loader.setLocation(new File("app/src/main/resources/fxml/error.fxml").toURI().toURL());
             Parent root = loader.load();
             Scene scene = new Scene(root);
@@ -252,23 +255,21 @@ public class View extends Application implements Observer {
             if (errorStage != null) {
                 errorStage.close();
             }
-            Boolean showingSecondary = false;
-            if (secondaryStage != null && secondaryStage.isShowing()) showingSecondary = true;
-            primaryStage.hide();
-            if (secondaryStage != null) secondaryStage.hide();
 
             errorStage = new Stage();
-            errorStage.setTitle("Error!");
+            errorStage.setTitle("Error");
             errorStage.setScene(scene);
 
             Boolean finalShowingSecondary = showingSecondary; // needed to be right before the lambda for it to work.
             errorStage.setOnCloseRequest(e -> {
                 if (secondaryStage != null && finalShowingSecondary) secondaryStage.show();
-                else primaryStage.show();
-                errorStage.close();
+                else if (primaryStage != null) primaryStage.show();
+                if (errorStage != null) errorStage.close();
             });
 
             errorStage.show();
+            if (primaryStage != null) primaryStage.hide();
+            if (secondaryStage != null) secondaryStage.hide();
         } catch(IOException e) {
             System.out.println(e);
         }

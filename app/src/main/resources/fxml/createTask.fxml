@@ -18,9 +18,9 @@ FXML Task Creation page
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.isu.cs.cs2263.todoListManager.controller.Controller">
    <children>
-      <TextArea layoutX="37.0" layoutY="129.0" prefHeight="49.0" prefWidth="234.0" wrapText="true" />
-      <TextField layoutX="37.0" layoutY="80.0" prefHeight="25.0" prefWidth="234.0" />
-      <TextArea layoutX="37.0" layoutY="202.0" prefHeight="77.0" prefWidth="234.0" wrapText="true" />
+      <TextArea fx:id="txtDescription" layoutX="37.0" layoutY="129.0" prefHeight="49.0" prefWidth="234.0" wrapText="true" />
+      <TextField fx:id="txtTitle" layoutX="37.0" layoutY="80.0" prefHeight="25.0" prefWidth="234.0" />
+      <TextArea fx:id="txtComment" layoutX="37.0" layoutY="202.0" prefHeight="77.0" prefWidth="234.0" wrapText="true" />
       <Label layoutX="37.0" layoutY="112.0" text="Description" />
       <Label layoutX="37.0" layoutY="186.0" prefHeight="17.0" prefWidth="61.0" text="Comment" />
       <Label layoutX="37.0" layoutY="63.0" text="Title" />
@@ -32,17 +32,17 @@ FXML Task Creation page
       <Separator layoutY="41.0" prefHeight="1.0" prefWidth="600.0" />
       <Separator layoutX="297.0" layoutY="43.0" orientation="VERTICAL" prefHeight="257.0" prefWidth="3.0" />
       <Separator layoutY="299.0" prefHeight="3.0" prefWidth="600.0" />
-      <TextField layoutX="327.0" layoutY="80.0" prefHeight="25.0" prefWidth="234.0" />
+      <TextField fx:id="txtLabels" layoutX="327.0" layoutY="80.0" prefHeight="25.0" prefWidth="234.0" />
       <Label layoutX="327.0" layoutY="63.0" text="Label" />
-      <DatePicker layoutX="420.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
+      <DatePicker fx:id="dpDueDate" layoutX="420.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
       <Label layoutX="329.0" layoutY="120.0" text="Due Date:" />
       <Label layoutX="328.0" layoutY="163.0" text="Priority:" />
-      <ChoiceBox layoutX="420.0" layoutY="159.0" prefHeight="25.0" prefWidth="141.0" />
+      <ChoiceBox fx:id="cbPriority" layoutX="420.0" layoutY="159.0" prefHeight="25.0" prefWidth="141.0" />
       <Label layoutX="327.0" layoutY="206.0" text="Section:" />
-      <ChoiceBox layoutX="420.0" layoutY="245.0" prefHeight="25.0" prefWidth="141.0" />
-      <ChoiceBox layoutX="420.0" layoutY="202.0" prefHeight="25.0" prefWidth="141.0" />
+      <ChoiceBox fx:id="cbTaskList" layoutX="420.0" layoutY="245.0" prefHeight="25.0" prefWidth="141.0" />
+      <ChoiceBox fx:id="cbSection" layoutX="420.0" layoutY="202.0" prefHeight="25.0" prefWidth="141.0" />
       <Label layoutX="331.0" layoutY="249.0" text="List:" />
-      <Button layoutX="18.0" layoutY="310.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
-      <Button layoutX="491.0" layoutY="310.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="87.0" text="Create Task" />
+      <Button fx:id="btnCancel" layoutX="18.0" layoutY="310.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Cancel" onAction="#handle" />
+      <Button fx:id="btnFinishCreateTask" layoutX="491.0" layoutY="310.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="87.0" text="Create Task" onAction="#handle" />
    </children>
 </AnchorPane>

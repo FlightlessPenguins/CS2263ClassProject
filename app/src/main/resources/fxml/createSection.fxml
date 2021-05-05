@@ -16,12 +16,12 @@ FXML Section Creation page
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="346.0" prefWidth="287.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.isu.cs.cs2263.todoListManager.controller.Controller">
    <children>
-      <TextField layoutX="24.0" layoutY="148.0" prefHeight="25.0" prefWidth="234.0" />
-      <Button layoutX="10.0" layoutY="307.0" mnemonicParsing="false" text="Cancel" />
-      <Button layoutX="180.0" layoutY="307.0" mnemonicParsing="false" text="Create Section" />
+      <TextField fx:id="txtTitle" layoutX="24.0" layoutY="148.0" prefHeight="25.0" prefWidth="234.0" />
+      <Button fx:id="btnCancel" layoutX="10.0" layoutY="307.0" mnemonicParsing="false" text="Cancel" onAction="#handle" />
+      <Button fx:id="btnFinishCreateSection" layoutX="180.0" layoutY="307.0" mnemonicParsing="false" text="Create Section" onAction="#handle" />
       <Label layoutX="25.0" layoutY="131.0" text="Title" />
       <Label layoutX="24.0" layoutY="173.0" text="Description" />
-      <TextArea layoutX="24.0" layoutY="191.0" prefHeight="93.0" prefWidth="234.0" wrapText="true" />
+      <TextArea fx:id="txtDescription" layoutX="24.0" layoutY="191.0" prefHeight="93.0" prefWidth="234.0" wrapText="true" />
       <Separator layoutY="38.0" prefHeight="7.0" prefWidth="287.0" />
       <Label layoutX="22.0" layoutY="6.0" prefHeight="27.0" prefWidth="129.0" text="Create Section">
          <font>
