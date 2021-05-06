@@ -363,7 +363,7 @@ public class View extends Application implements Observer {
         }
     }
     /**
-     * Shows section creation screen
+     * Shows task creation screen
      *
      * @author Liam Andrus
      */
@@ -374,16 +374,14 @@ public class View extends Application implements Observer {
             Parent root = loader.load();
             Scene scene = new Scene(root);
 
-            //Stage stage = new Stage();
-            //stage.setTitle("Register");
-            //stage.setScene(scene);
-
-            //stage.show();
-
             secondaryStage = new Stage();
             secondaryStage.setTitle("Create Task");
-            secondaryStage.setScene(scene);
 
+            //Get controller to populate choice box
+            Controller controllerRef = loader.getController();
+            controllerRef.populatePrioCb();
+
+            secondaryStage.setScene(scene);
             secondaryStage.show();
         } catch(IOException e) {
             System.out.println(e);

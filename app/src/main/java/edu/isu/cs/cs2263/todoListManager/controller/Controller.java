@@ -18,6 +18,7 @@ import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 import edu.isu.cs.cs2263.todoListManager.storage.Write;
 import edu.isu.cs.cs2263.todoListManager.view.Event;
 import edu.isu.cs.cs2263.todoListManager.view.View;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -80,7 +81,7 @@ public class Controller implements Initializable {
     private CheckBox cbSortDirection;
 
     @FXML
-    private ChoiceBox cbPriority;
+    public ChoiceBox cbPriority;
     @FXML
     private ChoiceBox cbTaskList;
     @FXML
@@ -315,6 +316,18 @@ public class Controller implements Initializable {
         apHomeAllTask.getChildren().add(DisplayVBox);
         //spHomeAllTask.setContent(DisplayVBox);
 
+    }
+
+    /**
+     * Small method that assists in populating the priority choice box in the Task Creation screen
+     *
+     * @author Liam Andrus
+     */
+    public void populatePrioCb(){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        list.addAll("Low","Medium","High","Highest");
+        //populate the Choicebox;
+        cbPriority.setItems(list);
     }
 
     public void handle(ActionEvent event) {
