@@ -2,6 +2,7 @@ package edu.isu.cs.cs2263.todoListManager.controller;
 
 import edu.isu.cs.cs2263.todoListManager.controller.command.*;
 import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
+import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.context.TaskContext;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.*;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
@@ -318,16 +319,35 @@ public class Controller implements Initializable {
 
     }
 
+
     /**
      * Small method that assists in populating the priority choice box in the Task Creation screen
      *
      * @author Liam Andrus
      */
-    public void populatePrioCb(){
+    public void populatePrioCb() {
         ObservableList<String> list = FXCollections.observableArrayList();
-        list.addAll("Low","Medium","High","Highest");
+        list.addAll("Low", "Medium", "High", "Highest");
         //populate the Choicebox;
         cbPriority.setItems(list);
+    }
+
+    public void populateHomeScrollPane() throws IOException {
+        UserAccount account = (UserAccount) AccountContext.CURRENT_ACCOUNT;
+        Iterator<Task> iter;
+        VBox DisplayVBox = new VBox();
+        Task currentTask;
+        if (account.getTaskLists().iterator().hasNext()) {
+            iter = account.getTaskLists().iterator();
+            while (iter.hasNext()) {
+                currentTask = iter.next();
+                HBox TaskHbox = new HBox();
+                Text currentTaskText = new Text(currentTask.getTitle());
+                TaskHbox.getChildren().add(currentTaskText);
+                DisplayVBox.getChildren().add(TaskHbox);
+            }
+        }
+        apHomeAllTask.getChildren().add(DisplayVBox);
     }
 
     public void handle(ActionEvent event) {
