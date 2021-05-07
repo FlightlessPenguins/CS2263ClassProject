@@ -5,6 +5,8 @@
 package edu.isu.cs.cs2263.todoListManager.view;
 
 import edu.isu.cs.cs2263.todoListManager.controller.Controller;
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.NullAccount;
 import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
 import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountLoginState;
@@ -30,7 +32,7 @@ import java.io.IOException;
 
 public class View extends Application implements Observer {
 
-    private static final int splashDelay = 5;
+    private static final int splashDelay = 1;
 
     @FXML
     public static Stage primaryStage;
@@ -42,8 +44,7 @@ public class View extends Application implements Observer {
     public static Stage errorStage;
 
     @FXML
-    TextField loginEmailTxt;
-    Button loginRegisterBtn;
+    TextField lblUserName;
 
     @FXML
     public static void positionSecondaryStage() {

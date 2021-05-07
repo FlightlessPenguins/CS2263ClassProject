@@ -25,6 +25,6 @@ FXML Login page
       <TextField fx:id="txtEmail" layoutX="141.0" layoutY="183.0" prefHeight="25.0" prefWidth="202.0" />
       <Label layoutX="141.0" layoutY="213.0" text="Password" />
       <Button fx:id="btnLoginUser" layoutX="424.0" layoutY="260.0" mnemonicParsing="false" onAction="#handle" text="Login" />
-      <Button fx:id="btnLoginRegister" layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#handle" text="Register" />
+      <Button fx:id="btnLoginRegister" layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#handle" text="New User" />
    </children>
 </AnchorPane>

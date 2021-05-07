@@ -39,7 +39,7 @@ public class FreshStart {
 
         // create test user with username: "test@gmail.com" and password: "password" (auto-creates a default tasklist with a default section)
         System.out.println("\r\n\nCreating test user...");
-        UserAccount user = new UserAccount("I was here.", null, "test@gmail.com", "password", "Brandon", "Watkins");
+        UserAccount user = new UserAccount("I was here.", null, "test", "pass", "Brandon", "Watkins");
         System.out.printf("Test user created:\r\nID: %s\r\nEmail: %s\r\nPassword Hash: %s\r\nName: %s %s\r\nBiography: %s\r\n",
                 user.getID(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getBiography());
 

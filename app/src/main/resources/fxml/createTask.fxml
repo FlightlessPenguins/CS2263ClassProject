@@ -15,10 +15,7 @@ FXML Task Creation page
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.isu.cs.cs2263.todoListManager.controller.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16" fx:controller="edu.isu.cs.cs2263.todoListManager.controller.Controller">
    <children>
       <TextArea fx:id="txtDescription" layoutX="37.0" layoutY="129.0" prefHeight="49.0" prefWidth="234.0" wrapText="true" />
       <TextField fx:id="txtTitle" layoutX="37.0" layoutY="80.0" prefHeight="25.0" prefWidth="234.0" />
@@ -40,11 +37,7 @@ FXML Task Creation page
       <Label layoutX="329.0" layoutY="120.0" text="Due Date:" />
       <Label layoutX="328.0" layoutY="163.0" text="Priority:" />
       <ChoiceBox fx:id="cbPriority" layoutX="420.0" layoutY="159.0" prefHeight="25.0" prefWidth="141.0" />
-      <Label layoutX="327.0" layoutY="206.0" text="Section:" />
-      <ChoiceBox fx:id="cbTaskList" layoutX="420.0" layoutY="245.0" prefHeight="25.0" prefWidth="141.0" />
-      <ChoiceBox fx:id="cbSection" layoutX="420.0" layoutY="202.0" prefHeight="25.0" prefWidth="141.0" />
-      <Label layoutX="331.0" layoutY="249.0" text="List:" />
-      <Button fx:id="btnCancel" layoutX="18.0" layoutY="310.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Cancel" onAction="#handle" />
-      <Button fx:id="btnFinishCreateTask" layoutX="491.0" layoutY="310.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="87.0" text="Create Task" onAction="#handle" />
+      <Button fx:id="btnCancel" layoutX="18.0" layoutY="310.0" mnemonicParsing="false" onAction="#handle" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
+      <Button fx:id="btnFinishCreateTask" layoutX="491.0" layoutY="310.0" mnemonicParsing="false" onAction="#handle" prefHeight="25.0" prefWidth="87.0" text="Create Task" />
    </children>
 </AnchorPane>

@@ -22,6 +22,7 @@ import edu.isu.cs.cs2263.todoListManager.view.View;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -35,6 +36,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Controller implements Initializable {
@@ -100,6 +102,9 @@ public class Controller implements Initializable {
 
     @FXML
     public ScrollPane spHomeAllTask;
+
+    @FXML
+    private Text lblUserName;
 
     @FXML
     private TextArea txtBiography;
@@ -348,47 +353,106 @@ public class Controller implements Initializable {
             }
         }
         apHomeAllTask.getChildren().add(DisplayVBox);
+
+        if (AccountContext.CURRENT_ACCOUNT != null) lblUserName.setText(
+                AccountContext.CURRENT_ACCOUNT instanceof NullAccount ? "Profile" : AccountContext.CURRENT_ACCOUNT.getFirstName());
     }
 
+    /**
+     * Handles all button events
+     *
+     * @param event (ActionEvent) The event being handled.
+     *
+     * @author Brandon Watkins
+     */
     public void handle(ActionEvent event) {
-        switch (((Node)event.getTarget()).getId()) {
-            case "btnRegisterUser":
+        String id = "";
+        if (event == null) return;
+        EventTarget tar = event.getTarget();
+        if (tar == null) return;
+        try {
+            id = tar.toString();
+            id = id.substring(id.indexOf("id=") + 3, id.length());
+            id = id.substring(0, id.indexOf(","));
+        } catch (Exception ex) {
+            id = "";
+        }
+
+        //switch (event != null ? event.getTarget() != null ? ((Node)event.getTarget()).getId() : "" : "") {//throwing InvocationTargetException
+        switch (id) {
+            case "btnRegisterUser", "Register":
                 handle(Event.Register);
                 break;
-            case "btnLoginUser":
+            case "btnLoginUser", "Login":
                 handle(Event.Login);
                 break;
-            case "btnLoginRegister":
+            case "btnLoginRegister", "New User":
                 ((SystemState) SystemState.instance()).setState(AccountCreateState.instance());
                 openRegisterUser();
                 break;
-            case "btnCreateTask":
+            case "btnCreateTask", "New Task":
                 try {
                     btnCreateTask(event);
                 } catch (IOException ex) {
                     handle(Event.ViewTaskList);
                 }
-            case "btnFinishCreateTask":
+            case "btnFinishCreateTask", "Create Task":
                 handle(Event.CreateTask);
                 break;
-            case "btnCreateList":
+            case "btnCreateList", "New List":
                 try {
                     btnCreateList(event);
                 } catch (IOException ex) {
                     handle(Event.ViewTaskList);
                 }
-            case "btnFinishCreateList":
+            case "btnFinishCreateList", "Create List":
                 handle(Event.CreateTaskList);
                 break;
-            case "btnCreateSection":
+            case "btnCreateSection", "New Section":
                 try {
                     btnCreateSection(event);
                 } catch (IOException ex) {
                     handle(Event.ViewTaskList);
                 }
-            case "btnFinishCreateSection":
+            case "btnFinishCreateSection", "Create Section":
                 handle(Event.CreateSection);
-                break;/*
+                break;
+            case "btnFinishEditAccount", "Update Account":
+                handle(Event.UpdateUser);
+                break;
+            case "btnCancel", "Cancel":
+                cancelStage(event);
+                //handle(Event.Cancel);
+                break;
+            case "btnLogout", "Logout":
+                handle(Event.Logout);
+                break;
+            case "btnCloseApp", "Save and Exit":
+                handle(Event.CloseApp);
+                break;
+            case "btnReload", "Reload":
+                showAllTasks();
+                break;
+            case "btnSearch", "Search":
+                handle(Event.SearchTasks);
+                break;
+            case "btnSort", "Sort":
+                handle(Event.SortTasks);
+                break;
+            case "btnFilter", "Filter":
+                handle(Event.FilterTasks);
+                break;
+            default:
+                // do nothing
+                break;
+            /*
+            case "btnEditAccount":
+                try {
+                    btnEditAccount();// not added yet
+                } catch (IOException ex) {
+                    handle(Event.ViewTaskList);
+                }
+                break;
             case UPDATE_TASK:
                 handle(Event.UpdateTask);
                 break;
@@ -397,16 +461,6 @@ public class Controller implements Initializable {
                 break;
             case UPDATE_SECTION:
                 handle(Event.UpdateSection);
-                break;
-            case "btnEditAccount":
-                try {
-                    btnEditAccount();// not added yet
-                } catch (IOException ex) {
-                    handle(Event.ViewTaskList);
-                }
-                break;
-            case "btnFinishEditAccount":
-                handle(Event.UpdateUser);
                 break;
             case VIEW_USER:
                 handle(Event.ViewUser);
@@ -425,32 +479,10 @@ public class Controller implements Initializable {
             case ARCHIVE_TASKLIST:
                 handle(Event.ArchiveTaskList);
                 break;
-            case SORT_TASKS:
-                handle(Event.SortTasks);
-                break;
-            case FILTER_TASKS:
-                handle(Event.FilterTasks);
-                break;
-            case SEARCH_TASKS:
-                handle(Event.SearchTasks);
-                break;
             case VIEW_LIST_OF_ALL_USERS:
                 handle(Event.ViewListOfAllUsers);
-                break;*/
-            case "btnLogout":
-                handle(Event.Logout);
-                break;/*
-            case CLOSE_APP:
-                handle(Event.CloseApp);
                 break;
             */
-            case "btnCancel":
-                cancelStage(event);
-                //handle(Event.Cancel);
-                break;
-            default:
-                // do nothing
-                break;
         }
     }
 
@@ -462,117 +494,132 @@ public class Controller implements Initializable {
         switch(event) {
             case CreateTaskList:
                 c = new CreateCommand(event);
-                args.put("title", txtTitle.getText());
-                args.put("description", txtDescription.getText());
-                args.put("comment", txtComment.getText());
-                //args.put("parentTaskListID", txtTitle.getParent().getId());
+                args.put("title", txtTitle != null ? txtTitle.getText() : null);
+                args.put("description", txtDescription != null ? txtDescription.getText() : null);
+                args.put("comment", txtComment != null ? txtComment.getText() : null);
+                //args.put("parentTaskListID", txtTitle != null ? txtTitle.getParent().getId() : null);
                 break;
             case UpdateTaskList:
                 c = new UpdateCommand(event);
                 //args.put("id", txtTitle.getParent().getId());
-                args.put("title", txtTitle.getText());
-                args.put("description", txtDescription.getText());
-                args.put("comment", txtComment.getText());
-                args.put("isListArchived", cbIsListArchived.isSelected() ? "true" : "false");
-                //args.put("parentTaskListID", txtTitle.getParent().getParent().getId());
+                args.put("title", txtTitle != null ? txtTitle.getText() : null);
+                args.put("description", txtDescription != null ? txtDescription.getText() : null);
+                args.put("comment", txtComment != null ? txtComment.getText() : null);
+                args.put("isListArchived", cbIsListArchived != null ? cbIsListArchived.isSelected() ? "true" : "false" : "false");
+                //args.put("parentTaskListID", txtTitle != null ? txtTitle.getParent().getParent().getId() : null);
                 break;
             case ViewTaskList:
                 c = new InfoCommand(event);
-                //args.put("id", lblTitle.getParent().getId());
+                //args.put("id", lblTitle != null ? lblTitle.getParent().getId() : null);
                 break;
             case RescheduleTaskList:
                 c = new UpdateCommand(event);
-                args.put("dueDate", txtDueDate.getText());
-                //args.put("id", lblTitle.getParent().getId());
+                String dateString = null;
+                if (dpDueDate != null) {
+                    LocalDate date = dpDueDate.getValue();
+                    if (date != null) dateString = date.getMonth().getValue() + "/" + date.getDayOfMonth() + "/" + date.getDayOfWeek().getValue();
+                }
+                args.put("dueDate", dateString); // may not work
+                //args.put("id", lblTitle != null ? lblTitle.getParent().getId() : null);
                 break;
             case ArchiveTaskList:
                 c = new UpdateCommand(event);
                 args.put("isListArchived", "true");
-                //args.put("id", lblTitle.getParent().getId());
+                //args.put("id", lblTitle != null ? lblTitle.getParent().getId() : null);
                 break;
             case SortTasks:
                 c = new ViewCommand(event);
-                args.put("sortCategory", lblSortBy.getText());
-                args.put("sortOrder", cbSortDirection.isSelected() ? "ascending" : "descending");
+                args.put("sortCategory", lblSortBy != null ? lblSortBy.getText() : null);
+                args.put("sortOrder", cbSortDirection != null ? cbSortDirection.isSelected() ? "ascending" : "descending" : "ascending");
                 break;
             case FilterTasks:
                 c = new ViewCommand(event);
-                args.put("filters", txtFilters.getText());
+                args.put("filters", txtFilters != null ? txtFilters.getText() : null);
                 break;
             case SearchTasks:
                 c = new ViewCommand(event);
-                args.put("searchTerm", txtSearch.getText());
+                args.put("searchTerm", txtSearch != null ? txtSearch.getText() : null);
                 break;
             case CreateSection:
                 c = new CreateCommand(event);
-                args.put("title", txtTitle.getText());
-                args.put("description", txtDescription.getText());
+                args.put("title", txtTitle != null ? txtTitle.getText() : null);
+                args.put("description", txtDescription != null ? txtDescription.getText() : null);
                 args.put("defaultSection", "false");
-                //args.put("parentTaskListID", txtTitle.getParent().getId());
+                //args.put("parentTaskListID", txtTitle != null ? txtTitle.getParent().getId() : null);
                 break;
             case UpdateSection:
                 c = new UpdateCommand(event);
-                //args.put("id", txtTitle.getParent().getId());
-                args.put("title", txtTitle.getText());
-                args.put("description", txtDescription.getText());
+                //args.put("id", txtTitle != null ? txtTitle.getParent().getId() : null);
+                args.put("title", txtTitle != null ? txtTitle.getText() : null);
+                args.put("description", txtDescription != null ? txtDescription.getText() : null);
                 break;
             case ViewSection:
                 c = new InfoCommand(event);
-                //args.put("id", lblTitle.getParent().getId());
+                //args.put("id", lblTitle != null ? lblTitle.getParent().getId() : null);
                 break;
             case CreateTask:
                 c = new CreateCommand(event);
-                args.put("title", txtTitle.getText());
-                args.put("description", txtDescription.getText());
-                args.put("labels", txtLabels.getText());
-                args.put("dueDate", txtDueDate.getText());
+                args.put("title", txtTitle != null ? txtTitle.getText() : null);
+                args.put("description", txtDescription != null ? txtDescription.getText() : null);
+                args.put("labels", txtLabels != null ? txtLabels.getText() : null);
+                String dateString2 = null;
+                if (dpDueDate != null) {
+                    LocalDate date = dpDueDate.getValue();
+                    if (date != null) dateString2 = date.getMonth().getValue() + "/" + date.getDayOfMonth() + "/" + date.getDayOfWeek().getValue();
+                }
+                args.put("dueDate", dateString2); // may not work
                 //args.put("parentTaskID", PARENT_TASK_ID);
-                //args.put("parentSectionID", lblTitle.getParent().getId());//would only work if creating from a section's view
+                //args.put("parentSectionID", lblTitle != null ? lblTitle.getParent().getId() : null);//would only work if creating from a section's view
                 break;
             case UpdateTask:
                 c = new UpdateCommand(event);
-                //args.put("id", txtTitle.getParent().getId());
-                args.put("title", txtTitle.getText());
-                args.put("description", txtDescription.getText());
-                args.put("labels", txtLabels.getText());
-                args.put("dueDate", txtDueDate.getText());
+                //args.put("id", txtTitle != null ? txtTitle.getParent().getId() : null);
+                args.put("title", txtTitle != null ? txtTitle.getText() : null);
+                args.put("description", txtDescription != null ? txtDescription.getText() : null);
+                args.put("labels", txtLabels != null ? txtLabels.getText() : null);
+                String dateString3 = null;
+                if (dpDueDate != null) {
+                    LocalDate date = dpDueDate.getValue();
+                    if (date != null) dateString3 = date.getMonth().getValue() + "/" + date.getDayOfMonth() + "/" + date.getDayOfWeek().getValue();
+                }
+                args.put("dueDate", dateString3); // may not work
                 //args.put("parentTaskID", PARENT_TASK_ID);
                 //args.put("parentSectionID", PARENT_SECTION_ID);
                 break;
             case ViewTask:
                 c = new InfoCommand(event);
-                //args.put("taskID", lblTitle.getParent().getId());
+                //args.put("taskID", lblTitle != null ? lblTitle.getParent().getId() : null);
                 break;
             case Register:
                 c = new CreateCommand(event);
-                args.put("email", txtEmail.getText());
-                args.put("password", txtPassword.getText());
-                args.put("confirmPassword", txtPasswordConfirm.getText());
-                args.put("firstName", txtFirstName.getText());
-                args.put("lastName", txtLastName.getText());
-                args.put("biography", txtBiography.getText());
+                args.put("email", txtEmail != null ? txtEmail.getText() : null);
+                args.put("password", txtPassword != null ? txtPassword.getText() : null);
+                args.put("confirmPassword", txtPasswordConfirm != null ? txtPasswordConfirm.getText() : null);
+                args.put("firstName", txtFirstName != null ? txtFirstName.getText() : null);
+                args.put("lastName", txtLastName != null ? txtLastName.getText() : null);
+                args.put("biography", txtBiography != null ? txtBiography.getText() : null);
                 break;
             case UpdateUser:
                 c = new UpdateCommand(event);
-                //args.put("id", lblEmail.getParent().getId());
-                args.put("email", txtEmail.getText());
-                args.put("password", txtPassword.getText());
-                args.put("confirmPassword", txtPasswordConfirm.getText());
-                args.put("firstName", txtFirstName.getText());
-                args.put("lastName", txtLastName.getText());
-                args.put("biography", txtBiography.getText());
+                //args.put("id", lblEmail != null ? lblEmail.getParent().getId() : null);
+                args.put("email", txtEmail != null ? txtEmail.getText() : null);
+                args.put("password", txtPassword != null ? txtPassword.getText() : null);
+                args.put("confirmPassword", txtPasswordConfirm != null ? txtPasswordConfirm.getText() : null);
+                args.put("firstName", txtFirstName != null ? txtFirstName.getText() : null);
+                args.put("lastName", txtLastName != null ? txtLastName.getText() : null);
+                args.put("biography", txtBiography != null ? txtBiography.getText() : null);
                 break;
             case ViewUser:
                 c = new InfoCommand(event);
-                args.put("email", txtEmail.getText());
+                args.put("email", txtEmail != null ? txtEmail.getText() : null);
                 break;
             case ViewListOfAllUsers:
                 c = new ListCommand(event);
                 break;
             case Login:
                 c = new SystemCommand(event);
-                args.put("email", txtEmail.getText());
-                args.put("password", txtPassword.getText());
+                args.put("email", txtEmail != null ? txtEmail.getText() : null);
+                args.put("password", txtPassword != null ? txtPassword.getText() : null);
                 break;
             default:
                 c = new SystemCommand(event);
@@ -612,264 +659,5 @@ public class Controller implements Initializable {
     public static Controller instance() {
         return Helper.INSTANCE;
     }
-
-
-
-
-
-
-    /* ***********************************************************************************************
-     ********************************** Old methods, kept for reminders ******************************
-     *********************************************************************************************** */
-
-
-    private List<String> filters;
-
-    public List<String> getFilters() {
-        return filters;
-    }
-
-    public void setFilters(List<String> filters) {
-        this.filters = filters;
-    }
-
-    public TaskList getUIList() {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    public static void logout() {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    public void updateTaskList(int ID, String title, String description, String comment, String subTaskListIDs) {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    public void updateSection(int ID, String title, String description, String taskIDs) {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    public void rescheduleList(String date) {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    public void sortTasks(String category, String direction) {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    /**
-     * Saves the specified user's data to file.
-     *
-     * @param accountToSave (Account) The account to save to file.
-     *
-     * @author Brandon Watkins
-     */
-    public void saveData(Account accountToSave) {
-        Write.writeAccountData(accountToSave);
-    }
-
-    public Boolean readData() {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    /** Retrieves the specific TaskList and archives it
-     *
-     *
-     * @param listID
-     * @author Liam Andrus
-     */
-    public void archiveList(int listID) {
-        //Get current user account
-        UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
-
-        //Create iterator to retrieve list
-        Iterator<TaskList> iter = account.getTaskLists().getSubTaskLists().iterator();
-        TaskList currentList = null;
-        while(iter.hasNext()){
-            currentList = iter.next();
-            if(currentList.getID() == listID) break;
-        }
-
-        //archive TaskList and save
-        currentList.setArchived(true);
-        saveData();
-
-    }
-
-    /**
-     * Resets the password of the target account
-     *
-     * @param ID
-     * @param password
-     * @author Liam Andrus
-     */
-    public void resetPassword(int ID, String password) {
-
-        Iterator<Account> iter = getUsers().iterator();
-        Account currentAccount = null;
-
-        while(iter.hasNext()){
-            currentAccount = iter.next();
-            if(currentAccount.getID() == ID) break;
-        }
-        currentAccount.setPassword(password);
-        saveData();
-
-    }
-
-    public void searchTasks(String searchTerm) {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    public void filterTasks(List<String> filters) {
-        throw new RuntimeException("not implemented yet.");
-    }
-
-    public void createTaskList(String name, String comment) {throw new RuntimeException("not implemented yet.");}
-
-    public void changeUserInfo() {throw new RuntimeException("not implemented yet.");}
-
-    public void displayLogo() {throw new RuntimeException("not implemented yet.");}
-
-    /**
-     * Creates new section and adds it to specific list
-     *
-     * @param listID (int)
-     * @param title (String)
-     * @param description (String)
-     * @author Liam Andrus
-     */
-    public void createSection(String title, String description, int listID) {
-        //Get current user account
-        UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
-
-        //Create section
-        Section newSection = new Section(title, description);
-
-        //Create iterator to retrieve list
-        Iterator<TaskList> iter = account.getTaskLists().getSubTaskLists().iterator();
-        TaskList currentList = null;
-        while(iter.hasNext()){
-            currentList = iter.next();
-            if(currentList.getID() == listID) break;
-        }
-        //Add section to list and save
-        currentList.addSection(newSection);
-        saveData();
-    }
-
-    /**Updates a section that belongs to the target TaskList
-     *
-     * @param sectionID
-     * @param listID
-     * @param title
-     * @param desc
-     * @author Liam Andrus
-     */
-    public void updateSection(int sectionID, int listID, String title, String desc){
-        //Get current user account
-        UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
-
-        //Get specific TaskList where the section is found
-        Iterator<TaskList> iter = account.getTaskLists().getSubTaskLists().iterator();
-        TaskList currentList = null;
-        while(iter.hasNext()){
-            currentList = iter.next();
-            if(currentList.getID() == listID) break;
-        }
-
-        //Get specific section in the TaskLists sections
-        Iterator<Section> iter2 = currentList.getSections().iterator();
-        Section currentSection = null;
-        while(iter2.hasNext()){
-            currentSection = iter2.next();
-            if(currentSection.getID() == sectionID) break;
-        }
-        //Update the title and description and save operations
-        currentSection.setTitle(title);
-        currentSection.setDescription(desc);
-        saveData();
-
-    }
-
-    /**
-     * reschedule task based on ID
-     *
-     * @author Grant Baird
-     * @author Brandon Watkins
-     */
-    public void rescheduleTask(int taskID, Calendar newDueDate) {
-        Account account = getCurrentUser();
-        if (account instanceof UserAccount) ((UserAccount) getCurrentUser()).getTask(taskID).setDueDate(newDueDate);
-    }
-
-    public void showTasks(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
-
-    public void showTaskListInfo(TaskList taskList) {throw new RuntimeException("not implemented yet.");}
-
-    public void ShowTaskInfo(int taskID) {throw new RuntimeException("not implemented yet.");}
-
-    public void editTask(int taskID) {throw new RuntimeException("not implemented yet.");}
-
-    /**
-     * creates a task.
-     *
-     * @param title (String) title of task
-     * @param description (String) description of task
-     * @param labels (List<String>) List of labels applied to task
-     * @param dueDate (Calendar) desired due date
-     * @param dateCompleted (Calendar) date completed. empty/null if incomplete
-     * @param subtasks (List<Task>) List of subtasks. Null if already a subtask
-     * @param desiredTaskList (TaskList) desired TaskList that will hold the Task. Null and it will be in the
-     *
-     * @author Grant Baird
-     */
-    public Task createTask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks, TaskList desiredTaskList, Section desiredTaskSection) {
-        UserAccount account = (UserAccount)((AccountContext)AccountContext.instance()).getCurrentAccount();
-        Task newTask = null;
-        if(title != null && description != null && labels != null && dueDate != null && dateCompleted != null && subtasks != null) {
-            newTask = new Task(title, description, labels, dueDate, dateCompleted, subtasks);
-        }
-        else if(title != null && description != null) {
-            newTask = new Task(title, description);
-        }
-        else if(title != null) {
-            newTask = new Task(title);
-        }
-
-        if (desiredTaskList != null && desiredTaskSection == null) {
-            account.getTaskLists().addTask(newTask);
-        }
-        else if (desiredTaskList == null && desiredTaskSection == null) {
-            account.getTaskLists().addTask(newTask);
-        }
-        else if (desiredTaskList != null && desiredTaskSection != null) {
-            account.getTaskLists().getSections().get(desiredTaskSection.getID()).addTask(newTask);
-        }
-
-
-        return newTask;
-    }
-
-    /**Creates a subtask and adds it to target taskList //WIP
-     *
-     * @param title
-     * @param description
-     * @param labels
-     * @param dueDate
-     * @param dateCompleted
-     * @param parentTaskID
-     * @author Liam Andrus
-     */
-    public void createSubtask(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, int parentTaskID) {
-        //Get current user account
-        UserAccount account = (UserAccount) ((AccountContext)AccountContext.instance()).getCurrentAccount();
-
-        Task newSubTask = new Task(title, description);
-        newSubTask.setDueDate(dueDate);
-    }
-
-
-
 
 }
