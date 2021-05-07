@@ -84,7 +84,7 @@ public class Section implements Searchable, Serializable {
      */
     public Section(int id, String title, String description, List<Task> tasks, Boolean isDefault){
         this.id = id == NEW_SECTION_ID ? Read.getNextID(this) : id;
-        this.title = title;
+        this.title = title == null ? "Default" : title;
         this.description = description;
         this.defaultSection = isDefault;
         if (tasks == null) this.tasks = new ArrayList<Task>();

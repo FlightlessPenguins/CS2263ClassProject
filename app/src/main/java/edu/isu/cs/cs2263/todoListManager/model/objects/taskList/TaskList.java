@@ -116,7 +116,7 @@ TaskList implements Searchable, Serializable {
      */
     public TaskList(int id, String title, String description, String comment, List<TaskList> subTaskLists, List<Section> sections, Boolean isListArchived) {
         this.id = id == NEW_TASKLIST_ID ? Read.getNextID(this) : id;
-        this.title = title;
+        this.title = title == null ? "Default" : title;
         this.description = description;
         this.comment = comment;
         this.subTaskLists = subTaskLists;

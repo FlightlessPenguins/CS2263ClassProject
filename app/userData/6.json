@@ -2,9 +2,11 @@
   "biography": "I was here. Again.",
   "taskLists": {
     "id": 8,
+    "title": "Default",
     "sections": [
       {
         "id": 8,
+        "title": "Default",
         "tasks": [],
         "defaultSection": true,
         "parentTaskListID": -1

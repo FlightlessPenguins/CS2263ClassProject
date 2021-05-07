@@ -29,7 +29,7 @@ public class App {
     // Make sure this (LOGGING_ENABLED) is set to false whenever you push, especially for our submission. It will print read/write logs, and
     // will wipe all data every time it's run, otherwise.
     public static final Boolean LOGGING_ENABLED = false;
-    private static final Boolean ERASE_ALL_DATA = true;
+    private static final Boolean ERASE_ALL_DATA = false;
 
     public static void main(String[] args) {
         if (ERASE_ALL_DATA) FreshStart.run();

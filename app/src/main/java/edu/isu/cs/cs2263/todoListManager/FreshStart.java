@@ -39,7 +39,7 @@ public class FreshStart {
 
         // create test user with username: "test@gmail.com" and password: "password" (auto-creates a default tasklist with a default section)
         System.out.println("\r\n\nCreating test user...");
-        UserAccount user = new UserAccount("I was here.", null, "test", "pass", "Brandon", "Watkins");
+        UserAccount user = new UserAccount("I was here.", null, "test@gmail.com", "password", "Brandon", "Watkins");
         System.out.printf("Test user created:\r\nID: %s\r\nEmail: %s\r\nPassword Hash: %s\r\nName: %s %s\r\nBiography: %s\r\n",
                 user.getID(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getBiography());
 
@@ -47,55 +47,94 @@ public class FreshStart {
         UserAccount user2 = new UserAccount("I was here. Again.", null, "test2@gmail.com", "password2", "Tom", "Bombadil");
         (((AccountListState) AccountListState.instance())).addAccount(user2);
 
-        // create tasklist - "taskList2" (auto-creates a default section)
-        TaskList taskList2 = new TaskList("TaskList 2", "Second tasklist", "When the default tasklist just isn't good enough.", null, null, false);
-        user.addTaskList(taskList2);
+        TaskList school = new TaskList("School", "School Stuff", "For when the default tasklist just isn't good enough.", null, null, false);
+        user.addTaskList(school);
 
-        // create a subtasklist - "subtasklist" - in tasklist2
-        TaskList subTaskList = new TaskList("Sub-TaskList", "Sub-tasklist.", "Some comment.", null, null, false);
-        taskList2.addSubTaskList(subTaskList);
+        Calendar date1 = Calendar.getInstance();
+        date1.set(2021, 5, 1, 15, 30);
+        user.getTaskLists().addTask(new Task("Appointment with Dr. Green", "123 Main St.", null, date1, null, null));
 
-        // create section - "section1" - add to tasklist2
-        Section section1 = new Section("Section 1", "Additional section.");
-        taskList2.addSection(section1);
+        Section cs2263 = new Section("CS 2263", null);
+        school.addSection(cs2263);
 
-        // create 2 tasks in default tasklist/section
-        Task task1 = new Task("Task 1", "task 1 description", null, null, null, null);
-        Task task2 = new Task("Task 2", "task 2 description", null, null, null, null);
-        user.getTaskLists().addTask(task1);
-        user.getTaskLists().addTask(task2);
+        Task lecture1 = new Task("Lecture", "Lecture 15", null, null, null, null);
+        Task homework1 = new Task("Homework", null, null, null, null, null);
+        Task project = new Task("Project", "Meet Mon., Wed., Fri.", null, null, null, null);
+        Calendar date2 = Calendar.getInstance();
+        date2.set(2021, 5, 3, 10, 15);
+        project.setDueDate(date2);
+        cs2263.addTask(lecture1);
+        cs2263.addTask(homework1);
+        cs2263.addTask(project);
 
-        // create 2 tasks in tasklist2, default section
-        Task task3 = new Task("Task 3", "task 3 description", null, null, null, null);
-        Task task4 = new Task("Task 4", "task 4 description", null, null, null, null);
-        user.getTaskLists().getSubTaskLists().get(0).addTask(task3);
-        user.getTaskLists().getSubTaskLists().get(0).addTask(task4);
+        Section cs1337 = new Section("CS 1337", null);
+        school.addSection(cs1337);
 
-        // create 2 tasks in tasklist2, section1
-        Task task5 = new Task("Task 5", "task 5 description", null, null, null, null);
-        Task task6 = new Task("Task 6", "task 6 description", null, null, null, null);
-        task5.addDaysToDueDate(14);
-        Calendar date = Calendar.getInstance();
-        date.add(Calendar.DAY_OF_YEAR, 14);
-        task6.setDueDate(date);
-        user.getTaskLists().getSubTaskLists().get(0).getSections().get(1).addTask(task5);
-        user.getTaskLists().getSubTaskLists().get(0).getSections().get(1).addTask(task6);
+        Task finalExam1 = new Task("Final Exam", "Room 101", null, null, null, null);
+        Calendar date3 = Calendar.getInstance();
+        date3.set(2021, 5, 11, 8, 0);
+        finalExam1.setDueDate(date3);
+        cs1337.addTask(finalExam1);
 
-        // create subtask in one of the tasks in tasklist2, section1
-        Task task7 = new Task("Task 7", "task 7 description", null, null, null, null);
-        user.getTaskLists().getSubTaskLists().get(0).getSections().get(1).getTasks().get(0).addSubTask(task7);
+        Section cs1187 = new Section("CS 1187", null);
+        school.addSection(cs1187);
 
-        // create 1 task in subtasklist, default section
-        Task task8 = new Task("Task 8", "task 8 description", null, null, null, null);
-        user.getTaskLists().addTask(task8);
+        Task lecture2 = new Task("Lecture", "Lecture 15", null, null, null, null);
+        Task homework2 = new Task("Homework", null, null, null, null, null);
+        Task finalExam2 = new Task("Final Exam", "Room 315", null, null, null, null);
+        Calendar date4 = Calendar.getInstance();
+        date4.set(2021, 5, 1, 12, 30);
+        finalExam2.setDueDate(date4);
+        cs1187.addTask(lecture2);
+        cs1187.addTask(homework2);
+        cs1187.addTask(finalExam2);
 
-        // create empty sub-sub-tasklist
-        TaskList subSubTaskList = new TaskList("Sub-Sub-TaskList", "Sub-sub-tasklist.", "Yeah, I went there.", null, null, false);
-        subTaskList.addSubTaskList(subSubTaskList);
+        Section info3380 = new Section("INFO 3380", null);
+        school.addSection(info3380);
 
-        // create an empty section for sub-sub-tasklist
-        Section section2 = new Section("Section 2", "Additional section.");
-        subSubTaskList.addSection(section2);
+        Task lecture3 = new Task("Lecture", "Lecture 15", null, null, null, null);
+        Task emailTeacher = new Task("Email Teacher", null, null, null, null, null);
+        Task finalExam3 = new Task("Final Exam", "Room 212", null, null, null, null);
+        Calendar date5 = Calendar.getInstance();
+        date5.set(2021, 5, 1, 9, 0);
+        finalExam3.setDueDate(date5);
+        info3380.addTask(lecture3);
+        info3380.addTask(emailTeacher);
+        info3380.addTask(finalExam3);
+
+        TaskList errands = new TaskList("Errands", "Errands to run", null, null, null, false);
+        user.addTaskList(errands);
+
+        Section pocatello = new Section("Pocatello", null);
+        errands.addSection(pocatello);
+
+        Task dougsGift = new Task("Drop off Doug's bday gift", "315 main st.", null, null, null, null);
+        pocatello.addTask(dougsGift);
+
+        Section idahoFalls = new Section("Idaho Falls", null);
+        errands.addSection(idahoFalls);
+
+        Task movies = new Task("Return borrowed movies", "217 main st.", null, null, null, null);
+        idahoFalls.addTask(movies);
+
+        Section bills = new Section("Bills", null);
+        errands.addSection(bills);
+
+        Task utilities = new Task("Utilities", null, null, null, null, null);
+        bills.addTask(utilities);
+
+        Task cellPhone = new Task("Cell Phone", null, null, null, null, null);
+        bills.addTask(cellPhone);
+
+        Task creditCard = new Task("Credit Cards", null, null, null, null, null);
+        bills.addTask(creditCard);
+
+        Task creditCard2 = new Task("Capital One Credit Card", null, null, null, null, null);
+        creditCard.addSubTask(creditCard2);
+
+        Task creditCard3 = new Task("Discover Credit Card", null, null, null, null, null);
+        creditCard.addSubTask(creditCard3);
+
 
         // Save test user
         System.out.println("\r\nSaving test user...");
