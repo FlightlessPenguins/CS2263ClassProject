@@ -389,4 +389,25 @@ public class View extends Application implements Observer {
             System.out.println(e);
         }
     }
+    /**
+     * Shows account editing screen
+     *
+     * @author Liam Andrus
+     */
+    public void editAccount() {
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            loader.setLocation(new File("app/src/main/resources/fxml/editAccount.fxml").toURI().toURL());
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            secondaryStage = new Stage();
+            secondaryStage.setTitle("Edit Account");
+
+            secondaryStage.setScene(scene);
+            secondaryStage.show();
+        } catch(IOException e) {
+            System.out.println(e);
+        }
+    }
 }

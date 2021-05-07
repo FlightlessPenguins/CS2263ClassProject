@@ -137,6 +137,9 @@ public class Controller implements Initializable {
     @FXML
     private PasswordField txtPasswordConfirm;
 
+    @FXML
+    private Button btnFinishEditAccount;
+
 
     public Controller() {}
 
@@ -249,6 +252,10 @@ public class Controller implements Initializable {
     @FXML
     private void btnCreateTask(ActionEvent event) throws IOException {
         View.instance().createTask();
+    }
+    @FXML
+    private void btnEditAccount(ActionEvent event) throws IOException {
+        View.instance().editAccount();
     }
 
 
@@ -463,14 +470,14 @@ public class Controller implements Initializable {
             default:
                 // do nothing
                 break;
-            /*
+
             case "btnEditAccount":
                 try {
-                    btnEditAccount();// not added yet
+                    btnEditAccount(event);// not added yet
                 } catch (IOException ex) {
-                    handle(Event.ViewTaskList);
+                    handle(Event.UpdateUser);
                 }
-                break;
+                break;/*
             case UPDATE_TASK:
                 handle(Event.UpdateTask);
                 break;
