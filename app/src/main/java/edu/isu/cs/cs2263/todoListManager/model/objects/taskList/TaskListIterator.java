@@ -40,7 +40,7 @@ public class TaskListIterator implements Iterator<Task> {
         addSectionsToTasks(taskList);
         List<TaskList> tl = taskList.getSubTaskLists();
         if (tl == null) return;
-        for (TaskList list : taskList.getSubTaskLists()) {
+        for (TaskList list : tl) {
             addSectionsToTasks(list);
         }
     }

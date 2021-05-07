@@ -32,7 +32,7 @@ import java.io.IOException;
 
 public class View extends Application implements Observer {
 
-    private static final int splashDelay = 1;
+    private static final int splashDelay = 5;
 
     @FXML
     public static Stage primaryStage;

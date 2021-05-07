@@ -95,7 +95,7 @@ public class ViewCommand implements Command {
         Account user = AccountContext.CURRENT_ACCOUNT;
         if (user instanceof UserAccount) {
             TaskList tl = null;
-            if (((TaskListInfoState) TaskListInfoState.instance()).getState() != null) tl = ((TaskListInfoState) AccountInfoState.instance()).getState().search(searchTerm);
+            if (((TaskListInfoState) TaskListInfoState.instance()).getState() != null) tl = ((TaskListInfoState) TaskListInfoState.instance()).getState().search(searchTerm);
             ((TaskListInfoState) TaskListInfoState.instance()).setState(tl);
             SystemState.instance().setNextState(TaskListInfoState.instance(), null);
         }
