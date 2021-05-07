@@ -291,13 +291,14 @@ public class View extends Application implements Observer {
 
             primaryStage.setTitle("Home");
             Controller controllerRef = loader.getController();
-            controllerRef.populateHomeScrollPane();
+
             primaryStage.setScene(scene);
 
             //Controller.instance().populateTaskListAccordion();
 
 
             primaryStage.show();
+            controllerRef.populateTaskLists();
 
         } catch(IOException e) {
             System.out.println(e);

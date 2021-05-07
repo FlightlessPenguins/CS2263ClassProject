@@ -129,6 +129,8 @@ public class Controller implements Initializable {
     private TextField txtLabels;
     @FXML
     private TextField txtFilters;
+    @FXML
+    private ListView<String> lstViewHome;
 
     @FXML
     private PasswordField txtPassword;
@@ -250,78 +252,94 @@ public class Controller implements Initializable {
     }
 
 
-    public void populateTaskListAccordion() throws IOException {
-        UserAccount account = (UserAccount) AccountContext.CURRENT_ACCOUNT;
-        Iterator<TaskList> iter;
-        VBox DisplayVBox = new VBox();
-        TaskList currentList;
-        Section currentSection;
-        Task currentTask;
-        Task currentSubTask;
-        if(account.getTaskLists().getSubTaskLists() != null) {
-            iter =  account.getTaskLists().getSubTaskLists().iterator();
+    public void populateTaskLists() {
+
+        //Setup for list VARNAME= lstViewHome
 
 
-            while(iter.hasNext()) {
-                currentList = iter.next();
-                HBox TaskListHBox = new HBox();
-                //TitledPane taskListPane = new TitledPane(currentList.getTitle(), SectionAccordion);
-                Text currentListText = new Text(currentList.getTitle());
-                TaskListHBox.getChildren().add(currentListText);
-                Iterator<Section> iter2;
-                DisplayVBox.getChildren().add(TaskListHBox);
-                if(currentList.getSections() != null) {
-                    iter2 = currentList.getSections().iterator();
-                    while (iter2.hasNext()) {
-                        currentSection = iter2.next();
-                        HBox SectionHBox = new HBox();
-                        //TitledPane taskSectionPane = new TitledPane(currentSection.getTitle(), taskVBox);
-                        Text currentSectionText = new Text(currentSection.getTitle());
-                        SectionHBox.getChildren().add(currentSectionText);
-                        Iterator<Task> iter3;
-                        DisplayVBox.getChildren().add(SectionHBox);
-                        if(currentSection.getTasks() != null) {
-                            iter3 = currentSection.getTasks().iterator();
-                            while (iter3.hasNext()) {
-                                currentTask = iter3.next();
-                                HBox TaskHBox = new HBox();
-                                Text currentTaskText = new Text(currentTask.getTitle());
-                                TaskHBox.getChildren().add(currentTaskText);
-                                Iterator<Task> iter4;
-                                DisplayVBox.getChildren().add(TaskHBox);
-                                if(currentTask.getSubtasks() != null) {
-                                    iter4 = currentTask.getSubtasks().iterator();
-                                    while (iter4.hasNext()) {
-                                        currentSubTask = iter4.next();
-                                        HBox subTaskHBox = new HBox();
-                                        Text currentSubTaskText = new Text(currentSubTask.getTitle());
-                                        subTaskHBox.getChildren().add(currentSubTaskText);
-                                        DisplayVBox.getChildren().add(subTaskHBox);
-                                    }
-                                }
-                                //DisplayVBox.getChildren().add(TaskHBox);
-                            }
-                        }
+        //---------------------------
+        //Using Alex's Method       |
+        //----------------------------
+        System.out.println("Method 1 output: ");
+        UserAccount accountTest = (UserAccount) AccountContext.CURRENT_ACCOUNT;
+        TaskList userTasks = accountTest.getTaskLists();
 
 
-                        //taskSectionPane.setContent(taskVBox);
-                        //SectionAccordion.getPanes().add(taskSectionPane);
-                        //DisplayVBox.getChildren().add(SectionHBox);
-                    }
+        //Check for Default Sections
+        for (Section sectionMain : userTasks.getSections()) {
+            //Check if section is null
+            if(sectionMain.getTitle() != null) {
+                lstViewHome.getItems().add("Section: " + sectionMain.getTitle());
+                System.out.println("Section: " + sectionMain.getTitle());
+            }
+
+            //List tasks in each section
+            List<Task> sectionMainTasks = sectionMain.getTasks();
+            for (Task task : sectionMainTasks) {
+                if(sectionMain.getTitle() != null) {
+                    System.out.println("Task: " + task.getTitle());
+                    lstViewHome.getItems().add("\t" + "Task: " + task.getTitle());
+                } else {
+                    System.out.println("Task: " + task.getTitle());
+                    lstViewHome.getItems().add("Task: " + task.getTitle());
                 }
-
-                //taskSectionPane.setContent(taskVBox);
-                //SectionAccordion.getPanes().add(taskSectionPane);
-
-
-                //DisplayVBox.getChildren().add(TaskListHBox);
             }
         }
 
+        //Check for Lists
+        for (TaskList taskList : userTasks.getSubTaskLists()) {
+            System.out.println("Task List: " + taskList.getTitle());
+            lstViewHome.getItems().add("Task List: " + taskList.getTitle());
 
-        apHomeAllTask.getChildren().add(DisplayVBox);
-        //spHomeAllTask.setContent(DisplayVBox);
+            //Check for Sections
+            for (Section section : taskList.getSections()) {
+                //Check if section is null (would not need to show name)
+                if(section.getTitle() != null) {
+                    System.out.println("Section: " + section.getTitle());
+                    lstViewHome.getItems().add("\t" + "Section: " + section.getTitle());
+                }
 
+                //List tasks in each section
+                List<Task> sectionTasks = section.getTasks();
+                for (Task task : sectionTasks) {
+                    if(section.getTitle() != null) {
+                        System.out.println("Task: " + task.getTitle());
+                        lstViewHome.getItems().add("\t\t" + "Task: " + task.getTitle());
+                    } else {
+                        System.out.println("Task: " + task.getTitle());
+                        lstViewHome.getItems().add("\t" + "Task: " + task.getTitle());
+                    }
+                }
+            }
+
+            //Check for subTaskLists
+            for (TaskList subTaskLists : taskList.getSubTaskLists()) {
+                System.out.println("Sub Task List: " + subTaskLists.getTitle());
+                lstViewHome.getItems().add("\t" + "Task List: " + subTaskLists.getTitle());
+
+                //Check for subSections
+                for (Section subSections : subTaskLists.getSections()) {
+
+                    //Check if section title is null
+                    if(subSections.getTitle() != null) {
+                        System.out.println("Sections: " + subSections.getTitle());
+                        lstViewHome.getItems().add("\t\t" + "Sections: " + subSections.getTitle());
+                    }
+
+                    //Check for subTasks
+                    for (Task subTask : subSections.getTasks()) {
+                        //Check if section title is null here for tabs
+                        if(subSections.getTitle() != null) {
+                            System.out.println("Sub Tasks: " + subTask.getTitle());
+                            lstViewHome.getItems().add("\t\t\t" + "Tasks: " + subTask.getTitle());
+                        } else {
+                            System.out.println("Sub Tasks: " + subTask.getTitle());
+                            lstViewHome.getItems().add("\t\t" + "Tasks: " + subTask.getTitle());
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
@@ -380,66 +398,66 @@ public class Controller implements Initializable {
 
         //switch (event != null ? event.getTarget() != null ? ((Node)event.getTarget()).getId() : "" : "") {//throwing InvocationTargetException
         switch (id) {
-            case "btnRegisterUser", "Register":
+            case "btnRegisterUser":
                 handle(Event.Register);
                 break;
-            case "btnLoginUser", "Login":
+            case "btnLoginUser":
                 handle(Event.Login);
                 break;
-            case "btnLoginRegister", "New User":
+            case "btnLoginRegister":
                 ((SystemState) SystemState.instance()).setState(AccountCreateState.instance());
                 openRegisterUser();
                 break;
-            case "btnCreateTask", "New Task":
+            case "btnCreateTask":
                 try {
                     btnCreateTask(event);
                 } catch (IOException ex) {
                     handle(Event.ViewTaskList);
                 }
-            case "btnFinishCreateTask", "Create Task":
+            case "btnFinishCreateTask":
                 handle(Event.CreateTask);
                 break;
-            case "btnCreateList", "New List":
+            case "btnCreateList":
                 try {
                     btnCreateList(event);
                 } catch (IOException ex) {
                     handle(Event.ViewTaskList);
                 }
-            case "btnFinishCreateList", "Create List":
+            case "btnFinishCreateList":
                 handle(Event.CreateTaskList);
                 break;
-            case "btnCreateSection", "New Section":
+            case "btnCreateSection":
                 try {
                     btnCreateSection(event);
                 } catch (IOException ex) {
                     handle(Event.ViewTaskList);
                 }
-            case "btnFinishCreateSection", "Create Section":
+            case "btnFinishCreateSection":
                 handle(Event.CreateSection);
                 break;
-            case "btnFinishEditAccount", "Update Account":
+            case "btnFinishEditAccount":
                 handle(Event.UpdateUser);
                 break;
-            case "btnCancel", "Cancel":
+            case "btnCancel":
                 cancelStage(event);
                 //handle(Event.Cancel);
                 break;
-            case "btnLogout", "Logout":
+            case "btnLogout":
                 handle(Event.Logout);
                 break;
-            case "btnCloseApp", "Save and Exit":
+            case "btnCloseApp":
                 handle(Event.CloseApp);
                 break;
-            case "btnReload", "Reload":
+            case "btnReload":
                 showAllTasks();
                 break;
-            case "btnSearch", "Search":
+            case "btnSearch":
                 handle(Event.SearchTasks);
                 break;
-            case "btnSort", "Sort":
+            case "btnSort":
                 handle(Event.SortTasks);
                 break;
-            case "btnFilter", "Filter":
+            case "btnFilter":
                 handle(Event.FilterTasks);
                 break;
             default:
