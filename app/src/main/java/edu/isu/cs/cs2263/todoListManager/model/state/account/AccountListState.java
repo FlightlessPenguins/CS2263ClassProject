@@ -5,12 +5,14 @@
 package edu.isu.cs.cs2263.todoListManager.model.state.account;
 
 import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
-import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.AccountIterator;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.AdminAccount;
-import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
-import jdk.jshell.spi.ExecutionControl;
+import edu.isu.cs.cs2263.todoListManager.model.state.SystemState;
+import edu.isu.cs.cs2263.todoListManager.model.state.taskList.TaskListInfoState;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
+import edu.isu.cs.cs2263.todoListManager.storage.Write;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.List;
 public class AccountListState implements State, Serializable {
     //Instance Variables
     private List<Account> accounts = new ArrayList();
+    private List<Account> state = accounts;
 
     //Constructor
     private AccountListState() {}
@@ -32,10 +35,27 @@ public class AccountListState implements State, Serializable {
      * @author Brandon Watkins
      */
     public AccountListState(List<Account> accounts) {
-        this.accounts = accounts;
+        setAccounts(accounts);
     }
 
     //Methods
+
+    public Account getAccount(int accountID) {
+        for (Account account : accounts) {
+            if (account.getID() == accountID) return account;
+        }
+        return null;
+    }
+
+    public List<Account> getState() {
+        return getAccounts();
+    }
+
+    public AccountListState setState(List<Account> accounts) {
+        this.accounts = accounts;
+        this.state = accounts;
+        return this;
+    }
 
     // Just because I'm unsure whether the getters/setters needs to be strictly named for gson to read objects in from files.
     /**
@@ -45,7 +65,10 @@ public class AccountListState implements State, Serializable {
      *
      * @author Brandon Watkins
      */
-    public List<Account> getAccounts() { return getUsers(); }
+    public List<Account> getAccounts() {
+        if (((AccountContext)(AccountContext.instance())).getCurrentAccount() instanceof AdminAccount) return getAccountsBackdoor();
+        return new ArrayList<Account>();
+    }
 
     /**
      * Sets the list of accounts.
@@ -56,42 +79,24 @@ public class AccountListState implements State, Serializable {
      */
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
-    }
-
-    /**
-     * If current user is an admin, returns a list of all accounts. Otherwise, returns an empty list of accounts.
-     *
-     * @return (List<Account>) If user is an admin, returns a list of all accounts. Else returns an empty one.
-     *
-     * @author Brandon Watkins
-     */
-    public List<Account> getUsers() {
-        if (((AccountContext)(AccountContext.instance())).getCurrentAccount() instanceof AdminAccount) return accounts;
-        return new ArrayList<Account>();
+        this.state = accounts;
     }
 
     /**
      * Gets a list of all accounts.
-     * <p>Note: This should NOT be called for anything other than saving users to file, or other internal purposes.
+     * <p>Note: This should NOT be called for anything other than saving users to file, or other internal purposes (that don't require a user to be logged in for).
      *
      * @return (List<Account>) A list of all accounts.
      *
      * @author Brandon Watkins
      */
     public List<Account> getAccountsBackdoor() {
+        if (accounts == null || accounts.size() < 1) accounts = Read.readAllUserData();
         return accounts;
     }
 
-    public void addUser() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("addUser not implemented yet.");
-    }
-
-    public UserAccount removeUser(int userID) throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("removeUser not implemented yet.");
-    }
-
-    public static Iterator<UserAccount> iterator() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("iterator not implemented yet.");
+    public static Iterator<Account> iterator() {
+        return new AccountIterator();
     }
 
     /**
@@ -99,10 +104,36 @@ public class AccountListState implements State, Serializable {
      * <p>Make sure to call the context's changeState(this) by the end of run().
      *
      * @author Brandon Watkins
+     * @param state
+     * @param args
      */
     @Override
-    public void run() {
-        throw new RuntimeException("run not implemented yet.");
+    public void setNextState(State state, Object args) {
+        switch(state.getClass().getSimpleName()) {
+            case "AccountLoginState": // They logged out
+                ((SystemState) SystemState.instance()).setState(AccountLoginState.instance());
+                break;
+            case "AccountInfoState": // the admin clicked on someone's profile
+                ((SystemState) SystemState.instance()).setState(AccountInfoState.instance());
+                break;
+            case "TaskListInfoState": // they clicked "Home"
+                ((SystemState) SystemState.instance()).setState(TaskListInfoState.instance());
+                break;
+            // this would allow the admin to change any of the profile data, without more time invested
+            // case "AccountUpdateState": // the admin wants to update someone's profile
+        }
+    }
+
+    public void addAccount(Account account) {
+        accounts.add(account);
+        state = accounts;
+        Write.writeAccountData(account);
+    }
+
+    public Account removeAccount(Account account) {
+        accounts.remove(account);
+        state = accounts;
+        return account;
     }
 
     /**

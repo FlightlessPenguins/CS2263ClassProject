@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 Created by Alex Losser
 FXML Login page
 -->
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -11,7 +13,7 @@ FXML Login page
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="299.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.isu.cs.cs2263.todoListManager.controller.Controller">
+<AnchorPane prefHeight="299.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.isu.cs.cs2263.todoListManager.controller.Controller">
    <children>
       <ImageView fitHeight="152.0" fitWidth="270.0" layoutX="107.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -19,10 +21,10 @@ FXML Login page
          </image>
       </ImageView>
       <Label layoutX="138.0" layoutY="166.0" text="Email" />
-      <PasswordField layoutX="141.0" layoutY="230.0" prefHeight="25.0" prefWidth="202.0" />
-      <TextField layoutX="141.0" layoutY="183.0" prefHeight="25.0" prefWidth="202.0" />
+      <PasswordField fx:id="txtPassword" layoutX="141.0" layoutY="230.0" prefHeight="25.0" prefWidth="202.0" />
+      <TextField fx:id="txtEmail" layoutX="141.0" layoutY="183.0" prefHeight="25.0" prefWidth="202.0" />
       <Label layoutX="141.0" layoutY="213.0" text="Password" />
-      <Button layoutX="424.0" layoutY="260.0" mnemonicParsing="false" text="Login" />
-      <Button fx:id="loginRegisterBtn" layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#testAction" text="Register" />
+      <Button fx:id="btnLoginUser" layoutX="424.0" layoutY="260.0" mnemonicParsing="false" onAction="#handle" text="Login" />
+      <Button fx:id="btnLoginRegister" layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#handle" text="New User" />
    </children>
 </AnchorPane>

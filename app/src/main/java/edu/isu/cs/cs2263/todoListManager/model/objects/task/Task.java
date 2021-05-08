@@ -6,6 +6,7 @@ package edu.isu.cs.cs2263.todoListManager.model.objects.task;
 
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
 import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.search.Searchable;
@@ -16,8 +17,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class Task implements Searchable, Serializable {
+public class Task implements Searchable, Serializable, Comparable<Task> {
 
+    private static final int HAS_NO_PARENT_TASK = -1;
+    private static final int NO_PARENT_SECTION = -2;
+    private static final int NEW_TASK_ID = -13;
     private int id;
     private String title;
     private String description;
@@ -25,8 +29,63 @@ public class Task implements Searchable, Serializable {
     private Calendar dueDate;
     private Calendar dateCompleted;
     private List<Task> subtasks;
-    private int parentTaskID;
-    private int parentSectionID;
+    private int parentTaskID = HAS_NO_PARENT_TASK;
+    private int parentSectionID = NO_PARENT_SECTION;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public Calendar getDateCompleted() {
+        return dateCompleted;
+    }
+
+    public Task setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public Task setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public Task setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public Task setLabels(List<String> labels) {
+        this.labels = labels;
+        return this;
+    }
+
+    public Task setDateCompleted(Calendar dateCompleted) {
+        this.dateCompleted = dateCompleted;
+        return this;
+    }
+
+    public Task addLabel(String label) {
+        labels.add(label);
+        return this;
+    }
+
+    public String removeLabel(String label) {
+        labels.remove(label);
+        return label;
+    }
 
     /**
      * Creates a Task.
@@ -41,13 +100,17 @@ public class Task implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Task(int id, String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks) {
-        this.id = id;
+        this.id = id == NEW_TASK_ID ? Read.getNextID(this) : id;
         this.title = title;
         this.description = description;
         this.labels = labels;
         this.dueDate = dueDate;
         this.dateCompleted = dateCompleted;
-        this.subtasks = subtasks;
+        if (subtasks != null) {
+            for (Task subtask : subtasks) {
+                addSubTask(subtask);
+            }
+        }
     }
 
     /**
@@ -62,7 +125,7 @@ public class Task implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Task(String title, String description, List<String> labels, Calendar dueDate, Calendar dateCompleted, List<Task> subtasks) {
-        this(Read.readNextID("task"), title, description, labels, dueDate, dateCompleted, subtasks);
+        this(NEW_TASK_ID, title, description, labels, dueDate, dateCompleted, subtasks);
     }
 
     /**
@@ -73,7 +136,7 @@ public class Task implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Task(String title, String description) {
-        this(Read.readNextID("task"), title, description, null, null, null, null);
+        this(title, description, null, null, null, null);
     }
 
     /**
@@ -83,7 +146,7 @@ public class Task implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Task(String title) {
-        this(Read.readNextID("task"), title, null, null, null, null, null);
+        this(title, null, null, null, null, null);
     }
 
     /**
@@ -115,6 +178,157 @@ public class Task implements Searchable, Serializable {
     }
 
     /**
+     * Sets this task's subtasks.
+     *
+     * @param subtasks (List<Task>) Subtasks to add to this task.
+     * @return (Task) The parent task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task setSubtasks(List<Task> subtasks) {
+        this.subtasks = subtasks;
+        return this;
+    }
+
+    /**
+     * Adds a subtask to this task.
+     *
+     * @param subtask (Task) The task to be added as a child.
+     * @return (Task) The parent task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task addSubTask(Task subtask) {
+        if (canAddSubtask()) {
+            if (subtasks == null) subtasks = new ArrayList();
+            subtasks.add(subtask);
+            subtask.setParentTask(this);
+        }
+        return this;
+    }
+
+    /**
+     * Removes a subtask from this task.
+     *
+     * @param subtask (Task) The task to be removed from the parent task.
+     * @return (Task) The parent task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task removeSubTask(Task subtask) {
+        subtask.setParentTask(null);
+        this.subtasks.remove(subtask);
+        return this;
+    }
+
+    /**
+     * Determines whether the task can have children tasks.
+     *
+     * @return (Boolean) True if the task can have subtasks (ie. it has no parent task).
+     *
+     * @author Brandon Watkins
+     */
+    public Boolean canAddSubtask() {
+        return parentTaskID == HAS_NO_PARENT_TASK;
+    }
+
+    /**
+     * Sets the task's parent task's ID.
+     *
+     * @param parentTask (Task) The parent task.
+     * @return (Task) The child task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task setParentTask(Task parentTask) {
+        if (parentTask == null) this.parentTaskID = HAS_NO_PARENT_TASK;
+        return this;
+    }
+
+    /**
+     * Sets the task's parent task's ID.
+     *
+     * @param id (int) The parent's ID number.
+     * @return (Task) The child task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task setParentTaskID(int id) {
+        this.parentTaskID = id;
+        return this;
+    }
+
+    /**
+     * Gets the task's parent task's ID.
+     * @return (int) The parent task's ID number.
+     *
+     * @author Brandon Watkins
+     */
+    public int getParentTaskID() {
+        return parentTaskID;
+    }
+
+    /**
+     * Sets the task's parent Section's ID.
+     *
+     * @param id (int) The parent's ID number.
+     * @return (Task) The child task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task setParentSectionID(int id) {
+        this.parentSectionID = id;
+        return this;
+    }
+
+    /**
+     * Gets the task's parent Section's ID.
+     * @return (int) The parent Section's ID number.
+     *
+     * @author Brandon Watkins
+     */
+    public int getParentSectionID() {
+        return parentSectionID;
+    }
+
+    /**
+     * Gets the task's due date.
+     * @return (Calendar) The task's due date.
+     *
+     * @author Brandon Watkins
+     */
+    public Calendar getDueDate() {
+        return dueDate;
+    }
+
+    /**
+     * Sets the task's due date.
+     *
+     * @param dueDate (Calendar) The date to set the task's due date to.
+     * @return (Task) The task being modified.
+     *
+     * @author Brandon Watkins
+     */
+    public Task setDueDate(Calendar dueDate) {
+        this.dueDate = dueDate;
+        return this;
+    }
+
+    /**
+     * Sets the due date for today's date plus the given number of days.
+     *
+     * @param daysToAdd (int) Number of days from now to set the due date to.
+     * @return (Task) The task being modified.
+     *
+     * @author Brandon Watkins
+     */
+    public Task addDaysToDueDate(int daysToAdd) {
+        if (dueDate == null) dueDate = Calendar.getInstance();
+        dueDate.add(Calendar.DAY_OF_YEAR, daysToAdd);
+        return this;
+    }
+
+    /**
      * Searches via the SearchVisitor, returning a List of Tasks matching the search term.
      *
      * @param v (SearchVisitor) The visitor used to search with.
@@ -124,8 +338,18 @@ public class Task implements Searchable, Serializable {
     public List<Task> accept(SearchVisitor v) {
         String s = v.getSearchTerm();
         List<Task> output = new ArrayList();
-        if (title.contains(s) || description.contains(s)) {
+        if ((title != null && title.contains(s)) || (description != null && description.contains(s))) {
             output.add(this);
+            if (subtasks != null && subtasks.size() > 0) {
+                for (Task task : subtasks) {
+                    output.add(task);
+                }
+            }
+        }
+        else if (subtasks != null && subtasks.size() > 0) {
+            for (Task task : subtasks) {
+                output.addAll(task.accept(v));
+            }
         }
         return output;
     }
@@ -143,7 +367,27 @@ public class Task implements Searchable, Serializable {
         return false;
     }
 
-    public void setDueDate(Calendar dueDate) {
-        this.dueDate = dueDate;
+    @Override
+    public int compareTo(Task task) {
+        return this.getTitle().compareTo(task.getTitle());
     }
+
+    /**
+     * Sets the Task's parent Section.
+     *
+     * @param parentSection (Section) The containing parent of this task.
+     * @return (Task) This task.
+     *
+     * @author Brandon Watkins
+     */
+    public Task setParentSection(Section parentSection) {
+        if (parentSection == null) this.parentSectionID = NO_PARENT_SECTION;
+        else this.parentSectionID = parentSection.getID();
+        return this;
+    }
+
+    public Boolean isComplete() {
+        return dateCompleted != null;
+    }
+
 }

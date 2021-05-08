@@ -3,6 +3,11 @@
  */
 package edu.isu.cs.cs2263.todoListManager;
 
+import com.google.common.hash.Hashing;
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.state.account.AccountListState;
+import edu.isu.cs.cs2263.todoListManager.storage.Read;
 import edu.isu.cs.cs2263.todoListManager.view.View;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
@@ -16,11 +21,20 @@ import javafx.util.Duration;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
-public class App{
+public class App {
+
+    // Make sure this (LOGGING_ENABLED) is set to false whenever you push, especially for our submission. It will print read/write logs, and
+    // will wipe all data every time it's run, otherwise.
+    public static final Boolean LOGGING_ENABLED = false;
+    private static final Boolean ERASE_ALL_DATA = false;
 
     public static void main(String[] args) {
+        if (ERASE_ALL_DATA) FreshStart.run();
+
         Application.launch(View.instance().getClass());
     }
+
 }

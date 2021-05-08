@@ -1,0 +1,275 @@
+{
+  "biography": "I was here.",
+  "taskLists": {
+    "id": 6,
+    "title": "Default",
+    "subTaskLists": [
+      {
+        "id": 9,
+        "title": "School",
+        "description": "School Stuff",
+        "comment": "For when the default tasklist just isn\u0027t good enough.",
+        "sections": [
+          {
+            "id": 9,
+            "title": "Default",
+            "tasks": [],
+            "defaultSection": true,
+            "parentTaskListID": -1
+          },
+          {
+            "id": 10,
+            "title": "CS 2263",
+            "tasks": [
+              {
+                "id": 6,
+                "title": "Lecture",
+                "description": "Lecture 15",
+                "parentTaskID": -1,
+                "parentSectionID": 10
+              },
+              {
+                "id": 7,
+                "title": "Homework",
+                "parentTaskID": -1,
+                "parentSectionID": 10
+              },
+              {
+                "id": 8,
+                "title": "Project",
+                "description": "Meet Mon., Wed., Fri.",
+                "dueDate": {
+                  "year": 2021,
+                  "month": 5,
+                  "dayOfMonth": 3,
+                  "hourOfDay": 10,
+                  "minute": 15,
+                  "second": 52
+                },
+                "parentTaskID": -1,
+                "parentSectionID": 10
+              }
+            ],
+            "defaultSection": false,
+            "parentTaskListID": 9
+          },
+          {
+            "id": 11,
+            "title": "CS 1337",
+            "tasks": [
+              {
+                "id": 9,
+                "title": "Final Exam",
+                "description": "Room 101",
+                "dueDate": {
+                  "year": 2021,
+                  "month": 5,
+                  "dayOfMonth": 11,
+                  "hourOfDay": 8,
+                  "minute": 0,
+                  "second": 52
+                },
+                "parentTaskID": -1,
+                "parentSectionID": 11
+              }
+            ],
+            "defaultSection": false,
+            "parentTaskListID": 9
+          },
+          {
+            "id": 12,
+            "title": "CS 1187",
+            "tasks": [
+              {
+                "id": 10,
+                "title": "Lecture",
+                "description": "Lecture 15",
+                "parentTaskID": -1,
+                "parentSectionID": 12
+              },
+              {
+                "id": 11,
+                "title": "Homework",
+                "parentTaskID": -1,
+                "parentSectionID": 12
+              },
+              {
+                "id": 12,
+                "title": "Final Exam",
+                "description": "Room 315",
+                "dueDate": {
+                  "year": 2021,
+                  "month": 5,
+                  "dayOfMonth": 1,
+                  "hourOfDay": 12,
+                  "minute": 30,
+                  "second": 52
+                },
+                "parentTaskID": -1,
+                "parentSectionID": 12
+              }
+            ],
+            "defaultSection": false,
+            "parentTaskListID": 9
+          },
+          {
+            "id": 13,
+            "title": "INFO 3380",
+            "tasks": [
+              {
+                "id": 13,
+                "title": "Lecture",
+                "description": "Lecture 15",
+                "parentTaskID": -1,
+                "parentSectionID": 13
+              },
+              {
+                "id": 14,
+                "title": "Email Teacher",
+                "parentTaskID": -1,
+                "parentSectionID": 13
+              },
+              {
+                "id": 15,
+                "title": "Final Exam",
+                "description": "Room 212",
+                "dueDate": {
+                  "year": 2021,
+                  "month": 5,
+                  "dayOfMonth": 1,
+                  "hourOfDay": 9,
+                  "minute": 0,
+                  "second": 52
+                },
+                "parentTaskID": -1,
+                "parentSectionID": 13
+              }
+            ],
+            "defaultSection": false,
+            "parentTaskListID": 9
+          }
+        ],
+        "isListArchived": false,
+        "parentTaskListID": 6
+      },
+      {
+        "id": 10,
+        "title": "Errands",
+        "description": "Errands to run",
+        "sections": [
+          {
+            "id": 14,
+            "title": "Default",
+            "tasks": [],
+            "defaultSection": true,
+            "parentTaskListID": -1
+          },
+          {
+            "id": 15,
+            "title": "Pocatello",
+            "tasks": [
+              {
+                "id": 16,
+                "title": "Drop off Doug\u0027s bday gift",
+                "description": "315 main st.",
+                "parentTaskID": -1,
+                "parentSectionID": 15
+              }
+            ],
+            "defaultSection": false,
+            "parentTaskListID": 10
+          },
+          {
+            "id": 16,
+            "title": "Idaho Falls",
+            "tasks": [
+              {
+                "id": 17,
+                "title": "Return borrowed movies",
+                "description": "217 main st.",
+                "parentTaskID": -1,
+                "parentSectionID": 16
+              }
+            ],
+            "defaultSection": false,
+            "parentTaskListID": 10
+          },
+          {
+            "id": 17,
+            "title": "Bills",
+            "tasks": [
+              {
+                "id": 18,
+                "title": "Utilities",
+                "parentTaskID": -1,
+                "parentSectionID": 17
+              },
+              {
+                "id": 19,
+                "title": "Cell Phone",
+                "parentTaskID": -1,
+                "parentSectionID": 17
+              },
+              {
+                "id": 20,
+                "title": "Credit Cards",
+                "subtasks": [
+                  {
+                    "id": 21,
+                    "title": "Capital One Credit Card",
+                    "parentTaskID": -1,
+                    "parentSectionID": -2
+                  },
+                  {
+                    "id": 22,
+                    "title": "Discover Credit Card",
+                    "parentTaskID": -1,
+                    "parentSectionID": -2
+                  }
+                ],
+                "parentTaskID": -1,
+                "parentSectionID": 17
+              }
+            ],
+            "defaultSection": false,
+            "parentTaskListID": 10
+          }
+        ],
+        "isListArchived": false,
+        "parentTaskListID": 6
+      }
+    ],
+    "sections": [
+      {
+        "id": 6,
+        "title": "Default",
+        "tasks": [
+          {
+            "id": 5,
+            "title": "Appointment with Dr. Green",
+            "description": "123 Main St.",
+            "dueDate": {
+              "year": 2021,
+              "month": 5,
+              "dayOfMonth": 1,
+              "hourOfDay": 15,
+              "minute": 30,
+              "second": 52
+            },
+            "parentTaskID": -1,
+            "parentSectionID": 6
+          }
+        ],
+        "defaultSection": true,
+        "parentTaskListID": -1
+      }
+    ],
+    "isListArchived": false,
+    "parentTaskListID": -1
+  },
+  "id": 5,
+  "email": "test@gmail.com",
+  "password": "b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86",
+  "firstName": "Brandon",
+  "lastName": "Watkins"
+}

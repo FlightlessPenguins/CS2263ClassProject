@@ -26,16 +26,18 @@ public class SearchTaskVisitor implements SearchVisitor {
         return searchTerm;
     }
 
-    public void setSearchTerm(String searchTerm) {
+    public SearchTaskVisitor setSearchTerm(String searchTerm) {
         this.searchTerm = searchTerm;
+        return this;
     }
 
     public List<Task> getSearchResults() {
         return searchResults;
     }
 
-    public void setSearchResults(List<Task> tasks) {
+    public SearchTaskVisitor setSearchResults(List<Task> tasks) {
         this.searchResults = tasks;
+        return this;
     }
 
     /**

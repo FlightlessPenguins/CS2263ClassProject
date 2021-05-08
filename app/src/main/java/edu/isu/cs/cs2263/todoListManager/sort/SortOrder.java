@@ -19,15 +19,17 @@ public class SortOrder {
         return category;
     }
 
-    public void setCategory(String category) {
+    public SortOrder setCategory(String category) {
         this.category = category;
+        return this;
     }
 
     public Order getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public SortOrder setOrder(Order order) {
         this.order = order;
+        return this;
     }
 }

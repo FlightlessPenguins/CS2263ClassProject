@@ -4,8 +4,10 @@
  */
 package edu.isu.cs.cs2263.todoListManager.model.objects.taskList;
 
+import edu.isu.cs.cs2263.todoListManager.model.context.AccountContext;
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
+import edu.isu.cs.cs2263.todoListManager.model.objects.account.UserAccount;
 import edu.isu.cs.cs2263.todoListManager.model.objects.section.Section;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
@@ -21,13 +23,16 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
-public class TaskList implements Searchable, Serializable {
+public class
+TaskList implements Searchable, Serializable {
     /* Reserved IDs:
         0: currently viewed tasklist, unfiltered
         1: currently viewed tasklist, filtered
 
      */
 
+    private static final int NEW_TASKLIST_ID = -12;
+    private static final int NO_PARENT_TASKLIST = -1;
     protected int id;
     private String title;
     private String description;
@@ -35,8 +40,14 @@ public class TaskList implements Searchable, Serializable {
     private List<TaskList> subTaskLists;
     private List<Section> sections;
     private Boolean isListArchived;
+    private int parentTaskListID = NO_PARENT_TASKLIST;
+
 
     public TaskList() { this(null); }
+
+    public TaskList(int id) {
+        this(id, null, null, null, null, null, false);
+    }
 
     /**
      * Creates a TaskList.
@@ -46,7 +57,7 @@ public class TaskList implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public TaskList(String title) {
-        this(Read.readNextID("taskList"), title, null, null, null, null, false);
+        this(title, null, null, null, null, false);
     }
 
     /**
@@ -58,7 +69,7 @@ public class TaskList implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public TaskList(String title, String description) {
-        this(Read.readNextID("taskList"), title, description, null, null, null, false);
+        this(title, description, null, null, null, false);
     }
 
     /**
@@ -71,7 +82,7 @@ public class TaskList implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public TaskList(String title, String description, String comment) {
-        this(Read.readNextID("taskList"), title, description, comment, null, null, false);
+        this(title, description, comment, null, null, false);
     }
 
     /**
@@ -87,7 +98,7 @@ public class TaskList implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public TaskList(String title, String description, String comment, List<TaskList> subTaskLists, List<Section> sections, Boolean isListArchived) {
-        this(Read.readNextID("taskList"), title, description, comment, subTaskLists, sections, isListArchived);
+        this(NEW_TASKLIST_ID, title, description, comment, subTaskLists, sections, isListArchived);
     }
 
     /**
@@ -104,8 +115,8 @@ public class TaskList implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public TaskList(int id, String title, String description, String comment, List<TaskList> subTaskLists, List<Section> sections, Boolean isListArchived) {
-        this.id = id;
-        this.title = title;
+        this.id = id == NEW_TASKLIST_ID ? Read.getNextID(this) : id;
+        this.title = title == null ? "Default" : title;
         this.description = description;
         this.comment = comment;
         this.subTaskLists = subTaskLists;
@@ -163,6 +174,7 @@ public class TaskList implements Searchable, Serializable {
     public TaskList addSubTaskList(TaskList taskList) {
         if (subTaskLists == null) subTaskLists = new ArrayList<TaskList>();
         subTaskLists.add(taskList);
+        taskList.setParentTaskList(this);
         return this;
     }
 
@@ -176,19 +188,74 @@ public class TaskList implements Searchable, Serializable {
      */
     public TaskList removeSubTaskList(TaskList taskList)  {
         subTaskLists.remove(taskList);
+        taskList.setParentTaskList(null);
         return taskList;
     }
 
-
+    /**
+     * Adds a section to this TaskList.
+     *
+     * @param section (Section) The section to add to this TaskList.
+     * @return (TaskList) This TaskList.
+     *
+     * @author Brandon Watkins
+     */
     public TaskList addSection(Section section) {
         sections.add(section);
+        section.setParentTaskList(this);
         return this;
     }
 
-
+    /**
+     * Removes a section from this tasklist.
+     *
+     * @param section (Section) The section to be removed.
+     * @return (Section) The section that was removed.
+     *
+     * @author Brandon Watkins
+     */
     public Section removeSection(Section section) {
         sections.remove(section);
+        section.setParentTaskList(null);
         return section;
+    }
+
+    /**
+     * Sets the parent tasklist for this tasklist.
+     *
+     * @param parentTaskList (TaskList) This tasklist's parent tasklist.
+     * @return (TaskList) The child tasklist.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList setParentTaskList(TaskList parentTaskList) {
+        if (parentTaskList == null) parentTaskListID = NO_PARENT_TASKLIST;
+        else parentTaskListID = parentTaskList.getID();
+        return this;
+    }
+
+    /**
+     * Sets this tasklist's parent's tasklist's ID.
+     *
+     * @param parentTaskListID (int) The parent tasklist's ID number.
+     * @return (TaskList) The child Tasklist.
+     *
+     * @author Brandon Watkins
+     */
+    public TaskList setParentTaskListID(int parentTaskListID) {
+        this.parentTaskListID = parentTaskListID;
+        return this;
+    }
+
+    /**
+     * Gets this tasklist's parent tasklist's ID.
+     *
+     * @return (int) The parent TaskList's ID number.
+     *
+     * @author Brandon Watkins
+     */
+    public int getParentTaskListID() {
+        return parentTaskListID;
     }
 
     /**
@@ -257,12 +324,17 @@ public class TaskList implements Searchable, Serializable {
 
     public Boolean update(int ID, String title, String description, String comment, String subTaskListIDs) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("update not implemented, yet."); }
 
-    public int getNextID() throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("getNextID not implemented, yet."); }
-
     public void changeDueDates(TaskList uiList, Calendar date) {}
 
     public TaskList moveTaskToList(Task task, TaskList destination) throws ExecutionControl.NotImplementedException { throw new ExecutionControl.NotImplementedException("moveTaskToList not implemented, yet."); }
 
+    /**
+     * Searches through the tasklist, it's sub lists, sections, tasks, and subtasks, for the given search term.
+     * @param searchTerm (String) The term to search for.
+     * @return (TaskList) A new TaskList containing all matching terms and their children.
+     *
+     * @author Brandon Watkins
+     */
     public TaskList search(String searchTerm) {
         SearchVisitor visitor = new SearchTaskVisitor(searchTerm);
         List<Task> tasks = accept(visitor);
@@ -270,6 +342,14 @@ public class TaskList implements Searchable, Serializable {
         return taskList;
     }
 
+    /**
+     * Converts a list of tasks into a TaskList.
+     *
+     * @param tasks (List<Task>) List of tasks to convert into a TaskList.
+     * @return (TaskList) A new TaskList containing the converted tasks.
+     *
+     * @author Brandon Watkins
+     */
     private TaskList convertTasksToTaskList(List<Task> tasks) {
         TaskList output = new TaskList(0, null, null, null, null, null, false);
         for (Task task : tasks) {
@@ -278,11 +358,19 @@ public class TaskList implements Searchable, Serializable {
         return output;
     }
 
+    /**
+     * Searches through the tasklist, it's sub lists, sections, tasks, and subtasks, for the given search term.
+     *
+     * @param v (SearchVisitor) The visitor used to search with.
+     * @return (List<Task>) List of all tasks matching (or belonging to something that does) the search term.
+     *
+     * @author Brandon Watkins
+     */
     public List<Task> accept(SearchVisitor v) {
         String s = v.getSearchTerm();
         Iterator<Task> iterator = iterator();
         List<Task> tasks = new ArrayList();
-        if (title.contains(s) || comment.contains(s) || description.contains(s)) {
+        if ((title != null && title.contains(s)) || (comment != null && comment.contains(s)) || (description != null && description.contains(s))) {
             while(iterator.hasNext()) {
                 tasks.add(iterator.next());
             }
@@ -293,15 +381,39 @@ public class TaskList implements Searchable, Serializable {
                 tasks.addAll(task.accept(v));
             }
         }
-        for (TaskList taskList : subTaskLists) {
-            tasks.addAll(taskList.accept(v));
+        if (subTaskLists != null) {
+            for (TaskList taskList : subTaskLists) {
+                tasks.addAll(taskList.accept(v));
+            }
         }
-        for (Section section : sections) {
-            tasks.addAll(section.accept(v));
+        if (sections != null) {
+            for (Section section : sections) {
+                tasks.addAll(section.accept(v));
+            }
+        }
+        Boolean[] taskIncluded = new Boolean[1000000000];
+        List<Task> toBeDeleted = new ArrayList();
+        for (Task task : tasks) {
+            if (taskIncluded[task.getID()] == null || !taskIncluded[task.getID()]) {
+                taskIncluded[task.getID()] = true;
+            }
+            else {
+                toBeDeleted.add(task);
+            }
+        }
+        for (Task task : toBeDeleted) {
+            tasks.remove(task);
         }
         return tasks;
     }
 
+    /**
+     * Creates an iterator to cycle through all of this TaskList's Tasks.
+     *
+     * @return (Iterator<Task>) Iterator of Tasks within this TaskList.
+     *
+     * @author Brandon Watkins
+     */
     public Iterator<Task> iterator() {
         return new TaskListIterator(this);
     }
@@ -317,6 +429,34 @@ public class TaskList implements Searchable, Serializable {
     public boolean equals(Object o) {
         if (o instanceof TaskList && ((TaskList)o).getID() >= 0 && this.id == ((TaskList)o).getID()) return true;
         return false;
+    }
+
+    public TaskList findTaskList(int tasklistID) {
+        if (this.id == tasklistID) return this;
+        for (TaskList taskList : subTaskLists) {
+            return taskList.findTaskList(tasklistID);
+        }
+        return null;
+    }
+
+    public Section findSection(int sectionID) {
+        for (TaskList taskList : subTaskLists) {
+            for (Section section : taskList.getSections()) {
+                if (section.getID() == sectionID) return section;
+            }
+        }
+        return null;
+    }
+
+    public Task findTask(int taskID) {
+        for (TaskList taskList : subTaskLists) {
+            for (Section section : taskList.getSections()) {
+                for (Task task : section.getTasks()) {
+                    if (task.getID() == taskID) return task;
+                }
+            }
+        }
+        return null;
     }
 
 }

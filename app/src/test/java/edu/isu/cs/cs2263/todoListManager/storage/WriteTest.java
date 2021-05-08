@@ -14,11 +14,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class
-WriteTest {
+/**
+ * Most of these tests are for private methods. You'll have to switch all of the Read/Write methods to public if you want
+ * to run the tests that have been commented out.
+ */
+class WriteTest {
 
     /**
      * NOTE: These will royally screw up the data if run after legit users have been created.
@@ -27,21 +31,11 @@ WriteTest {
      */
     @BeforeEach
     void setUp() {
-        File file = new File("test.txt");
-        file.delete();
-        file = new File("./counters/test.txt");
-        file.delete();
-        file = new File("./counters/task.txt");
-        file.delete();
-        file = new File("./counters/account.txt");
-        file.delete();
-        file = new File("./userData/0.json");
-        file.delete();
-        file = new File("./userData/test.json");
-        file.delete();
-        file = new File("./counters/taskList.txt");
-        file.delete();
-        file = new File("./counters/section.txt");
+        // delete userData folder (and its contents)
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/");
+        // delete counter folder (and its contents)
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/counters/");
+        File file = new File("./app");
         file.delete();
     }
 
@@ -52,21 +46,11 @@ WriteTest {
      */
     @AfterEach
     void tearDown() {
-        File file = new File("test.txt");
-        file.delete();
-        file = new File("./counters/test.txt");
-        file.delete();
-        file = new File("./counters/task.txt");
-        file.delete();
-        file = new File("./counters/account.txt");
-        file.delete();
-        file = new File("./userData/0.json");
-        file.delete();
-        file = new File("./userData/test.json");
-        file.delete();
-        file = new File("./counters/taskList.txt");
-        file.delete();
-        file = new File("./counters/section.txt");
+        // delete userData folder (and its contents)
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/userData/");
+        // delete counter folder (and its contents)
+        Write.deleteFolder(Paths.get("").toAbsolutePath().normalize().toString() + "/app/counters/");
+        File file = new File("./app");
         file.delete();
     }
 
@@ -76,7 +60,7 @@ WriteTest {
      * @author Brandon Watkins
      */
     @Test
-    void createFile1() {
+    void createFileTest1() {
         Write.createFile("test.txt");
         File file = new File("test.txt");
         assertEquals(true, file.exists());
@@ -88,7 +72,7 @@ WriteTest {
      * @author Brandon Watkins
      */
     @Test
-    void createFile2() {
+    void createFileTest2() {
         Write.createFile("test.txt");
         File file = new File("test.txt");
         file.delete();
@@ -101,7 +85,7 @@ WriteTest {
      * @author Brandon Watkins
      */
     @Test
-    void createFile3() {
+    void createFileTest3() {
         Write.createFile("test.txt");
         Write.createFile("test.txt");
     }
@@ -111,13 +95,13 @@ WriteTest {
      *
      * @author Brandon Watkins
      */
-    @Test
-    void createFile4() {
+    /*@Test
+    void createFileTest4() {
         Write.createFile("test.txt");
         Write.overwriteFile("test.txt", "Stuff and things.");
         Write.createFile("test.txt");
         assertEquals(Read.readSingleLineFile("test.txt"), "Stuff and things.");
-    }
+    }*/
 
     /**
      * incrementing a new counter initializes to zero.
@@ -125,8 +109,8 @@ WriteTest {
      * @author Brandon Watkins
      */
     @Test
-    void incrementCounter1() {
-        assertEquals(0, Read.readNextID("test"));
+    void incrementCounterTest1() {
+        assertEquals(0, Read.getNextID("test"));
     }
 
     /**
@@ -134,58 +118,72 @@ WriteTest {
      *
      * @author Brandon Watkins
      */
-    @Test
-    void incrementCounter2() {
+    /*@Test
+    void incrementCounterTest2() {
         Read.readNextID("test");
         assertEquals(1, Read.readNextID("test"));
-    }
+    }*/
 
     /**
      * creates new file if doesn't exist.
      *
      * @author Brandon Watkins
      */
-    @Test
-    void overwriteFile1() {
+    /*@Test
+    void overwriteFileTest1() {
         Write.overwriteFile("test.txt", "Stuff and things.");
         assertEquals(Read.readSingleLineFile("test.txt"), "Stuff and things.");
-    }
+    }*/
 
     /**
      * Overwrites existing file content.
      *
      * @author Brandon Watkins
      */
-    @Test
-    void overwriteFile2() {
+    /*@Test
+    void overwriteFileTest2() {
         Write.overwriteFile("test.txt", "Stuff and things.");
         Write.overwriteFile("test.txt", "Stuff and things again.");
         assertEquals(Read.readSingleLineFile("test.txt"), "Stuff and things again.");
-    }
+    }*/
 
     /**
      * Writes object to file, which can be read back into memory.
      *
      * @author Brandon Watkins
      */
-    @Test
-    void writeObjectToFile() {
+    /*@Test
+    void writeObjectToFileTest1() {
         Task task = new Task("Stuff", "Things");
         Write.writeObjectToFile(task, "./userData/test");
-        assertEquals(task, (Task)Read.readObjectFromFile(Task.class, "./userData/test"));
-    }
+        assertEquals(task, Read.readObjectFromFile(Task.class, "./userData/test"));
+    }*/
 
     /**
      * Writes user to file, which can be read back into memory.
      *
      * @author Brandon Watkins
      */
-    @Test
-    void writeUserData1() {
+    /*@Test
+    void writeObjectToFileTest2() {
         UserAccount act = new UserAccount("Stuff@gmail.com", "password", "Tom", "Bombadil");
         Write.writeObjectToFile(act, "./userData/0");
-        assertEquals(act, (UserAccount)Read.readObjectFromFile(UserAccount.class, "./userData/0"));
-    }
+        assertEquals(act, Read.readObjectFromFile(UserAccount.class, "./userData/0"));
+    }*/
+
+    /**
+     * Writes user to file, with nested objects (TaskList), which can be read back into memory.
+     *
+     * @author Brandon Watkins
+     */
+    /*@Test
+    void writeObjectToFileTest3() {
+        UserAccount act = new UserAccount("Stuff@gmail.com", "password", "Tom", "Bombadil");
+        act.addTaskList(new TaskList());
+        act.getTaskLists().addTask(new Task("Do stuff"));
+        Write.writeObjectToFile(act, "./userData/0");
+        assertEquals(act, Read.readObjectFromFile(UserAccount.class, "./userData/0"));
+    }*/
 
     /**
      * Writes user to file, with nested objects (TaskList), which can be read back into memory.
@@ -193,12 +191,13 @@ WriteTest {
      * @author Brandon Watkins
      */
     @Test
-    void writeUserData2() {
+    void writeAccountDataTest() {
         UserAccount act = new UserAccount("Stuff@gmail.com", "password", "Tom", "Bombadil");
+        UserAccount act2 = new UserAccount("Stuff2@gmail.com", "password2", "Tom2", "Bombadil2");
         act.addTaskList(new TaskList());
         act.getTaskLists().addTask(new Task("Do stuff"));
-        Write.writeObjectToFile(act, "./userData/0");
-        assertEquals(act, (UserAccount)Read.readObjectFromFile(UserAccount.class, "./userData/0"));
+        Write.writeAccountData(act);
+        assertEquals(act, Read.readUserData(act.getID()));
     }
 
 }

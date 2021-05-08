@@ -6,6 +6,7 @@ package edu.isu.cs.cs2263.todoListManager.model.objects.section;
 
 import edu.isu.cs.cs2263.todoListManager.model.objects.account.Account;
 import edu.isu.cs.cs2263.todoListManager.model.objects.task.Task;
+import edu.isu.cs.cs2263.todoListManager.model.objects.taskList.TaskList;
 import edu.isu.cs.cs2263.todoListManager.search.SearchVisitor;
 import edu.isu.cs.cs2263.todoListManager.model.context.Context;
 import edu.isu.cs.cs2263.todoListManager.model.state.State;
@@ -21,11 +22,14 @@ import java.util.List;
 public class Section implements Searchable, Serializable {
 
     //Instance Variables
+    private static final int NO_PARENT_TASKLIST = -1;
     private int id;
     private String title;
     private String description;
     private List<Task> tasks;
     private Boolean defaultSection = false;
+    private static final int NEW_SECTION_ID = -14;
+    private int parentTaskListID = NO_PARENT_TASKLIST;
 
     //Constructors
     public Section(){}
@@ -38,21 +42,19 @@ public class Section implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Section(Boolean isDefault) {
-        this(null, null, null, isDefault);
+        this(NEW_SECTION_ID, null, null, null, isDefault);
     }
 
     /**
      * Create a new Section.
      *
-     * @param id (int) The section's ID number.
      * @param title (String) The section's title.
      * @param description (String) The section's description.
-     * @param tasks (List<Task>) The section's contained Tasks.
      *
      * @author Brandon Watkins
      */
-    public Section(int id, String title, String description, List<Task> tasks){
-        this(id, title, description, tasks, false);
+    public Section(String title, String description){
+        this(NEW_SECTION_ID, title, description, null, false);
     }
 
     /**
@@ -66,7 +68,7 @@ public class Section implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Section(String title, String description, List<Task> tasks, Boolean isDefault){
-        this(Read.readNextID("section"), title, description, tasks, isDefault);
+        this(NEW_SECTION_ID, title, description, tasks, isDefault);
     }
 
     /**
@@ -81,8 +83,8 @@ public class Section implements Searchable, Serializable {
      * @author Brandon Watkins
      */
     public Section(int id, String title, String description, List<Task> tasks, Boolean isDefault){
-        this.id = id;
-        this.title = title;
+        this.id = id == NEW_SECTION_ID ? Read.getNextID(this) : id;
+        this.title = title == null ? "Default" : title;
         this.description = description;
         this.defaultSection = isDefault;
         if (tasks == null) this.tasks = new ArrayList<Task>();
@@ -128,6 +130,7 @@ public class Section implements Searchable, Serializable {
         return getDefaultSection();
     }
 
+
     /**
      * Adds the given task to this section.
      *
@@ -138,6 +141,7 @@ public class Section implements Searchable, Serializable {
      */
     public Section addTask(Task task){
         tasks.add(task);
+        task.setParentSection(this);
         return this;
     }
 
@@ -151,6 +155,7 @@ public class Section implements Searchable, Serializable {
      */
     public Task removeTask(Task task) {
         tasks.remove(task);
+        task.setParentSection(null);
         return task;
     }
 
@@ -158,8 +163,10 @@ public class Section implements Searchable, Serializable {
         return this;
     }
 
-    private int getNextID() throws ExecutionControl.NotImplementedException {
-        throw new ExecutionControl.NotImplementedException("getNextID() not implemented.");
+    public Section updateBasicInfo(String title, String description){
+        this.title = title;
+        this.description = description;
+        return this;
     }
 
     public Section moveTaskToSection(Task task, Section destination) throws ExecutionControl.NotImplementedException {
@@ -174,7 +181,7 @@ public class Section implements Searchable, Serializable {
         String s = v.getSearchTerm();
         Iterator<Task> iterator = iterator();
         List<Task> tasks = new ArrayList();
-        if (title.contains(s) || description.contains(s)) {
+        if ((title != null && title.contains(s)) || (description != null && description.contains(s))) {
             while(iterator.hasNext()) {
                 tasks.add(iterator.next());
             }
@@ -201,4 +208,30 @@ public class Section implements Searchable, Serializable {
         return false;
     }
 
+    /**
+     * Sets this section's parent tasklist.
+     *
+     * @param taskList (TaskList) This section's parent tasklist.
+     * @return (Section) This child section.
+     *
+     * @author Brandon Watkins
+     */
+    public Section setParentTaskList(TaskList taskList) {
+        if (taskList == null) parentTaskListID = NO_PARENT_TASKLIST;
+        else parentTaskListID = taskList.getID();
+        return this;
+    }
+
+    /**
+     * Sets this section's parent tasklist's ID number.
+     *
+     * @param parentTaskListID (int) This tasklist's parent tasklist's ID number.
+     * @return (Section) This child section.
+     *
+     * @author Brandon Watkins
+     */
+    public Section setParentTaskListID(int parentTaskListID) {
+        this.parentTaskListID = parentTaskListID;
+        return this;
+    }
 }

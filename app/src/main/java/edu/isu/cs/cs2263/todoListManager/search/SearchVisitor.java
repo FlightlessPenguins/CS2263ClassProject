@@ -14,11 +14,11 @@ public interface SearchVisitor {
 
     public String getSearchTerm();
 
-    public void setSearchTerm(String searchTerm);
+    public SearchVisitor setSearchTerm(String searchTerm);
 
     public List<Task> getSearchResults();
 
-    public void setSearchResults(List<Task> tasks);
+    public SearchVisitor setSearchResults(List<Task> tasks);
 
     /**
      * Searches a taskList for searchTerm

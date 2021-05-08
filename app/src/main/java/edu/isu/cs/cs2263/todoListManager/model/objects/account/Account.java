@@ -18,7 +18,7 @@ public abstract class Account implements Serializable {
     // in order to read in Accounts from file.
 
     /* Reserved IDs:
-        0: NullAccount
+        -1: NullAccount
 
      */
 
@@ -27,6 +27,7 @@ public abstract class Account implements Serializable {
     private String password;
     private String firstName;
     private String lastName;
+    public static final int NEW_ACCOUNT_ID = -11;
 
     /**
      * Create a new account.
@@ -50,7 +51,7 @@ public abstract class Account implements Serializable {
         setPassword(((AccountContext)AccountContext.instance()).generateHash(password));
         this.firstName = firstName;
         this.lastName = lastName;
-        this.id = Read.readNextID("account");
+        this.id = Read.getNextID(this);
     }
 
     /**
@@ -66,10 +67,10 @@ public abstract class Account implements Serializable {
      */
     public Account(int id, String email, String password, String firstName, String lastName) {
         this.email = email;
-        setPassword(password);
+        setPassword(id == NEW_ACCOUNT_ID ? ((AccountContext)AccountContext.instance()).generateHash(password) : password);
         this.firstName = firstName;
         this.lastName = lastName;
-        this.id = id;
+        this.id = id == NEW_ACCOUNT_ID ? Read.getNextID(this) : id;
     }
 
     /**

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Created by Liam Andrus
+FXML Task Creation page
+-->
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16" fx:controller="edu.isu.cs.cs2263.todoListManager.controller.Controller">
+   <children>
+      <TextArea fx:id="txtDescription" layoutX="37.0" layoutY="129.0" prefHeight="49.0" prefWidth="234.0" wrapText="true" />
+      <TextField fx:id="txtTitle" layoutX="37.0" layoutY="80.0" prefHeight="25.0" prefWidth="234.0" />
+      <TextArea fx:id="txtComment" layoutX="37.0" layoutY="202.0" prefHeight="77.0" prefWidth="234.0" wrapText="true" />
+      <Label layoutX="37.0" layoutY="112.0" text="Description" />
+      <Label layoutX="37.0" layoutY="186.0" prefHeight="17.0" prefWidth="61.0" text="Comment" />
+      <Label layoutX="37.0" layoutY="63.0" text="Title" />
+      <Label layoutX="14.0" layoutY="8.0" prefHeight="27.0" prefWidth="100.0" text="Create Task">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Separator layoutY="41.0" prefHeight="1.0" prefWidth="600.0" />
+      <Separator layoutX="297.0" layoutY="43.0" orientation="VERTICAL" prefHeight="257.0" prefWidth="3.0" />
+      <Separator layoutY="299.0" prefHeight="3.0" prefWidth="600.0" />
+      <TextField fx:id="txtLabels" layoutX="327.0" layoutY="80.0" prefHeight="25.0" prefWidth="234.0" />
+      <Label layoutX="327.0" layoutY="63.0" text="Label" />
+      <DatePicker fx:id="dpDueDate" layoutX="420.0" layoutY="116.0" prefHeight="25.0" prefWidth="141.0" />
+      <Label layoutX="329.0" layoutY="120.0" text="Due Date:" />
+      <Label layoutX="328.0" layoutY="163.0" text="Priority:" />
+      <ChoiceBox fx:id="cbPriority" layoutX="420.0" layoutY="159.0" prefHeight="25.0" prefWidth="141.0" />
+      <Button fx:id="btnCancel" layoutX="18.0" layoutY="310.0" mnemonicParsing="false" onAction="#handle" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
+      <Button fx:id="btnFinishCreateTask" layoutX="491.0" layoutY="310.0" mnemonicParsing="false" onAction="#handle" prefHeight="25.0" prefWidth="87.0" text="Create Task" />
+   </children>
+</AnchorPane>
